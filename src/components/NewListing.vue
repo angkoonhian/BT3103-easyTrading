@@ -1,5 +1,6 @@
 <template>
 <div>
+    <Header></Header>
     <h1>Post your listing</h1><br>
     <div id="commonOptions">
         <h2><i>1. Choose your category</i></h2><br>
@@ -43,8 +44,12 @@
 </template>
 
 <script>
+import Header from '../components/Header'
 
 export default {
+    components:{
+        Header
+    },
     name: 'NewListing',
     data() {
         return {
