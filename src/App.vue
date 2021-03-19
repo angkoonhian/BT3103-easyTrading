@@ -1,20 +1,21 @@
 <template>
-  <NewListing></NewListing>
+  <div id="app">
+    <router-view></router-view>
+    <!-- <NewListing></NewListing> -->
+  </div>
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld.vue'
-import NewListing from './NewListing.vue'
-
+//import NewListing from './components/NewListing.vue'
 export default {
   name: 'App',
   components: {
-    NewListing
+    //NewListing
   }
 }
 </script>
 
-<style scoped>
+<style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

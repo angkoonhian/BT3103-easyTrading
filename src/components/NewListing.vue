@@ -1,4 +1,5 @@
 <template>
+<div>
     <h1>Post your listing</h1><br>
     <div id="commonOptions">
         <h2><i>1. Choose your category</i></h2><br>
@@ -38,53 +39,54 @@
         <textarea type='text' maxlength="50" rows="8" cols = '70' v-model="tnc"></textarea><br>
         <button v-on:click="submitListing('rent')">Submit</button>
     </div>
-    
+</div>
 </template>
 
 <script>
 
 export default {
-  data() {
-      return {
-          listing: {}, 
-          selectedType: 'sale', 
-          selectedSubcat : '',
-          title: '',
-          desc: '', 
-          loc: '', 
-          price: 0, 
-          alt_trade: '', 
-          trans_method: '',
-          subcat_sales: ['Mobile & Electronics', 'Hobbies & Games', 'Sports', 'Education', 'Fashion'], 
-          subcat_rent: ['Automobiles', 'Property', 'Books', 'Games', 'Electronics'], 
-          rent_intervals: ['hour', 'day', 'week', 'month', 'year'], 
-          interval: '', 
-          tnc: '', 
-          
-      }
-  }, 
-  methods: {
-      submitListing: function(x) {
-        this.listing['Type'] = this.selectedType; 
-        this.listing['Subcat'] = this.selectedSubcat; 
-        this.listing['Title'] = this.title; 
-        this.listing['Description'] = this.desc; 
-        this.listing['Location'] = this.loc; 
-        this.listing['Price'] = this.price;
-        if (x==='sale') {
-            var others = {}; 
-            others['Alternatives'] = this.alt_trade; 
-            others['Transaction method'] = this.trans_method; 
-            this.listing['sale'] = others; 
-        } else if (x==='rent') {
-            var others2 = {}; 
-            others2['Interval'] = this.interval; 
-            others2['Terms and Conditions'] = this.tnc; 
-            this.listing['rent'] = others2; 
+    name: 'NewListing',
+    data() {
+        return {
+            listing: {}, 
+            selectedType: 'sale', 
+            selectedSubcat : '',
+            title: '',
+            desc: '', 
+            loc: '', 
+            price: 0, 
+            alt_trade: '', 
+            trans_method: '',
+            subcat_sales: ['Mobile & Electronics', 'Hobbies & Games', 'Sports', 'Education', 'Fashion'], 
+            subcat_rent: ['Automobiles', 'Property', 'Books', 'Games', 'Electronics'], 
+            rent_intervals: ['hour', 'day', 'week', 'month', 'year'], 
+            interval: '', 
+            tnc: '', 
+            
         }
-        console.log(this.listing)
-      }
-  }
+    }, 
+    methods: {
+        submitListing: function(x) {
+            this.listing['Type'] = this.selectedType; 
+            this.listing['Subcat'] = this.selectedSubcat; 
+            this.listing['Title'] = this.title; 
+            this.listing['Description'] = this.desc; 
+            this.listing['Location'] = this.loc; 
+            this.listing['Price'] = this.price;
+            if (x==='sale') {
+                var others = {}; 
+                others['Alternatives'] = this.alt_trade; 
+                others['Transaction method'] = this.trans_method; 
+                this.listing['sale'] = others; 
+            } else if (x==='rent') {
+                var others2 = {}; 
+                others2['Interval'] = this.interval; 
+                others2['Terms and Conditions'] = this.tnc; 
+                this.listing['rent'] = others2; 
+            }
+            console.log(this.listing)
+        }
+    }
 }
 </script>
 
