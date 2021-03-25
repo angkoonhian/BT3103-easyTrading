@@ -10,18 +10,38 @@
           <input class="input2" onfocus="value=''" value="Password"/>
           <button class="but">Get Started</button>
           <p class="cut">____________OR____________</p>
-          <img id="icon" src="../assets/google.png">
-          <p class="other">Login by Google</p>
-
+          <div @click="login">
+              <img id="icon" src="../assets/google.png">
+              <p class="other">Login by Google</p>
+          </div>
       </div>      
   </div>
 </template>
 
 <script>
+//import auth from'../firebase';
+import { mapActions } from 'vuex';
+
 export default ({
     data() {
         return {
         }
+    },
+    methods: {
+        ...mapActions('user', {
+            login: 'login',
+        })
+        // loginGoogle: function() {
+        //     const googleProvider = new auth.GoogleAuthProvider();
+        //     auth.SignInWithPopup(googleProvider)
+        //         .then(() => {
+        //             window.location.assign('/sales')
+        //         })
+        //         .catch(error => {
+        //             console.error(error);
+        //         })
+        //     console.log("login via google")
+        // }
     },
     components:{
     }
@@ -126,4 +146,5 @@ export default ({
     height: 40px;
     width: 40px;
 }
+
 </style>
