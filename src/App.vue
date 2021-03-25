@@ -1,16 +1,17 @@
 <template>
   <div id="app">
+    <Header></Header>
     <router-view></router-view>
-    <!-- <NewListing></NewListing> -->
   </div>
 </template>
 
 <script>
-//import NewListing from './components/NewListing.vue'
+import Header from './components/Header'
+
 export default {
   name: 'App',
   components: {
-    //NewListing
+    Header
   },
   methods: {}
 }

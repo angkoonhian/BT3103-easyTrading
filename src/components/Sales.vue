@@ -1,5 +1,7 @@
 <template>
+  
   <div>
+    <Header></Header>
      <div class="flex">
     <section>
       <div class="profile" v-bind:style="{ backgroundImage: 'url(' + 'https://media.wired.com/photos/5b8999943667562d3024c321/master/w_2560%2Cc_limit/trash2-01.jpg' + ')' }">desmond<br>
@@ -124,6 +126,7 @@
 
 <script>
 import database from "../firebase.js"
+import Header from '../components/Header'
 
 export default ({
     data() {
@@ -133,6 +136,7 @@ export default ({
         }
     },
     components:{
+      Header
     }, 
     methods: {
         fetchItems: function() {

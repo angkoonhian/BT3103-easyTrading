@@ -5,43 +5,62 @@
       <img class="right" style="z-index: 0" src="../assets/white.png">
       <div class="right">
           <img src="../assets/logo.png" class="logo">
-          <input class="input1" onfocus="value=''" value="Username"/>
+          <input class="input1" onfocus="value=''" value="Username" v-model="username"/>
 
-          <input class="input2" onfocus="value=''" value="Password"/>
-          <button class="but">Get Started</button>
+          <input class="input2" onfocus="value=''" value="Password" v-model="password"/>
+          <button class="but" @click="login">Login</button>
           <p class="cut">____________OR____________</p>
-          <div @click="login">
+          <div @click="socialLogin">
               <img id="icon" src="../assets/google.png">
               <p class="other">Login by Google</p>
           </div>
+          <h1></h1>
       </div>      
   </div>
 </template>
 
 <script>
-//import auth from'../firebase';
-import { mapActions } from 'vuex';
+import firebase from "firebase"
+//import { mapActions, mapGetters } from 'vuex';
 
 export default ({
     data() {
         return {
+            Username: '',
+            password: ''
         }
     },
     methods: {
-        ...mapActions('user', {
-            login: 'login',
-        })
-        // loginGoogle: function() {
-        //     const googleProvider = new auth.GoogleAuthProvider();
-        //     auth.SignInWithPopup(googleProvider)
-        //         .then(() => {
-        //             window.location.assign('/sales')
-        //         })
-        //         .catch(error => {
-        //             console.error(error);
-        //         })
-        //     console.log("login via google")
-        // }
+        login: function() {
+            // Login with email and password
+            try {
+                firebase.auth().signInWithEmailAndPassword(this.username, this.password).then(
+                    user => {
+                        console.log(user.data);
+                        this.$router.push('/sales')
+                    }
+                )
+            } catch (err) {
+                alert(err);
+            }
+            
+        },
+        socialLogin: function() {
+            // Login wtih socialLogin
+            const provider = new firebase.auth.GoogleAuthProvider();
+                try {
+                firebase
+                    .auth()
+                    .signInWithPopup(provider)
+                    .then(() => {
+                        console.log("loggin done");
+                        this.$router.push('/newListing')
+                    });
+                } catch (error) {
+                    alert(error.message)
+                    console.log(error);
+                }
+        }
     },
     components:{
     }
