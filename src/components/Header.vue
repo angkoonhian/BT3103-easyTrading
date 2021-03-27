@@ -1,22 +1,57 @@
 <template>
-  <div id = "nav">
-    <img id = "logo" src="../assets/logo.png">
-    <input id = "search">
-    <img id = "icon2" src="../assets/search.jpeg">
-    <ul>
-      <li><router-link to="/login" exact>Log in</router-link></li>
-      <li><router-link to="/signup" exact>Sign up</router-link></li>
-    </ul>
+  <div id = "nav" class="fixed" style="margin-bottom: 100px;">
+    <!-- <v-navigation-drawer v-model="sidebar" app mobile-break-point="959">
+      <v-list>
+        <v-list-item
+          v-for="item in menuItems"
+          :key="item.title"
+          :to="item.path">
+          <v-list-item-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>{{ item.title }}</v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer> -->
+
+    <v-app-bar app fixed dense shrink>
+      <span class="d-none d-sm-flex d-md-none">
+        <v-icon @click="sidebar = !sidebar">
+        </v-icon>
+      </span>
+      <v-toolbar-title>
+        <router-link to="/" tag="span" style="cursor: pointer">
+          <img src="../assets/logo.png" id="logo">
+        </router-link>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items class="d-sm-none d-md-flex">
+        <v-btn
+          text
+          v-for="item in menuItems"
+          :key="item.title"
+          :to="item.path">
+          <v-icon left dark>{{item.icon}}</v-icon>
+          {{ item.title }}
+        </v-btn>
+      </v-toolbar-items>
+    </v-app-bar>
   </div>
 </template>
 
 <script>
 
 export default ({
-    data() {
-        return {
-        }
-    },
+    data(){
+    return {
+      sidebar: false,
+      menuItems: [
+          { title: 'Home', path: '/home', icon: 'home' },
+          { title: 'Sign Up', path: '/signup', icon: 'face' },
+          { title: 'Sign In', path: '/login', icon: 'lock_open' }
+     ]
+    }
+  },
     methods: {
 
     },
@@ -27,8 +62,7 @@ export default ({
 
 <style scoped>
 #logo {
-    width: 200px;
-    position: absolute;
+    width: 150px;
     top: 0px;
     left: 0px;
 }

@@ -1,6 +1,5 @@
 <template>
   <div>
-      <h1 class="welcome">Welcome to Easy Trading :)</h1>
       <img id="bg" src="../assets/login1.jpg">
       <img class="right" style="z-index: 0" src="../assets/white.png">
       <div class="right">
@@ -21,7 +20,6 @@
 
 <script>
 import firebase from "firebase"
-//import { mapActions, mapGetters } from 'vuex';
 
 export default ({
     data() {
@@ -52,7 +50,8 @@ export default ({
                 firebase
                     .auth()
                     .signInWithPopup(provider)
-                    .then(() => {
+                    .then((res) => {
+                        localStorage.setItem("UID", res.user.uid);
                         console.log("loggin done");
                         this.$router.push('/newListing')
                     });

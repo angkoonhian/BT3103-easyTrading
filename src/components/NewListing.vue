@@ -2,6 +2,7 @@
 <div>
     <h1>Post your listing</h1><br>
     <div id="commonOptions">
+        <v-radio-group v-model="radioGroup"></v-radio-group>
         <h2><i>1. Choose your category</i></h2><br>
             <input type="radio" id="sale" name="listingtype" v-on:click="selectedType='sale'" checked>I am selling an item
             <input type="radio" id="rent" name="listingtype" v-on:click="selectedType='rent'">I am renting out an item
@@ -16,7 +17,7 @@
         <h2><i>3. Give your listing a title</i></h2><br>
             <input type='text' id='listingname' maxlength="50" size="70" placeholder="no more than 50 chars" v-model='title'>
         <h2><i>4. Describe your listing</i></h2><br>
-            <textarea type='text' maxlength="50" rows="8" cols = '70' v-model='desc'></textarea>
+            <textarea type='text' maxlength="50" rows="8" cols = '70' v-model='desc' style="background-color: #f9f9f9"></textarea>
         <h2><i>5. Location where you want to deal</i></h2><br>
             <input type='text' id='listingloc' maxlength="50" size="70" placeholder="no more than 50 chars" v-model="loc">
         <h2><i>6. Upload your pictures:</i></h2><br>          
@@ -148,6 +149,8 @@ export default {
 
 <style scoped>
 h1 {
+    font-size: 50px;
+    font-weight: 600;
     text-align: center;
     font-family: Avenir, Helvetica, Arial, sans-serif; 
     color: #2c3e50;

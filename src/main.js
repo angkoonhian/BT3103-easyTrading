@@ -3,10 +3,14 @@ import App from "./App.vue";
 import Routes from "./routes.js";
 import VueRouter from "vue-router";
 import Beufy from "buefy";
+import Vuetify from "vuetify";
+import "vuetify/dist/vuetify.min.css";
 import "buefy/dist/buefy.css";
 import firebase from "firebase";
+import "material-design-icons-iconfont/dist/material-design-icons.css";
 
 Vue.use(VueRouter);
+Vue.use(Vuetify);
 Vue.use(Beufy);
 Vue.config.productionTip = false;
 
@@ -33,6 +37,7 @@ firebase.auth().onAuthStateChanged((user) => {
     app = new Vue({
       render: (h) => h(App),
       router,
+      vuetify: new Vuetify(),
     }).$mount("#app");
   }
 });
