@@ -5,7 +5,7 @@ import SignUp from "./components/SignUp.vue";
 import Sales from "./components/Sales.vue";
 
 export default [
-  { path: "/", component: NewListing },
+  { path: "/", component: Login },
   { path: "/login", component: Login },
   {
     path: "/newListing",
