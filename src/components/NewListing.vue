@@ -56,7 +56,9 @@
 </template>
 
 <script>
+// import database from '../firebase.js'
 import firebase from 'firebase'
+
 
 export default {
     components:{},
@@ -90,6 +92,8 @@ export default {
             this.listing['Description'] = this.desc; 
             this.listing['Location'] = this.loc; 
             this.listing['Price'] = this.price;
+            this.listing['UserID'] = localStorage.getItem('UID'); 
+            this.listing['images'] = this.imgurls; 
             if (x==='sale') {
                 var others = {}; 
                 others['Alternatives'] = this.alt_trade; 
@@ -101,6 +105,12 @@ export default {
                 others2['Terms and Conditions'] = this.tnc; 
                 this.listing['rent'] = others2; 
             }
+            // firebase.database().ref('Listings').push(this.listing).then(
+            //     ()=>
+            //         {location.reload()}); 
+            firebase.firestore().collection('Listings').add(this.listing).then(
+                ()=>
+                    {location.reload()});
             console.log(this.listing)
         }, 
         // create () {
@@ -142,6 +152,7 @@ export default {
                 });
             }      
             );
+            // console.log("ran")
         },
     }
 }
