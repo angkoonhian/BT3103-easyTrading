@@ -3,7 +3,7 @@
   <div>
     <Header></Header>
      <div class="flex">
-    <section>
+    <section v-for = "x in items" v-bind:key="x.id">
       <div class="profile" v-bind:style="{ backgroundImage: 'url(' + 'https://media.wired.com/photos/5b8999943667562d3024c321/master/w_2560%2Cc_limit/trash2-01.jpg' + ')' }">desmond<br>
         5 stars
       </div>
@@ -22,101 +22,6 @@
         <!-- <button>Add to Cart</button> -->
       </aside>
     </section>  
-    <section>
-      <div class="profile" v-bind:style="{ backgroundImage: 'url(' + 'https://media.wired.com/photos/5b8999943667562d3024c321/master/w_2560%2Cc_limit/trash2-01.jpg' + ')' }">desmond<br>
-        5 stars
-      </div>
-      <img src="https://static.pexels.com/photos/24166/pexels-photo-24166-medium.jpg" alt="Smartphone" />
-      <h2>123456789012340</h2>
-      <div class="options">
-      <div class="hh">
-          $255
-      </div> -or- 
-      <div class="hh">
-          sentosa cove apartment
-      </div> 
-      </div>
-      <aside>
-        
-        <!-- <button>Add to Cart</button> -->
-      </aside>
-    </section> 
-    <section>
-      <div class="profile" v-bind:style="{ backgroundImage: 'url(' + 'https://media.wired.com/photos/5b8999943667562d3024c321/master/w_2560%2Cc_limit/trash2-01.jpg' + ')' }">desmond<br>
-        5 stars
-      </div>
-      <img src="https://static.pexels.com/photos/24166/pexels-photo-24166-medium.jpg" alt="Smartphone" />
-      <h2>123456789012340</h2>
-      <div class="options">
-      <div class="hh">
-          $255
-      </div> -or- 
-      <div class="hh">
-          macbook pro
-      </div> 
-      </div>
-      <aside>
-        
-        <!-- <button>Add to Cart</button> -->
-      </aside>
-    </section>   
-    <section>
-      <div class="profile" v-bind:style="{ backgroundImage: 'url(' + 'https://media.wired.com/photos/5b8999943667562d3024c321/master/w_2560%2Cc_limit/trash2-01.jpg' + ')' }">desmond<br>
-        5 stars
-      </div>
-      <img src="https://static.pexels.com/photos/24166/pexels-photo-24166-medium.jpg" alt="Smartphone" />
-      <h2>123456789012340</h2>
-      <div class="options">
-      <div class="hh">
-          $255
-      </div> -or- 
-      <div class="hh">
-          guhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
-      </div> 
-      </div>
-      <aside>
-        
-        <!-- <button>Add to Cart</button> -->
-      </aside>
-    </section>   
-    <section>
-      <div class="profile" v-bind:style="{ backgroundImage: 'url(' + 'https://media.wired.com/photos/5b8999943667562d3024c321/master/w_2560%2Cc_limit/trash2-01.jpg' + ')' }">desmond<br>
-        5 stars
-      </div>
-      <img src="https://static.pexels.com/photos/24166/pexels-photo-24166-medium.jpg" alt="Smartphone" />
-      <h2>123456789012340</h2>
-      <div class="options">
-      <div class="hh">
-          $255
-      </div> -or- 
-      <div class="hh">
-          mercedes benz
-      </div> 
-      </div>
-      <aside>
-        
-        <!-- <button>Add to Cart</button> -->
-      </aside>
-    </section>   
-    <section>
-      <div class="profile" v-bind:style="{ backgroundImage: 'url(' + 'https://media.wired.com/photos/5b8999943667562d3024c321/master/w_2560%2Cc_limit/trash2-01.jpg' + ')' }">desmond<br>
-        5 stars
-      </div>
-      <img src="https://static.pexels.com/photos/24166/pexels-photo-24166-medium.jpg" alt="Smartphone" />
-      <h2>1234567890123jngnjgdjsgdjnasgdjndsajsgajgsajkasg40</h2>
-      <div class="options">
-      <div class="hh">
-          $255
-      </div> -or- 
-      <div class="hh">
-          iphone xs
-      </div> 
-      </div>
-      <aside>
-        
-        <!-- <button>Add to Cart</button> -->
-      </aside>
-    </section>     
       
     
   </div>
@@ -125,7 +30,8 @@
 </template>
 
 <script>
-import database from "../firebase.js"
+// import firebase from 'firebase'
+import firebase from '../firebase.js'
 import Header from '../components/Header'
 
 export default ({
@@ -140,7 +46,9 @@ export default ({
     }, 
     methods: {
         fetchItems: function() {
-      database.collection('Listings').get().then((querySnapShot)=>{ 
+          // database.collection('Listings').get()
+          // firebase.firestore().collection('Listings').get()
+      firebase.firestore().collection('Listings').get().then((querySnapShot)=>{ 
         let item={};
         querySnapShot.forEach(doc=>{ 
           item=doc.data(); 
