@@ -1,20 +1,34 @@
 <template>
-  <div id="app">
-    <Header></Header>
-    <router-view></router-view>
-  </div>
+  <v-app>
+    <head>
+      <link
+        href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
+        rel="stylesheet"
+      />
+      <link
+        href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css"
+        rel="stylesheet"
+      />
+    </head>
+
+    <div id="app">
+      <Header></Header>
+      <router-view></router-view>
+    </div>
+  </v-app>
 </template>
 
 <script>
-import Header from './components/Header'
+import Header from "./components/Header";
+//import Footer from "./components/Footer";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    Header
+    Header,
   },
-  methods: {}
-}
+  methods: {},
+};
 </script>
 
 <style>

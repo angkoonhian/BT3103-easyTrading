@@ -1,68 +1,79 @@
 <template>
-  
   <div>
     <Header></Header>
-     <div class="flex">
-    <section v-for = "x in items" v-bind:key="x.id">
-      <div class="profile" v-bind:style="{ backgroundImage: 'url(' + 'https://media.wired.com/photos/5b8999943667562d3024c321/master/w_2560%2Cc_limit/trash2-01.jpg' + ')' }">desmond<br>
-        5 stars
-      </div>
-      <img src="https://static.pexels.com/photos/24166/pexels-photo-24166-medium.jpg" alt="Smartphone" />
-      <h2>12345678901234567890123456789012345678901234567890</h2>
-      <div class="options">
-      <div class="hh">
-          $255
-      </div> -or- 
-      <div class="hh">
-          bmw m3
-      </div> 
-      </div>
-      <aside>
-        
-        <!-- <button>Add to Cart</button> -->
-      </aside>
-    </section>  
-      
-    
-  </div>
-        
+    <div class="flex">
+      <section v-for="x in items" v-bind:key="x.id">
+        <div
+          class="profile"
+          v-bind:style="{
+            backgroundImage:
+              'url(' +
+              'https://media.wired.com/photos/5b8999943667562d3024c321/master/w_2560%2Cc_limit/trash2-01.jpg' +
+              ')',
+          }"
+        >
+          desmond<br />
+          5 stars
+        </div>
+        <img
+          src="https://static.pexels.com/photos/24166/pexels-photo-24166-medium.jpg"
+          alt="Smartphone"
+        />
+        <h2>12345678901234567890123456789012345678901234567890</h2>
+        <div class="options">
+          <div class="hh">
+            $255
+          </div>
+          -or-
+          <div class="hh">
+            bmw m3
+          </div>
+        </div>
+        <aside>
+          <!-- <button>Add to Cart</button> -->
+        </aside>
+      </section>
+    </div>
   </div>
 </template>
 
 <script>
 // import firebase from 'firebase'
-import firebase from '../firebase.js'
-import Header from '../components/Header'
+import firebase from "../firebase";
+import Header from "../components/Header";
 
-export default ({
-    data() {
-        return {
-            items: [], 
-
-        }
+export default {
+  data() {
+    return {
+      items: [],
+    };
+  },
+  components: {
+    Header,
+  },
+  methods: {
+    fetchItems: function() {
+      // database.collection('Listings').get()
+      // firebase.firestore().collection('Listings').get()
+      firebase
+        .firestore()
+        .collection("Listings")
+        .get()
+        .then((querySnapShot) => {
+          let item = {};
+          querySnapShot.forEach((doc) => {
+            item = doc.data();
+            // console.log("executed: "+item);
+            this.items.push([doc.id, item]);
+          });
+        });
+      console.log(this.allitems);
     },
-    components:{
-      Header
-    }, 
-    methods: {
-        fetchItems: function() {
-          // database.collection('Listings').get()
-          // firebase.firestore().collection('Listings').get()
-      firebase.firestore().collection('Listings').get().then((querySnapShot)=>{ 
-        let item={};
-        querySnapShot.forEach(doc=>{ 
-          item=doc.data(); 
-          // console.log("executed: "+item); 
-          this.items.push([doc.id, item]); 
-          
-        }) })
-        console.log(this.allitems);
-         }
-    }, 
-    created() {
-        this.fetchItems();
-    }
-})
+  },
+  created() {
+    this.fetchItems();
+  },
+};
 </script>
 
 <style scoped>
@@ -92,7 +103,7 @@ export default ({
 
 /* This rule ist just because of the responsive images */
 @media (max-width: 1600px) {
-  .flex > section {  
+  .flex > section {
     max-width: 250px;
   }
 }
@@ -118,7 +129,7 @@ img {
 }
 
 @media (max-width: 1600px) {
-  img{
+  img {
     width: 282px;
   }
 }
@@ -171,36 +182,36 @@ h1 {
 
 h2 {
   font-size: 25px;
-  word-break:break-all
-} 
+  word-break: break-all;
+}
 
 .flex > section {
   background: #fff;
   padding: 1em;
   margin: 0.5em;
   border-radius: 4px;
-  box-shadow: 0px 0px 15px #aaaaaa
+  box-shadow: 0px 0px 15px #aaaaaa;
 }
 
 .flex > section:hover {
-  box-shadow: 0px 0px 20px #3d3d3d
+  box-shadow: 0px 0px 20px #3d3d3d;
 }
 
 button:hover {
-  background-color: #006B6B;
+  background-color: #006b6b;
   background-size: 3em;
   background-position: 1.5em 50%;
 }
 
 .hh {
-  background: rgb(255, 153, 0); 
+  background: rgb(255, 153, 0);
   color: #fff;
   font-weight: 700;
   padding: 0.3em 0.6em;
   border-radius: 1em;
   display: flex;
-  font-size: 120%; 
-  word-break:break-all
+  font-size: 120%;
+  word-break: break-all;
 }
 
 .profile {
@@ -208,9 +219,9 @@ button:hover {
   background-repeat: no-repeat;
   background-position: 2em 50%;
   background-size: 2em;
-  border: 0;  
+  border: 0;
   cursor: pointer;
-  color: rgb(0, 0, 0);  
+  color: rgb(0, 0, 0);
   /* font-size: 13px; */
   padding: 0em 3em;
   padding-left: 5em;
