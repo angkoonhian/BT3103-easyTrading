@@ -15,7 +15,7 @@
 
 <script>
 import firebase from 'firebase';
-
+import database from '../firebase';
 export default ({
     data() {
         return {
@@ -29,6 +29,13 @@ export default ({
             firebase
                 .auth()
                 .createUserWithEmailAndPassword(this.email, this.password)
+                .then(cred => {
+                    return database.collection('users').doc(cred.user.id).set({
+                        Email: cred.user.email,
+                        Rating: 0,
+                        id: cred.user.id
+                    })
+                })
                 .catch((error) => {
                     console.error(error)
                 })
