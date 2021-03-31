@@ -85,8 +85,8 @@ export default ({
 .right {
     position:absolute;
     right:0px;    
-    top:0px;
-    height: 100%;
+    top:-20px;
+    height: 120%;
     width: 55%;
 }
 .welcome {
