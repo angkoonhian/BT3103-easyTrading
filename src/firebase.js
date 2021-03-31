@@ -16,4 +16,5 @@ import firebase from "firebase";
   firebase.analytics();
 
   var database = firebase.firestore();
-  export default database;
+  var auth = firebase.auth();
+  export default { database, auth, firebase };
