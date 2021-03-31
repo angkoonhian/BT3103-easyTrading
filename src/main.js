@@ -33,6 +33,11 @@ let app;
 
 firebase.auth().onAuthStateChanged((user) => {
   console.log(user);
+  if (user == null) {
+    localStorage.setItem("login", false);
+  } else {
+    localStorage.setItem("login", true);
+  }
   if (!app) {
     app = new Vue({
       render: (h) => h(App),
