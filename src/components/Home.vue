@@ -126,6 +126,7 @@ export default {
   },
   methods: {
     fetchItems: function() {
+      console.log("fetching items")
       firebase
         .firestore()
         .collection("Listings")
