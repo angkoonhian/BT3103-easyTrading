@@ -1,18 +1,34 @@
 <template>
-  <div id="app">
-    <router-view></router-view>
-    <!-- <NewListing></NewListing> -->
-  </div>
+  <v-app>
+    <head>
+      <link
+        href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
+        rel="stylesheet"
+      />
+      <link
+        href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css"
+        rel="stylesheet"
+      />
+    </head>
+
+    <div id="app" style="margin: 0px">
+      <Header></Header>
+      <router-view></router-view>
+    </div>
+  </v-app>
 </template>
 
 <script>
-//import NewListing from './components/NewListing.vue'
+import Header from "./components/Header";
+//import Footer from "./components/Footer";
+
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    //NewListing
-  }
-}
+    Header,
+  },
+  methods: {},
+};
 </script>
 
 <style>

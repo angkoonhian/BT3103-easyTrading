@@ -1,156 +1,138 @@
 <template>
   <div>
-     <div class="flex">
-    <section>
-      <div class="profile" v-bind:style="{ backgroundImage: 'url(' + 'https://media.wired.com/photos/5b8999943667562d3024c321/master/w_2560%2Cc_limit/trash2-01.jpg' + ')' }">desmond<br>
-        5 stars
-      </div>
-      <img src="https://static.pexels.com/photos/24166/pexels-photo-24166-medium.jpg" alt="Smartphone" />
-      <h2>12345678901234567890123456789012345678901234567890</h2>
-      <div class="options">
-      <div class="hh">
-          $255
-      </div> -or- 
-      <div class="hh">
-          bmw m3
-      </div> 
-      </div>
-      <aside>
-        
-        <!-- <button>Add to Cart</button> -->
-      </aside>
-    </section>  
-    <section>
-      <div class="profile" v-bind:style="{ backgroundImage: 'url(' + 'https://media.wired.com/photos/5b8999943667562d3024c321/master/w_2560%2Cc_limit/trash2-01.jpg' + ')' }">desmond<br>
-        5 stars
-      </div>
-      <img src="https://static.pexels.com/photos/24166/pexels-photo-24166-medium.jpg" alt="Smartphone" />
-      <h2>123456789012340</h2>
-      <div class="options">
-      <div class="hh">
-          $255
-      </div> -or- 
-      <div class="hh">
-          sentosa cove apartment
-      </div> 
-      </div>
-      <aside>
-        
-        <!-- <button>Add to Cart</button> -->
-      </aside>
-    </section> 
-    <section>
-      <div class="profile" v-bind:style="{ backgroundImage: 'url(' + 'https://media.wired.com/photos/5b8999943667562d3024c321/master/w_2560%2Cc_limit/trash2-01.jpg' + ')' }">desmond<br>
-        5 stars
-      </div>
-      <img src="https://static.pexels.com/photos/24166/pexels-photo-24166-medium.jpg" alt="Smartphone" />
-      <h2>123456789012340</h2>
-      <div class="options">
-      <div class="hh">
-          $255
-      </div> -or- 
-      <div class="hh">
-          macbook pro
-      </div> 
-      </div>
-      <aside>
-        
-        <!-- <button>Add to Cart</button> -->
-      </aside>
-    </section>   
-    <section>
-      <div class="profile" v-bind:style="{ backgroundImage: 'url(' + 'https://media.wired.com/photos/5b8999943667562d3024c321/master/w_2560%2Cc_limit/trash2-01.jpg' + ')' }">desmond<br>
-        5 stars
-      </div>
-      <img src="https://static.pexels.com/photos/24166/pexels-photo-24166-medium.jpg" alt="Smartphone" />
-      <h2>123456789012340</h2>
-      <div class="options">
-      <div class="hh">
-          $255
-      </div> -or- 
-      <div class="hh">
-          guhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
-      </div> 
-      </div>
-      <aside>
-        
-        <!-- <button>Add to Cart</button> -->
-      </aside>
-    </section>   
-    <section>
-      <div class="profile" v-bind:style="{ backgroundImage: 'url(' + 'https://media.wired.com/photos/5b8999943667562d3024c321/master/w_2560%2Cc_limit/trash2-01.jpg' + ')' }">desmond<br>
-        5 stars
-      </div>
-      <img src="https://static.pexels.com/photos/24166/pexels-photo-24166-medium.jpg" alt="Smartphone" />
-      <h2>123456789012340</h2>
-      <div class="options">
-      <div class="hh">
-          $255
-      </div> -or- 
-      <div class="hh">
-          mercedes benz
-      </div> 
-      </div>
-      <aside>
-        
-        <!-- <button>Add to Cart</button> -->
-      </aside>
-    </section>   
-    <section>
-      <div class="profile" v-bind:style="{ backgroundImage: 'url(' + 'https://media.wired.com/photos/5b8999943667562d3024c321/master/w_2560%2Cc_limit/trash2-01.jpg' + ')' }">desmond<br>
-        5 stars
-      </div>
-      <img src="https://static.pexels.com/photos/24166/pexels-photo-24166-medium.jpg" alt="Smartphone" />
-      <h2>1234567890123jngnjgdjsgdjnasgdjndsajsgajgsajkasg40</h2>
-      <div class="options">
-      <div class="hh">
-          $255
-      </div> -or- 
-      <div class="hh">
-          iphone xs
-      </div> 
-      </div>
-      <aside>
-        
-        <!-- <button>Add to Cart</button> -->
-      </aside>
-    </section>     
-      
-    
-  </div>
-        
+    <v-tabs
+      v-model="tab"
+      background-color="orange accent-4"
+      centered
+      dark
+      icons-and-text
+    >
+      <v-tabs-slider></v-tabs-slider>
+      <v-tab v-on:click="fetchItems('all')">
+        All
+      </v-tab>
+
+      <v-tab v-for="x in subcats" :key="x.id" v-on:click="fetchItems(x)">
+        {{ x }}
+      </v-tab>
+    </v-tabs>
+    <div class="flex">
+      <section v-for="(x, i) in items" v-bind:key="i">
+        <div
+          class="profile"
+          v-bind:style="{
+            backgroundImage:
+              'url(' +
+              'https://media.wired.com/photos/5b8999943667562d3024c321/master/w_2560%2Cc_limit/trash2-01.jpg' +
+              ')',
+          }"
+        >
+          desmond<br />
+          <v-rating
+            :value="3"
+            color="amber"
+            dense
+            half-increments
+            readonly
+            size="14"
+          ></v-rating>
+        </div>
+        <img v-bind:src="x[1]['images']" /> {{ x.id }}
+        <h2>{{ x[1]["Title"] }}</h2>
+        <!-- {{x[1]}} -->
+        {{ x.id }}
+
+        <div v-if="x[1]['Price'] != ''" class="hh">${{ x[1]["Price"] }}</div>
+        <div v-if="x[1]['sale']['Alternatives'] != '' && x[1]['Price'] != ''">
+          -or-
+        </div>
+        <div v-if="x[1]['sale']['Alternatives'] != '' && x[1]['Price'] == ''">
+          -trading for-
+        </div>
+        <div v-if="x[1]['sale']['Alternatives'] != ''" class="hh">
+          {{ x[1]["sale"]["Alternatives"] }}
+        </div>
+        <i> {{ x[1]["Location"] }}</i>
+        <aside>
+          {{ x.id }}
+          {{ x[1]["UserID"] }}
+          <!-- {{x[2]}} -->
+          {{ profiles["id"] }}
+        </aside>
+      </section>
+    </div>
   </div>
 </template>
 
 <script>
-import database from "../firebase.js"
+// import firebase from 'firebase'
+import firebase from "firebase";
 
-export default ({
-    data() {
-        return {
-            items: [], 
-
-        }
+export default {
+  data() {
+    return {
+      items: [],
+      profiles: [],
+      subcats: [
+        "Mobile & Electronics",
+        "Hobbies & Games",
+        "Sports",
+        "Education",
+        "Fashion",
+      ],
+    };
+  },
+  methods: {
+    fetchItems: function(x) {
+      // database.collection('Listings').get()
+      // firebase.firestore().collection('Listings').get()
+      this.items = [];
+      if (x === "all") {
+        firebase
+          .firestore()
+          .collection("Listings")
+          .get()
+          .then((querySnapShot) => {
+            let item = {};
+            querySnapShot.forEach((doc) => {
+              item = doc.data();
+              // console.log("executed: "+item);
+              this.items.push([doc.id, item]);
+            });
+          });
+        // console.log(this.items);
+        console.log(this.profiles);
+      } else {
+        firebase
+          .firestore()
+          .collection("Listings")
+          .where("Subcat", "==", x)
+          .get()
+          .then((querySnapShot) => {
+            let item = {};
+            querySnapShot.forEach((doc) => {
+              item = doc.data();
+              // console.log("executed: "+item);
+              this.items.push([doc.id, item]);
+            });
+          });
+      }
+      this.items.forEach((x) => {
+        firebase
+          .firestore()
+          .collection("User")
+          .doc(x[0])
+          .get()
+          .then((x) => {
+            this.profiles.push(x);
+          });
+      });
     },
-    components:{
-    }, 
-    methods: {
-        fetchItems: function() {
-      database.collection('Listings').get().then((querySnapShot)=>{ 
-        let item={};
-        querySnapShot.forEach(doc=>{ 
-          item=doc.data(); 
-          // console.log("executed: "+item); 
-          this.items.push([doc.id, item]); 
-          
-        }) })
-        console.log(this.allitems);
-         }
-    }, 
-    created() {
-        this.fetchItems();
-    }
-})
+  },
+  created() {
+    this.fetchItems("all");
+  },
+};
 </script>
 
 <style scoped>
@@ -180,7 +162,7 @@ export default ({
 
 /* This rule ist just because of the responsive images */
 @media (max-width: 1600px) {
-  .flex > section {  
+  .flex > section {
     max-width: 250px;
   }
 }
@@ -206,7 +188,7 @@ img {
 }
 
 @media (max-width: 1600px) {
-  img{
+  img {
     width: 282px;
   }
 }
@@ -259,36 +241,36 @@ h1 {
 
 h2 {
   font-size: 25px;
-  word-break:break-all
-} 
+  word-break: break-all;
+}
 
 .flex > section {
   background: #fff;
   padding: 1em;
   margin: 0.5em;
   border-radius: 4px;
-  box-shadow: 0px 0px 15px #aaaaaa
+  box-shadow: 0px 0px 15px #aaaaaa;
 }
 
 .flex > section:hover {
-  box-shadow: 0px 0px 20px #3d3d3d
+  box-shadow: 0px 0px 20px #3d3d3d;
 }
 
 button:hover {
-  background-color: #006B6B;
+  background-color: #006b6b;
   background-size: 3em;
   background-position: 1.5em 50%;
 }
 
 .hh {
-  background: rgb(255, 153, 0); 
+  background: rgb(255, 153, 0);
   color: #fff;
   font-weight: 700;
   padding: 0.3em 0.6em;
   border-radius: 1em;
   display: flex;
-  font-size: 120%; 
-  word-break:break-all
+  font-size: 120%;
+  word-break: break-all;
 }
 
 .profile {
@@ -296,11 +278,11 @@ button:hover {
   background-repeat: no-repeat;
   background-position: 2em 50%;
   background-size: 2em;
-  border: 0;  
+  border: 0;
   cursor: pointer;
-  color: rgb(0, 0, 0);  
+  color: rgb(0, 0, 0);
   /* font-size: 13px; */
-  padding: 0em 3em;
+  padding: 0em 13em;
   padding-left: 5em;
   display: block;
   width: 70%;

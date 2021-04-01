@@ -1,8 +1,8 @@
 <template>
 <div>
-    <Header></Header>
     <h1>Post your listing</h1><br>
     <div id="commonOptions">
+        <v-radio-group v-model="radioGroup"></v-radio-group>
         <h2><i>1. Choose your category</i></h2><br>
             <input type="radio" id="sale" name="listingtype" v-on:click="selectedType='sale'" checked>I am selling an item
             <input type="radio" id="rent" name="listingtype" v-on:click="selectedType='rent'">I am renting out an item
@@ -17,7 +17,7 @@
         <h2><i>3. Give your listing a title</i></h2><br>
             <input type='text' id='listingname' maxlength="50" size="70" placeholder="no more than 50 chars" v-model='title'>
         <h2><i>4. Describe your listing</i></h2><br>
-            <textarea type='text' maxlength="50" rows="8" cols = '70' v-model='desc'></textarea>
+            <textarea type='text'  rows="8" cols = '70' v-model='desc' style="background-color: #f9f9f9"></textarea>
         <h2><i>5. Location where you want to deal</i></h2><br>
             <input type='text' id='listingloc' maxlength="50" size="70" placeholder="no more than 50 chars" v-model="loc">
         <h2><i>6. Upload your pictures:</i></h2><br>          
@@ -56,13 +56,12 @@
 </template>
 
 <script>
-import Header from '../components/Header'
+// import database from '../firebase.js'
 import firebase from 'firebase'
 
+
 export default {
-    components:{
-        Header
-    },
+    components:{},
     name: 'NewListing',
     data() {
         return {
@@ -72,7 +71,7 @@ export default {
             title: '',
             desc: '', 
             loc: '', 
-            price: 0, 
+            price: '', 
             alt_trade: '', 
             trans_method: '',
             subcat_sales: ['Mobile & Electronics', 'Hobbies & Games', 'Sports', 'Education', 'Fashion'], 
@@ -93,6 +92,8 @@ export default {
             this.listing['Description'] = this.desc; 
             this.listing['Location'] = this.loc; 
             this.listing['Price'] = this.price;
+            this.listing['UserID'] = localStorage.getItem('UID'); 
+            this.listing['images'] = this.imgurls; 
             if (x==='sale') {
                 var others = {}; 
                 others['Alternatives'] = this.alt_trade; 
@@ -104,6 +105,12 @@ export default {
                 others2['Terms and Conditions'] = this.tnc; 
                 this.listing['rent'] = others2; 
             }
+            // firebase.database().ref('Listings').push(this.listing).then(
+            //     ()=>
+            //         {location.reload()}); 
+            firebase.firestore().collection('Listings').add(this.listing).then(
+                ()=>
+                    {location.reload()});
             console.log(this.listing)
         }, 
         // create () {
@@ -145,6 +152,7 @@ export default {
                 });
             }      
             );
+            // console.log("ran")
         },
     }
 }
@@ -152,6 +160,8 @@ export default {
 
 <style scoped>
 h1 {
+    font-size: 50px;
+    font-weight: 600;
     text-align: center;
     font-family: Avenir, Helvetica, Arial, sans-serif; 
     color: #2c3e50;
