@@ -11,7 +11,7 @@
       />
     </head>
 
-    <div id="app">
+    <div id="app" style="margin: 0px">
       <Header></Header>
       <router-view></router-view>
     </div>

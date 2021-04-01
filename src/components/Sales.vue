@@ -1,24 +1,23 @@
 <template>
   <div>
-    <Header></Header>
     <v-tabs
-          v-model="tab"
-          background-color="orange accent-4"
-          centered
-          dark
-          icons-and-text
-        >
-          <v-tabs-slider></v-tabs-slider>
-          <v-tab v-on:click="fetchItems('all')">
-            All
-          </v-tab>
+      v-model="tab"
+      background-color="orange accent-4"
+      centered
+      dark
+      icons-and-text
+    >
+      <v-tabs-slider></v-tabs-slider>
+      <v-tab v-on:click="fetchItems('all')">
+        All
+      </v-tab>
 
-          <v-tab v-for="x in subcats" :key="x.id" v-on:click="fetchItems(x)">
-            {{x}}
-          </v-tab>
-        </v-tabs>
+      <v-tab v-for="x in subcats" :key="x.id" v-on:click="fetchItems(x)">
+        {{ x }}
+      </v-tab>
+    </v-tabs>
     <div class="flex">
-      <section v-for="x,i in items" v-bind:key="i">
+      <section v-for="(x, i) in items" v-bind:key="i">
         <div
           class="profile"
           v-bind:style="{
@@ -30,39 +29,35 @@
         >
           desmond<br />
           <v-rating
-                      :value="3"
-                      color="amber"
-                      dense
-                      half-increments
-                      readonly
-                      size="14"
-                    ></v-rating>
-        </div> 
-        <img
-          v-bind:src="x[1]['images']"
-        /> {{x.id}}
-        <h2>{{x[1]['Title']}}</h2>
+            :value="3"
+            color="amber"
+            dense
+            half-increments
+            readonly
+            size="14"
+          ></v-rating>
+        </div>
+        <img v-bind:src="x[1]['images']" /> {{ x.id }}
+        <h2>{{ x[1]["Title"] }}</h2>
         <!-- {{x[1]}} -->
-        {{x.id}}
-    
-          <div v-if="x[1]['Price'] != ''" class="hh">
-            ${{x[1]['Price']}}
-          </div>
-          <div v-if="x[1]['sale']['Alternatives'] != '' && x[1]['Price'] != '' ">
+        {{ x.id }}
+
+        <div v-if="x[1]['Price'] != ''" class="hh">${{ x[1]["Price"] }}</div>
+        <div v-if="x[1]['sale']['Alternatives'] != '' && x[1]['Price'] != ''">
           -or-
-          </div>
-          <div v-if="x[1]['sale']['Alternatives'] != '' && x[1]['Price'] == '' ">
+        </div>
+        <div v-if="x[1]['sale']['Alternatives'] != '' && x[1]['Price'] == ''">
           -trading for-
-          </div>
-          <div v-if="x[1]['sale']['Alternatives'] != ''" class="hh">
-            {{x[1]['sale']['Alternatives']}}
-          </div>
-          <i> {{x[1]['Location']}}</i>
+        </div>
+        <div v-if="x[1]['sale']['Alternatives'] != ''" class="hh">
+          {{ x[1]["sale"]["Alternatives"] }}
+        </div>
+        <i> {{ x[1]["Location"] }}</i>
         <aside>
-          {{x.id}}
-          {{x[1]['UserID']}}
+          {{ x.id }}
+          {{ x[1]["UserID"] }}
           <!-- {{x[2]}} -->
-          {{profiles['id']}}
+          {{ profiles["id"] }}
         </aside>
       </section>
     </div>
@@ -72,64 +67,70 @@
 <script>
 // import firebase from 'firebase'
 import firebase from "firebase";
-import Header from "../components/Header";
 
 export default {
   data() {
     return {
       items: [],
-      profiles: [], 
-      subcats: ['Mobile & Electronics', 'Hobbies & Games', 'Sports', 'Education', 'Fashion']
+      profiles: [],
+      subcats: [
+        "Mobile & Electronics",
+        "Hobbies & Games",
+        "Sports",
+        "Education",
+        "Fashion",
+      ],
     };
-  },
-  components: {
-    Header,
   },
   methods: {
     fetchItems: function(x) {
       // database.collection('Listings').get()
       // firebase.firestore().collection('Listings').get()
       this.items = [];
-      if (x==="all") {
-      firebase
-        .firestore()
-        .collection("Listings")
-        .get()
-        .then((querySnapShot) => {
-          let item = {};
-          querySnapShot.forEach((doc) => {
-            item = doc.data();
-            // console.log("executed: "+item);
-            this.items.push([doc.id, item]);
-          }) 
-        });
-      // console.log(this.items);
-      console.log(this.profiles) 
+      if (x === "all") {
+        firebase
+          .firestore()
+          .collection("Listings")
+          .get()
+          .then((querySnapShot) => {
+            let item = {};
+            querySnapShot.forEach((doc) => {
+              item = doc.data();
+              // console.log("executed: "+item);
+              this.items.push([doc.id, item]);
+            });
+          });
+        // console.log(this.items);
+        console.log(this.profiles);
       } else {
         firebase
-        .firestore()
-        .collection("Listings").where('Subcat', '==', x)
-        .get()
-        .then((querySnapShot) => {
-          let item = {};
-          querySnapShot.forEach((doc) => {
-            item = doc.data();
-            // console.log("executed: "+item);
-            this.items.push([doc.id, item]);
-          })
-          
-        });
-      } this.items.forEach((x)=> {
-              firebase.firestore().collection("User").doc(x[0]).get().then(
-              x=>
-              {this.profiles.push(x)
-               }
-            ); 
+          .firestore()
+          .collection("Listings")
+          .where("Subcat", "==", x)
+          .get()
+          .then((querySnapShot) => {
+            let item = {};
+            querySnapShot.forEach((doc) => {
+              item = doc.data();
+              // console.log("executed: "+item);
+              this.items.push([doc.id, item]);
+            });
           });
+      }
+      this.items.forEach((x) => {
+        firebase
+          .firestore()
+          .collection("User")
+          .doc(x[0])
+          .get()
+          .then((x) => {
+            this.profiles.push(x);
+          });
+      });
     },
   },
   created() {
-    this.fetchItems('all');
+    this.fetchItems("all");
   },
 };
 </script>
