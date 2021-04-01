@@ -12,7 +12,7 @@
     </head>
 
     <div id="app">
-      <Header></Header>
+      <Header :key="header"></Header>
       <router-view></router-view>
     </div>
   </v-app>
