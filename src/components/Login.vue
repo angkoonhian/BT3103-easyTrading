@@ -100,11 +100,11 @@ export default {
   height: 100%;
 }
 .right {
-  position: absolute;
-  right: 0px;
-  top: 0px;
-  height: 100%;
-  width: 55%;
+    position:absolute;
+    right:0px;    
+    top:-20px;
+    height: 120%;
+    width: 55%;
 }
 .welcome {
   position: absolute;

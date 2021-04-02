@@ -1,11 +1,11 @@
 <template>
-  <v-app>
+  <v-app style="margin: 0px">
     <template>
       <v-carousel
-        hide-delimiters
-        height="auto"
-        width="auto"
-        style="padding-left: 150px; padding-right: 150px;"
+        cycle
+        height="500"
+        hide-delimiter-background
+        show-arrows-on-hover
       >
         <v-carousel-item
           v-for="(item, i) in items"
@@ -28,7 +28,7 @@
           <v-tabs-slider></v-tabs-slider>
 
           <v-tab href="#tab-1">
-            Sale/Trade
+            Sales
           </v-tab>
 
           <v-tab href="#tab-2">
@@ -42,6 +42,7 @@
 
         <v-tabs-items v-model="tab">
           <v-tab-item v-for="i in 3" :key="i" :value="'tab-' + i">
+            <Sales></Sales>
             <template>
               <v-card :loading="loading" class="mx-auto my-12" max-width="374">
                 <template slot="progress">
@@ -76,7 +77,7 @@
                   </v-row>
 
                   <div class="my-4 subtitle-1">
-                    Location:
+                    Location: Clementi
                   </div>
 
                   <div>
@@ -84,7 +85,20 @@
                     sandwiches - an intimate setting with 12 indoor seats plus
                     patio seating.
                   </div>
+                  <div><strong>Options:</strong> $200 or bmwM3</div>
                 </v-card-text>
+                <v-card-actions>
+                  <v-list-item class="grow" style="font-weight: 700">
+                    <v-list-item-avatar color="grey darken-3">
+                      <v-img
+                        class="elevation-6"
+                        alt=""
+                        src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
+                      ></v-img>
+                    </v-list-item-avatar>
+                    Desmond
+                  </v-list-item>
+                </v-card-actions>
 
                 <v-divider class="mx-4"></v-divider>
                 <v-card-actions>
@@ -102,8 +116,12 @@
 </template>
 <script>
 import firebase from "firebase";
+import Sales from "./Sales";
 
 export default {
+  components: {
+    Sales,
+  },
   data() {
     return {
       items: [
@@ -113,6 +131,18 @@ export default {
         },
         {
           src: "https://mweb-cdn.karousell.com/build/fb-og-3Lk91FbWAJ.png",
+        },
+        {
+          src:
+            "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/best-skincare-products-glowing-skin-1609813960.jpg",
+        },
+        {
+          src:
+            "https://mk0adespressoj4m2p68.kinstacdn.com/wp-content/uploads/2015/03/facebook-ads-ecommerce.jpg",
+        },
+        {
+          src:
+            "https://www.itl.cat/pngfile/big/251-2514844_facebook-ad-design.jpg",
         },
       ],
       tabs: null,
@@ -126,6 +156,7 @@ export default {
   },
   methods: {
     fetchItems: function() {
+      console.log("fetching items");
       firebase
         .firestore()
         .collection("Listings")

@@ -11,8 +11,8 @@
       />
     </head>
 
-    <div id="app">
-      <Header :key="header"></Header>
+    <div id="app" style="margin: 0px">
+      <Header></Header>
       <router-view></router-view>
     </div>
   </v-app>
@@ -38,6 +38,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 10px;
 }
 </style>

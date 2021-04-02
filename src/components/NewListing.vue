@@ -17,7 +17,7 @@
         <h2><i>3. Give your listing a title</i></h2><br>
             <input type='text' id='listingname' maxlength="50" size="70" placeholder="no more than 50 chars" v-model='title'>
         <h2><i>4. Describe your listing</i></h2><br>
-            <textarea type='text' maxlength="50" rows="8" cols = '70' v-model='desc' style="background-color: #f9f9f9"></textarea>
+            <textarea type='text'  rows="8" cols = '70' v-model='desc' style="background-color: #f9f9f9"></textarea>
         <h2><i>5. Location where you want to deal</i></h2><br>
             <input type='text' id='listingloc' maxlength="50" size="70" placeholder="no more than 50 chars" v-model="loc">
         <h2><i>6. Upload your pictures:</i></h2><br>          
@@ -71,7 +71,7 @@ export default {
             title: '',
             desc: '', 
             loc: '', 
-            price: 0, 
+            price: '', 
             alt_trade: '', 
             trans_method: '',
             subcat_sales: ['Mobile & Electronics', 'Hobbies & Games', 'Sports', 'Education', 'Fashion'], 

@@ -1,8 +1,23 @@
 <template>
   <div>
-    <Header></Header>
+    <v-tabs
+      v-model="tab"
+      background-color="orange accent-4"
+      centered
+      dark
+      icons-and-text
+    >
+      <v-tabs-slider></v-tabs-slider>
+      <v-tab v-on:click="fetchItems('all')">
+        All
+      </v-tab>
+
+      <v-tab v-for="x in subcats" :key="x.id" v-on:click="fetchItems(x)">
+        {{ x }}
+      </v-tab>
+    </v-tabs>
     <div class="flex">
-      <section v-for="x in items" v-bind:key="x.id">
+      <section v-for="(x, i) in items" v-bind:key="i">
         <div
           class="profile"
           v-bind:style="{
@@ -13,24 +28,36 @@
           }"
         >
           desmond<br />
-          5 stars
+          <v-rating
+            :value="3"
+            color="amber"
+            dense
+            half-increments
+            readonly
+            size="14"
+          ></v-rating>
         </div>
-        <img
-          src="https://static.pexels.com/photos/24166/pexels-photo-24166-medium.jpg"
-          alt="Smartphone"
-        />
-        <h2>12345678901234567890123456789012345678901234567890</h2>
-        <div class="options">
-          <div class="hh">
-            $255
-          </div>
+        <img v-bind:src="x[1]['images']" /> {{ x.id }}
+        <h2>{{ x[1]["Title"] }}</h2>
+        <!-- {{x[1]}} -->
+        {{ x.id }}
+
+        <div v-if="x[1]['Price'] != ''" class="hh">${{ x[1]["Price"] }}</div>
+        <div v-if="x[1]['sale']['Alternatives'] != '' && x[1]['Price'] != ''">
           -or-
-          <div class="hh">
-            bmw m3
-          </div>
         </div>
+        <div v-if="x[1]['sale']['Alternatives'] != '' && x[1]['Price'] == ''">
+          -trading for-
+        </div>
+        <div v-if="x[1]['sale']['Alternatives'] != ''" class="hh">
+          {{ x[1]["sale"]["Alternatives"] }}
+        </div>
+        <i> {{ x[1]["Location"] }}</i>
         <aside>
-          <!-- <button>Add to Cart</button> -->
+          {{ x.id }}
+          {{ x[1]["UserID"] }}
+          <!-- {{x[2]}} -->
+          {{ profiles["id"] }}
         </aside>
       </section>
     </div>
@@ -39,39 +66,71 @@
 
 <script>
 // import firebase from 'firebase'
-import firebase from "../firebase";
-import Header from "../components/Header";
+import firebase from "firebase";
 
 export default {
   data() {
     return {
       items: [],
+      profiles: [],
+      subcats: [
+        "Mobile & Electronics",
+        "Hobbies & Games",
+        "Sports",
+        "Education",
+        "Fashion",
+      ],
     };
   },
-  components: {
-    Header,
-  },
   methods: {
-    fetchItems: function() {
+    fetchItems: function(x) {
       // database.collection('Listings').get()
       // firebase.firestore().collection('Listings').get()
-      firebase
-        .firestore()
-        .collection("Listings")
-        .get()
-        .then((querySnapShot) => {
-          let item = {};
-          querySnapShot.forEach((doc) => {
-            item = doc.data();
-            // console.log("executed: "+item);
-            this.items.push([doc.id, item]);
+      this.items = [];
+      if (x === "all") {
+        firebase
+          .firestore()
+          .collection("Listings")
+          .get()
+          .then((querySnapShot) => {
+            let item = {};
+            querySnapShot.forEach((doc) => {
+              item = doc.data();
+              // console.log("executed: "+item);
+              this.items.push([doc.id, item]);
+            });
           });
-        });
-      console.log(this.allitems);
+        // console.log(this.items);
+        console.log(this.profiles);
+      } else {
+        firebase
+          .firestore()
+          .collection("Listings")
+          .where("Subcat", "==", x)
+          .get()
+          .then((querySnapShot) => {
+            let item = {};
+            querySnapShot.forEach((doc) => {
+              item = doc.data();
+              // console.log("executed: "+item);
+              this.items.push([doc.id, item]);
+            });
+          });
+      }
+      this.items.forEach((x) => {
+        firebase
+          .firestore()
+          .collection("User")
+          .doc(x[0])
+          .get()
+          .then((x) => {
+            this.profiles.push(x);
+          });
+      });
     },
   },
   created() {
-    this.fetchItems();
+    this.fetchItems("all");
   },
 };
 </script>
@@ -223,7 +282,7 @@ button:hover {
   cursor: pointer;
   color: rgb(0, 0, 0);
   /* font-size: 13px; */
-  padding: 0em 3em;
+  padding: 0em 13em;
   padding-left: 5em;
   display: block;
   width: 70%;
