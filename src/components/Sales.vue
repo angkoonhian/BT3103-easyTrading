@@ -18,6 +18,7 @@
     </v-tabs>
     <div class="flex">
       <section v-for="(x, i) in items" v-bind:key="i">
+         
         <div
           class="profile"
           v-bind:style="{
@@ -26,8 +27,7 @@
               'https://media.wired.com/photos/5b8999943667562d3024c321/master/w_2560%2Cc_limit/trash2-01.jpg' +
               ')',
           }"
-        >
-          desmond<br />
+        >desmond
           <v-rating
             :value="3"
             color="amber"
@@ -37,6 +37,7 @@
             size="14"
           ></v-rating>
         </div>
+        
         <img v-bind:src="x[1]['images']" /> {{ x.id }}
         <h2>{{ x[1]["Title"] }}</h2>
         <!-- {{x[1]}} -->
@@ -54,9 +55,7 @@
         </div>
         <i> {{ x[1]["Location"] }}</i>
         <aside>
-          {{ x.id }}
-          {{ x[1]["UserID"] }}
-          <!-- {{x[2]}} -->
+          <!-- {{ x[1]["UserID"] }} -->
           {{ profiles["id"] }}
         </aside>
       </section>
@@ -241,19 +240,19 @@ h1 {
 
 h2 {
   font-size: 25px;
-  word-break: break-all;
+  word-wrap: break-all;
 }
 
 .flex > section {
   background: #fff;
-  padding: 1em;
+  padding: 0em;
   margin: 0.5em;
-  border-radius: 4px;
+  border-radius: 10px;
   box-shadow: 0px 0px 15px #aaaaaa;
 }
 
 .flex > section:hover {
-  box-shadow: 0px 0px 20px #3d3d3d;
+  box-shadow: 0px 0px 20px #ffa600;
 }
 
 button:hover {
@@ -276,15 +275,16 @@ button:hover {
 .profile {
   text-align: left;
   background-repeat: no-repeat;
-  background-position: 2em 50%;
+  background-position: 0.5em 50%;
   background-size: 2em;
   border: 0;
   cursor: pointer;
   color: rgb(0, 0, 0);
   /* font-size: 13px; */
-  padding: 0em 13em;
-  padding-left: 5em;
+  /* padding: -5em 150em; */
+  padding-left: 3em;
+  padding-top: 0.5em;
   display: block;
-  width: 70%;
+  width: 100%;
 }
 </style>
