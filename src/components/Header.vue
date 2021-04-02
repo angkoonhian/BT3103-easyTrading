@@ -40,12 +40,16 @@
             :key="item.title"
             :to="item.path"
             v-if="item.show"
-            @click="signOut"
+            @click="item.method"
           >
             <v-icon left dark>{{ item.icon }}</v-icon>
             {{ item.title }}
           </v-btn>
         </template>
+        <v-btn text v-if="loginState === 'true'" @click="signOut">
+          <v-icon left dark>lock_open</v-icon>
+          Sign Out
+        </v-btn>
       </v-toolbar-items>
     </v-app-bar>
   </div>
@@ -59,16 +63,22 @@ export default {
     return {
       sidebar: false,
       menuItems: [
-        { title: "Home", path: "/home", icon: "home", show: true },
-        { title: "Chat", path: "/chat", icon: "chat", show: true },
-        { title: "Sign Up", path: "/signup", icon: "face", show: true },
+        { title: "Home", path: "/home", icon: "home", show: true, method: "" },
+        { title: "Chat", path: "/chat", icon: "chat", show: true, method: "" },
+        {
+          title: "Sign Up",
+          path: "/signup",
+          icon: "face",
+          show: true,
+          method: "",
+        },
         {
           title: "Sign In",
           path: "/login",
           icon: "mdi-account-arrow-right",
           show: true,
+          method: "",
         },
-        { title: "Sign Out", icon: "lock_open", show: true },
       ],
       loginState: false,
     };
@@ -86,31 +96,17 @@ export default {
         });
     },
   },
-  // mounted() {
-  //   if (localStorage.login !== true) {
-  //     this.menuItems[2].show = false;
-  //     this.menuItems[3].show = false;
-  //     this.menuItems[4].show = true;
-  //     this.menuItems[1].show = true;
-  //   } else {
-  //     this.menuItems[2].show = true;
-  //     this.menuItems[3].show = true;
-  //     this.menuItems[4].show = false;
-  //     this.menuItems[1].show = false;
-  //   }
-  // },
   components: {},
   created() {
+    this.loginState = localStorage.getItem("login");
     console.log(localStorage.getItem("login"));
     if (localStorage.getItem("login") == "true") {
       this.menuItems[2].show = false;
       this.menuItems[3].show = false;
-      this.menuItems[4].show = true;
       this.menuItems[1].show = true;
     } else {
       this.menuItems[2].show = true;
       this.menuItems[3].show = true;
-      this.menuItems[4].show = false;
       this.menuItems[1].show = false;
     }
   },

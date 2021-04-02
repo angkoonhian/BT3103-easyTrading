@@ -3,7 +3,7 @@
     <template>
       <v-carousel
         cycle
-        height="400"
+        height="500"
         hide-delimiter-background
         show-arrows-on-hover
       >
@@ -133,14 +133,17 @@ export default {
           src: "https://mweb-cdn.karousell.com/build/fb-og-3Lk91FbWAJ.png",
         },
         {
-          src: "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/best-skincare-products-glowing-skin-1609813960.jpg"
+          src:
+            "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/best-skincare-products-glowing-skin-1609813960.jpg",
         },
         {
-          src: "https://mk0adespressoj4m2p68.kinstacdn.com/wp-content/uploads/2015/03/facebook-ads-ecommerce.jpg"
+          src:
+            "https://mk0adespressoj4m2p68.kinstacdn.com/wp-content/uploads/2015/03/facebook-ads-ecommerce.jpg",
         },
         {
-          src: "https://www.itl.cat/pngfile/big/251-2514844_facebook-ad-design.jpg"
-        }
+          src:
+            "https://www.itl.cat/pngfile/big/251-2514844_facebook-ad-design.jpg",
+        },
       ],
       tabs: null,
       text: "asdasdasdasdsads",

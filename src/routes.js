@@ -4,7 +4,7 @@ import Login from "./components/Login.vue";
 import SignUp from "./components/SignUp.vue";
 import Sales from "./components/Sales.vue";
 import Home from "./components/Home.vue";
-import Chat from "./components/Chat.vue";
+import Chat from "./components/chatComponent/Chat.vue";
 import UserListings from "./components/UserListings.vue";
 
 export default [
