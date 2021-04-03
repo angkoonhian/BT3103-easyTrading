@@ -1,17 +1,42 @@
 <template>
-  <div class="form">
-    <h1 class="title">Register</h1>
-    <div class="tile is-vertical is-4">
-      <b-field label="Email">
-        <b-input icon="email" type="email" v-model="email" />
-      </b-field>
-      <b-field label="password">
-        <b-input type="password" password-reveal v-model="password" />
-      </b-field>
-      <b-button class="is-primary" @click="register()">Register</b-button>
-    </div>
-  </div>
+   <v-app id="inspire">
+      <v-content>
+         <v-container fluid fill-height>
+            <v-layout align-center justify-center>
+               <v-flex xs12 sm8 md4>
+                  <v-card class="elevation-12">
+                     <v-toolbar dark color="rgb(239, 117, 47)">
+                        <v-toolbar-title>Register Form</v-toolbar-title>
+                     </v-toolbar>
+                     <v-card-text>
+                        <v-form>
+                           <v-text-field
+                              prepend-icon="person"
+                              name="login"
+                              label="Login"
+                              type="text"
+                           ></v-text-field>
+                           <v-text-field
+                              id="password"
+                              prepend-icon="lock"
+                              name="password"
+                              label="Password"
+                              type="password"
+                           ></v-text-field>
+                        </v-form>
+                     </v-card-text>
+                     <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="rgb(239, 117, 47)" @click="register()" style="margin-left:80px"><span style="color:white;text-align:center;line-height: 60px;">Register</span></v-btn>
+                     </v-card-actions>
+                  </v-card>
+               </v-flex>
+            </v-layout>
+         </v-container>
+      </v-content>
+   </v-app>
 </template>
+
 
 <script>
 import firebase from "firebase";

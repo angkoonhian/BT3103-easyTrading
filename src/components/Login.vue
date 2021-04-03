@@ -64,6 +64,8 @@ export default {
           .signInWithEmailAndPassword(this.username, this.password)
           .then((user) => {
             console.log(user.data);
+            localStorage.setItem("username", this.username);
+            localStorage.setItem("email", this.email);
             this.$router.push("/sales");
             localStorage.setItem("login", true);
           });
@@ -91,6 +93,8 @@ export default {
                 id: res.user.uid,
                 ProfileURL: res.user.photoURL,
               });
+            localStorage.setItem("username", res.user.displayName);
+            localStorage.setItem("email", res.user.email);
             localStorage.setItem("UID", res.user.uid);
             localStorage.setItem("login", true);
             this.$router.push("/newListing");

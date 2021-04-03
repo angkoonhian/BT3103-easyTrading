@@ -6,6 +6,7 @@ import Sales from "./components/Sales.vue";
 import Home from "./components/Home.vue";
 import Chat from "./components/chatComponent/Chat.vue";
 import UserListings from "./components/UserListings.vue";
+import Profile from "./components/Profile.vue";
 
 export default [
   { path: "/", component: Login },
@@ -31,4 +32,10 @@ export default [
     component: Chat,
     meta: { requiresAuth: true },
   },
+  {
+    path: "/profile",
+    name: "profile",
+    component: Profile,
+    meta: { requiresAuth: true },
+  }
 ];
