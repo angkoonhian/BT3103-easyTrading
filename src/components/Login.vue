@@ -1,22 +1,49 @@
 <template>
-  <div>
-      <img id="bg" src="../assets/login1.jpg">
-      <img class="right" style="z-index: 0" src="../assets/white.png">
-      <div class="right">
-          <img src="../assets/logo.png" class="logo">
-          <input class="input1" onfocus="value=''" value="Username" v-model="username"/>
-
-          <input class="input2" onfocus="value=''" value="Password" v-model="password"/>
-          <button class="but" @click="login">Login</button>
-          <p class="cut">____________OR____________</p>
-          <div @click="socialLogin">
-              <img id="icon" src="../assets/google.png">
-              <p class="other">Login by Google</p>
-          </div>
-          <h1></h1>
-      </div>      
-  </div>
+   <v-app id="inspire">
+      <v-content>
+         <v-container fluid fill-height>
+            <v-layout align-center justify-center>
+               <v-flex xs12 sm8 md4>
+                  <v-card class="elevation-12">
+                     <v-toolbar dark color="rgb(239, 117, 47)">
+                        <v-toolbar-title>Login Form</v-toolbar-title>
+                     </v-toolbar>
+                     <v-card-text>
+                        <v-form>
+                           <v-text-field
+                              prepend-icon="person"
+                              name="login"
+                              label="Login"
+                              type="text"
+                           ></v-text-field>
+                           <v-text-field
+                              id="password"
+                              prepend-icon="lock"
+                              name="password"
+                              label="Password"
+                              type="password"
+                           ></v-text-field>
+                        </v-form>
+                     </v-card-text>
+                     <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <div @click="socialLogin" class="other">
+                            <img id="icon" src="../assets/google.png">
+                            <p >Login by Google</p>
+                        </div>
+                        <v-btn color="rgb(239, 117, 47)" @click="login" style="margin-left:80px"><span style="color:white;text-align:center;line-height: 60px;">Login</span></v-btn>
+                        <v-btn color="rgb(239, 117, 47)" to="/signUp" ><span style="color:white;text-align:center;line-height: 60px;">Sign Up</span></v-btn>
+                     </v-card-actions>
+                  </v-card>
+               </v-flex>
+            </v-layout>
+         </v-container>
+      </v-content>
+   </v-app>
 </template>
+
+
+
 
 <script>
 import firebase from "firebase"
@@ -123,13 +150,14 @@ export default ({
     top:40%;
     left: 25%;
     width: 250px;
-  border: 0;
-  border-bottom: 2px solid #9b9b9b;
-  outline: 0;
-  font-size: 1.3rem;
-  color: rgb(193, 183, 183);
-  padding: 7px 0;
+    border: 0;
+    border-bottom: 2px solid #9b9b9b;
+    outline: 0;
+    font-size: 1.3rem;
+    color: rgb(193, 183, 183);
+    padding: 7px 0;
 }
+
 .cut {
     position: absolute;
     margin: 10px;
@@ -138,14 +166,11 @@ export default ({
     width: 250px;  
     color:#9b9b9b;    
 }
+
 .other {
-    position: absolute;
-    margin: 10px;
-    top:71%;
-    left: 28%;
-    width: 250px; 
+    position: relative;
     font-style: bolder;
-    color:rgba(201, 136, 24, 0.851);   
+    color:rgb(239, 117, 47);   
     text-align: center;  
 }
 
@@ -164,10 +189,7 @@ export default ({
 }
 
 #icon {
-    position: absolute;
-    margin: 10px;
-    top:70%;
-    left: 30%;
+    position: relative;
     width: 250px; 
     height: 40px;
     width: 40px;
