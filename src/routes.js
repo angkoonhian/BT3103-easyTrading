@@ -4,6 +4,8 @@ import Login from "./components/Login.vue";
 import SignUp from "./components/SignUp.vue";
 import Sales from "./components/Sales.vue";
 import Home from "./components/Home.vue";
+import Chat from "./components/chatComponent/Chat.vue";
+import UserListings from "./components/UserListings.vue";
 
 export default [
   { path: "/", component: Login },
@@ -15,7 +17,18 @@ export default [
     component: NewListing,
     meta: { requiresAuth: true },
   },
+  {
+    path: "/myListings",
+    name: "myListings",
+    component: UserListings,
+    meta: { requiresAuth: true },
+  },
   { path: "/Signup", name: "signUp", component: SignUp },
   { path: "/sales", name: "sales", component: Sales },
-  { path: "/chat", name: "chat" },
+  {
+    path: "/chat",
+    name: "chat",
+    component: Chat,
+    meta: { requiresAuth: true },
+  },
 ];

@@ -19,7 +19,7 @@
         <v-icon @click="sidebar = !sidebar"> </v-icon>
       </span>
       <v-toolbar-title>
-        <router-link to="/" tag="span" style="cursor: pointer">
+        <router-link to="/Home" tag="span" style="cursor: pointer">
           <img src="../assets/logo.png" id="logo" />
         </router-link>
       </v-toolbar-title>
@@ -34,9 +34,21 @@
         solo-inverted
       ></v-text-field>
       <v-toolbar-items class="d-sm-none d-md-flex">
-        <v-btn text v-for="item in menuItems" :key="item.title" :to="item.path">
-          <v-icon left dark>{{ item.icon }}</v-icon>
-          {{ item.title }}
+        <template v-for="item in menuItems">
+          <v-btn
+            text
+            :key="item.title"
+            :to="item.path"
+            v-if="item.show"
+            @click="item.method"
+          >
+            <v-icon left dark>{{ item.icon }}</v-icon>
+            {{ item.title }}
+          </v-btn>
+        </template>
+        <v-btn text v-if="loginState === 'true'" @click="signOut">
+          <v-icon left dark>lock_open</v-icon>
+          Sign Out
         </v-btn>
       </v-toolbar-items>
     </v-app-bar>
@@ -44,20 +56,60 @@
 </template>
 
 <script>
+import firebase from "firebase";
+
 export default {
   data() {
     return {
       sidebar: false,
       menuItems: [
-        { title: "Home", path: "/home", icon: "home" },
-        { title: "Sign Up", path: "/signup", icon: "face" },
-        { title: "Sign In", path: "/login", icon: "lock_open" },
-        { title: "Chat", path: "/chat", icon: "chat" },
+        { title: "Home", path: "/home", icon: "home", show: true, method: "" },
+        { title: "Chat", path: "/chat", icon: "chat", show: true, method: "" },
+        {
+          title: "Sign Up",
+          path: "/signup",
+          icon: "face",
+          show: true,
+          method: "",
+        },
+        {
+          title: "Sign In",
+          path: "/login",
+          icon: "mdi-account-arrow-right",
+          show: true,
+          method: "",
+        },
       ],
+      loginState: false,
     };
   },
-  methods: {},
+  methods: {
+    signOut: function() {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          console.log("user sign out");
+          localStorage.clear();
+          localStorage.setItem("login", false);
+          location.reload();
+        });
+    },
+  },
   components: {},
+  created() {
+    this.loginState = localStorage.getItem("login");
+    console.log(localStorage.getItem("login"));
+    if (localStorage.getItem("login") == "true") {
+      this.menuItems[2].show = false;
+      this.menuItems[3].show = false;
+      this.menuItems[1].show = true;
+    } else {
+      this.menuItems[2].show = true;
+      this.menuItems[3].show = true;
+      this.menuItems[1].show = false;
+    }
+  },
 };
 </script>
 
