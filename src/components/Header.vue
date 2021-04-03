@@ -79,6 +79,13 @@ export default {
           show: true,
           method: "",
         },
+        {
+          title: "Profile",
+          path: "/profile",
+          icon: "mdi-account-arrow-right",
+          show: true,
+          method: "",
+        }
       ],
       loginState: false,
     };
@@ -104,10 +111,12 @@ export default {
       this.menuItems[2].show = false;
       this.menuItems[3].show = false;
       this.menuItems[1].show = true;
+      this.menuItems[4].show = true;
     } else {
       this.menuItems[2].show = true;
       this.menuItems[3].show = true;
       this.menuItems[1].show = false;
+      this.menuItems[4].show = false;
     }
   },
 };
@@ -115,7 +124,7 @@ export default {
 
 <style scoped>
 #logo {
-  width: 150px;
+  width: 130px;
   top: 0px;
   left: 0px;
 }
