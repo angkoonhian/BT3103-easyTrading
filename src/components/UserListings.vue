@@ -37,7 +37,7 @@
             </v-card-text>
 
             <v-divider class="mx-4"></v-divider>
-            <v-card-actions>
+            <v-card-actions v-show="isSameUser">
               <v-btn color="orange darken-2" text v-on:click="route(x[0])">
                 edit
               </v-btn>
@@ -57,7 +57,7 @@ import firebase from "firebase";
 import CfmDlg from "./CfmDlg"
 
 export default {
-  props: ["user", "profile", "rating", "numRatings", "name", "profileURL"],
+  props: ["user", "profile", "rating", "numRatings", "name", "profileURL", "isSameUser"],
   data() {
     return {
       items: [],

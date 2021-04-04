@@ -207,9 +207,8 @@ export default {
           .where("Subcat", "==", x)
           .get()
           .then((querySnapShot) => {
-            let item = {};
             querySnapShot.forEach(async(doc) => {
-              item = doc.data();
+              let item = doc.data();
               await firebase
                 .firestore()
                 .collection("users")

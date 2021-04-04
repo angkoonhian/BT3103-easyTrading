@@ -135,6 +135,7 @@
       v-bind:numRatings="numRatings"
       v-bind:name="name"
       v-bind:profileURL="profile"
+      v-bind:isSameUser="isSameUser"
     ></UserListings>
   </div>
 </template>
@@ -153,7 +154,8 @@ export default {
       rating: 0,
       biography: "",
       dialog: false,
-      currentid: ""
+      currentid: "", 
+      isSameUser: false
     };
   },
   components: {
@@ -166,6 +168,7 @@ export default {
     if (this.user=== undefined) {
       this.user = localStorage.UID; 
     }
+    this.isSameUser = this.currentid === this.user; 
     
     firebase
       .firestore()
