@@ -7,6 +7,7 @@ import Home from "./components/Home.vue";
 import Chat from "./components/chatComponent/Chat.vue";
 import UserListings from "./components/UserListings.vue";
 import Profile from "./components/Profile.vue";
+import EditListing from "./components/EditListing.vue"; 
 
 export default [
   { path: "/", component: Login },
@@ -26,6 +27,10 @@ export default [
   },
   { path: "/Signup", name: "signUp", component: SignUp },
   { path: "/sales", name: "sales", component: Sales },
+  { path: '/edit', component: EditListing, 
+    name:'edit', 
+    meta: { requiresAuth: true }, 
+    props:true }, 
   {
     path: "/chat",
     name: "chat",
