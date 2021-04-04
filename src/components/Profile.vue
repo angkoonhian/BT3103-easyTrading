@@ -17,6 +17,7 @@
             <v-list-item-subtitle>Software Engineer | dokanee</v-list-item-subtitle> -->
           </v-list-item-content>
           <template>
+            
             <v-row style="padding-left: 30px">
               <v-dialog v-model="dialog" persistent max-width="600px">
                 <template v-slot:activator="{ on, attrs }">
@@ -100,6 +101,22 @@
         {{ biography }}
       </h4>
     </v-card>
+    <v-tabs
+      v-model="tab"
+      background-color="orange accent-4"
+      centered
+      dark
+      icons-and-text
+    >
+      <v-tabs-slider></v-tabs-slider>
+      <v-tab>
+        Listings
+      </v-tab>
+
+      <v-tab>
+        Reviews
+      </v-tab>
+    </v-tabs>
     <v-btn
       text
       style="margin-top: 20px; height: 100px; width: 150px"
@@ -111,7 +128,7 @@
       New listing
     </v-btn>
     <UserListings
-      v-bind:user="user"
+      v-bind:user="userid"
       v-bind:profile="true"
       v-bind:rating="rating"
       v-bind:numRatings="numRatings"
@@ -135,6 +152,7 @@ export default {
       rating: 0,
       biography: "",
       dialog: false,
+      userid: localStorage.UID
     };
   },
   components: {
@@ -145,7 +163,7 @@ export default {
     firebase
       .firestore()
       .collection("users")
-      .where("id", "==", this.user)
+      .where("id", "==", localStorage.UID)
       .get()
       .then((res) => {
         const data = res.docs[0].data();
@@ -165,7 +183,7 @@ export default {
       firebase
         .firestore()
         .collection("users")
-        .doc(this.user)
+        .doc(localStorage.UID)
         .update({
           Name: this.name,
           Biography: this.biography,

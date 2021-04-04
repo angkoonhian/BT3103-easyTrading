@@ -1,5 +1,6 @@
 <template>
   <div>
+    <CfmDlg ref="confirm" />
     <div class="flex">
       <v-row style="">
         <v-col
@@ -11,30 +12,7 @@
           lg="3"
         >
           <v-card :loading="loading" class="mx-auto my-12" max-width="374">
-            <v-card-actions>
-              <v-list-item class="grow" style="font-weight: 700">
-                <v-list-item-avatar color="grey darken-3">
-                  <img v-bind:src="profileURL" class="elevation-6" alt="" />
-                </v-list-item-avatar>
-                {{ name }}
-              </v-list-item>
-            </v-card-actions>
-            <v-row
-              align="center"
-              class="mx-0"
-              style="margin-bottom: 10px; padding-left: 20px;"
-            >
-              <v-rating
-                v-bind:value="rating"
-                color="amber"
-                dense
-                half-increments
-                readonly
-                size="14"
-              ></v-rating>
-
-              <div class="grey--text ml-4">{{ rating }} ({{ numRatings }})</div>
-            </v-row>
+            
             <template slot="progress">
               <v-progress-linear
                 color="deep-purple"
@@ -61,10 +39,10 @@
             <v-divider class="mx-4"></v-divider>
             <v-card-actions>
               <v-btn color="orange darken-2" text>
-                View
+                edit
               </v-btn>
-              <v-btn color="orange darken-2" text v-if="profile">
-                Contact
+              <v-btn color="orange darken-2" text @click="delRecord(x[0])">
+                delete
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -76,6 +54,7 @@
 
 <script>
 import firebase from "firebase";
+import CfmDlg from "./CfmDlg"
 
 export default {
   props: ["user", "profile", "rating", "numRatings", "name", "profileURL"],
@@ -84,7 +63,7 @@ export default {
       items: [],
     };
   },
-  components: {},
+  components: { CfmDlg },
   methods: {
     fetchItems: function() {
       // database.collection('Listings').get()
@@ -105,6 +84,19 @@ export default {
           });
         });
     },
+    async delRecord(x) {
+        if (
+          await this.$refs.confirm.open(
+            "Confirm Deletion",
+            "Are you sure you want to delete this listing permanently?"
+          )
+        ) {
+          this.deleteRecord(x);
+        }
+      },
+      deleteRecord(x) {
+        firebase.firestore().collection('Listings').doc(x).delete().then(()=>location.reload());
+      },
   },
   created() {
     console.log(this.user);
