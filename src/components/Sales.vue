@@ -28,7 +28,7 @@
             lg="3"
           >
             <v-card :loading="loading" class="mx-auto my-12" max-width="374">
-              <v-card-actions>
+              <v-card-actions @click="toProfile(x[6])" style="cursor: pointer">
                 <v-list-item class="grow" style="font-weight: 700">
                   <v-list-item-avatar color="grey darken-3">
                     <img v-bind:src="x[5]" class="elevation-6" alt="" />
@@ -208,7 +208,7 @@ export default {
           .get()
           .then((querySnapShot) => {
             let item = {};
-            querySnapShot.forEach(async (doc) => {
+            querySnapShot.forEach(async(doc) => {
               item = doc.data();
               await firebase
                 .firestore()
@@ -244,6 +244,14 @@ export default {
           });
       });
     },
+    toProfile: function(x) {
+      this.$router.push({
+        path: `/profile`,
+        name: "profile",
+        params: { user: x },
+        props: true,
+      });
+    }, 
     contactOwner: function(ownerId) {
       const chatRoomUsers = [ownerId, this.user];
       firebase

@@ -118,6 +118,7 @@
       </v-tab>
     </v-tabs>
     <v-btn
+      v-show = "this.user === this.currentid"
       text
       style="margin-top: 20px; height: 100px; width: 150px"
       @click="toListing"
@@ -152,16 +153,20 @@ export default {
       rating: 0,
       biography: "",
       dialog: false,
+      currentid: ""
     };
   },
   components: {
     UserListings,
   },
   created() {
-    console.log(this.user);
+    console.log("yoyoyo"+this.user);
+    this.currentid = localStorage.UID; 
+
     if (this.user=== undefined) {
       this.user = localStorage.UID; 
     }
+    
     firebase
       .firestore()
       .collection("users")
@@ -176,7 +181,6 @@ export default {
         this.biography = data.Biography;
         this.rating = data.Rating;
         this.numRatings = data.numRatings;
-        console.log(this.name);
       });
   },
   methods: {
