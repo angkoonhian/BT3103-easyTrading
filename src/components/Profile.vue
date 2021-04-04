@@ -34,6 +34,7 @@ export default {
     if (localStorage.getItem("login") == "true") {
       this.name = localStorage.getItem("username");
       this.email = localStorage.getItem("email");
+      console.log(this.name);
     } 
   }
 }

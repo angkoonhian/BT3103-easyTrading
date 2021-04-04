@@ -17,8 +17,8 @@
 
     <br />
     <template>
-      <v-card>
-        <v-tabs
+      <!-- <v-card> -->
+        <v-tabs 
           v-model="tab"
           background-color="orange accent-4"
           centered
@@ -27,11 +27,11 @@
         >
           <v-tabs-slider></v-tabs-slider>
 
-          <v-tab href="#tab-1">
+          <v-tab v-on:click="currentTab='sales'">
             Sales
           </v-tab>
 
-          <v-tab href="#tab-2">
+          <v-tab v-on:click="currentTab='rentals'">
             Rental
           </v-tab>
 
@@ -39,12 +39,10 @@
             Services
           </v-tab>
         </v-tabs>
-
-        <v-tabs-items v-model="tab">
-          <v-tab-item v-for="i in 3" :key="i" :value="'tab-' + i">
-            <Sales></Sales>
-            <template>
-              <v-card :loading="loading" class="mx-auto my-12" max-width="374">
+            <div v-if="currentTab==='sales'"><Sales></Sales></div>
+            <div v-if="currentTab==='rentals'"><Rentals></Rentals></div>
+            <!-- <template>
+               <v-card :loading="loading" class="mx-auto my-12" max-width="374">
                 <template slot="progress">
                   <v-progress-linear
                     color="deep-purple"
@@ -107,23 +105,22 @@
                   </v-btn>
                 </v-card-actions>
               </v-card>
-            </template>
-          </v-tab-item>
-        </v-tabs-items>
-      </v-card>
+            </template> -->
     </template>
   </v-app>
 </template>
 <script>
 import firebase from "firebase";
 import Sales from "./Sales";
+import Rentals from "./Rentals"
 
 export default {
   components: {
-    Sales,
+    Sales, Rentals
   },
   data() {
     return {
+      currentTab: 'sales',
       items: [
         {
           src:
@@ -176,4 +173,8 @@ export default {
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+/* v-tab {
+  position: sticky;
+} */
+</style>
