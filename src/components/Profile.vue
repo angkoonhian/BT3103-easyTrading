@@ -128,7 +128,7 @@
       New listing
     </v-btn>
     <UserListings
-      v-bind:user="userid"
+      v-bind:user="user"
       v-bind:profile="true"
       v-bind:rating="rating"
       v-bind:numRatings="numRatings"
@@ -152,7 +152,6 @@ export default {
       rating: 0,
       biography: "",
       dialog: false,
-      userid: localStorage.UID
     };
   },
   components: {
@@ -160,10 +159,13 @@ export default {
   },
   created() {
     console.log(this.user);
+    if (this.user=== undefined) {
+      this.user = localStorage.UID; 
+    }
     firebase
       .firestore()
       .collection("users")
-      .where("id", "==", localStorage.UID)
+      .where("id", "==", this.user)
       .get()
       .then((res) => {
         const data = res.docs[0].data();

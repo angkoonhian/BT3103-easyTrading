@@ -25,6 +25,8 @@
         name="listingtype"
         v-on:click="selectedType = 'service'"
       />I am providing a service
+
+      
       <h2>2. Choose your sub-category</h2>
       <div
         v-show="selectedType === 'sale'"
