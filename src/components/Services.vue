@@ -84,7 +84,7 @@
                 <v-btn color="orange darken-2" text>
                   View
                 </v-btn>
-                <v-btn color="orange darken-2" text @click="contactOwner(x[6])">
+                <v-btn color="orange darken-2" text>
                   Contact
                 </v-btn>
               </v-card-actions>
@@ -148,17 +148,16 @@ export default {
       items: [],
       profiles: [],
       subcats: [
-        "Mobile & Electronics",
-        "Hobbies & Games",
-        "Sports",
         "Education",
-        "Fashion",
+        "Hobbies & Games",
+        "Coaching",
+        "Tutoring",
+        "Teaching",
       ],
       rating: 0,
       name: "",
       numRatings: 0,
       profileURL: "",
-      user: localStorage.UID,
     };
   },
   methods: {
@@ -170,7 +169,7 @@ export default {
         firebase
           .firestore()
           .collection("Listings")
-          .where("Type", "==", "sale")
+          .where("Type", "==", "services")
           .get()
           .then((querySnapShot) => {
             querySnapShot.forEach(async (doc) => {
@@ -193,7 +192,6 @@ export default {
                     this.name,
                     this.numRating,
                     this.profileURL,
-                    item.UserID,
                   ]);
                 });
             });
@@ -203,7 +201,7 @@ export default {
         firebase
           .firestore()
           .collection("Listings")
-          .where("Type", "==", "sale")
+          .where("Type", "==", "services")
           .where("Subcat", "==", x)
           .get()
           .then((querySnapShot) => {
@@ -225,20 +223,6 @@ export default {
             this.profiles.push(x);
           });
       });
-    },
-    contactOwner: function(ownerId) {
-      const chatRoomUsers = [ownerId, this.user];
-      firebase
-        .firestore()
-        .collection("chatRooms")
-        .where("users", "array-contains", chatRoomUsers)
-        .get()
-        .then((res) => {
-          if (res.empty == true) {
-            console.log("no chat room for them yet");
-          }
-        });
-      this.$router.push({ path: `/chat` });
     },
   },
   created() {
