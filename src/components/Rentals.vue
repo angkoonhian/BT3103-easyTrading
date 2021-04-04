@@ -17,8 +17,82 @@
       </v-tab>
     </v-tabs>
     <div class="flex">
-      <section v-for="(x, i) in items" v-bind:key="i">
-         
+      <div class="flex">
+        <v-row style="">
+          <v-col
+            v-for="(x, i) in items"
+            v-bind:key="i"
+            col="12"
+            sm="6"
+            md="4"
+            lg="3"
+          >
+            <v-card :loading="loading" class="mx-auto my-12" max-width="374">
+              <v-card-actions>
+                <v-list-item class="grow" style="font-weight: 700">
+                  <v-list-item-avatar color="grey darken-3">
+                    <img v-bind:src="x[5]" class="elevation-6" alt="" />
+                  </v-list-item-avatar>
+                  {{ x[3] }}
+                </v-list-item>
+              </v-card-actions>
+              <v-row
+                align="center"
+                class="mx-0"
+                style="margin-bottom: 10px; padding-left: 20px;"
+              >
+                <v-rating
+                  v-bind:value="x[2]"
+                  color="amber"
+                  dense
+                  half-increments
+                  readonly
+                  size="14"
+                ></v-rating>
+
+                <div class="grey--text ml-4">
+                  {{ x[2] }} ({{ x[4] }} reviews)
+                </div>
+              </v-row>
+              <template slot="progress">
+                <v-progress-linear
+                  color="deep-purple"
+                  height="10"
+                  indeterminate
+                ></v-progress-linear>
+              </template>
+
+              <v-img height="250" v-bind:src="x[1].images[0]"></v-img>
+
+              <v-card-title>{{ x[1]["Title"] }}</v-card-title>
+
+              <v-card-text>
+                <div class="my-2 subtitle-1">
+                  <strong>Location:</strong> {{ x[1]["Location"] }}
+                </div>
+                <div class="subtitle-1">
+                  <strong>Type:</strong> {{ x[1]["Type"] }}
+                </div>
+                <div>
+                  <strong>Description:</strong> {{ x[1]["Description"] }}
+                </div>
+                <div><strong>Options:</strong> ${{ x[1]["Price"] }}</div>
+              </v-card-text>
+
+              <v-divider class="mx-4"></v-divider>
+              <v-card-actions>
+                <v-btn color="orange darken-2" text>
+                  View
+                </v-btn>
+                <v-btn color="orange darken-2" text>
+                  Contact
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+        </v-row>
+      </div>
+      <!-- <section v-for="(x, i) in items" v-bind:key="i">
         <div
           class="profile"
           v-bind:style="{
@@ -27,28 +101,39 @@
               'https://media.wired.com/photos/5b8999943667562d3024c321/master/w_2560%2Cc_limit/trash2-01.jpg' +
               ')',
           }"
-        >desmond
+        >
+          {{ x[3] }}
           <v-rating
-            :value="3"
+            v-bind:value="x[2]"
             color="amber"
             dense
             half-increments
             readonly
             size="14"
-          ></v-rating>
+          ></v-rating
+          >{{ x[2] }}
         </div>
-        
+
         <img v-bind:src="x[1]['images']" /> {{ x.id }}
         <h2>{{ x[1]["Title"] }}</h2>
-        <div class="hh">${{ x[1]["Price"] }}</div>
-        per
-        {{x[1]['rent']['Interval']}}
+        {{x[1]}}
+        {{ x.id }}
+
+        <div v-if="x[1]['Price'] != ''" class="hh">${{ x[1]["Price"] }}</div>
+        <div v-if="x[1]['sale']['Alternatives'] != '' && x[1]['Price'] != ''">
+          -or-
+        </div>
+        <div v-if="x[1]['sale']['Alternatives'] != '' && x[1]['Price'] == ''">
+          -trading for-
+        </div>
+        <div v-if="x[1]['sale']['Alternatives'] != ''" class="hh">
+          {{ x[1]["sale"]["Alternatives"] }}
+        </div>
         <i> {{ x[1]["Location"] }}</i>
         <aside>
-          <!-- {{ x[1]["UserID"] }} -->
           {{ profiles["id"] }}
         </aside>
-      </section>
+      </section> -->
     </div>
   </div>
 </template>
@@ -62,7 +147,7 @@ export default {
     return {
       items: [],
       profiles: [],
-      subcats: ['Automobiles', 'Property', 'Books', 'Games', 'Electronics'],
+      subcats: ["Automobiles", "Property", "Books", "Games", "Electronics"],
     };
   },
   methods: {
@@ -73,22 +158,40 @@ export default {
       if (x === "all") {
         firebase
           .firestore()
-          .collection("Listings").where("Type", '==', 'rent')
+          .collection("Listings")
+          .where("Type", "==", "rent")
           .get()
           .then((querySnapShot) => {
-            let item = {};
-            querySnapShot.forEach((doc) => {
-              item = doc.data();
-              // console.log("executed: "+item);
-              this.items.push([doc.id, item]);
+            querySnapShot.forEach(async (doc) => {
+              let item = doc.data();
+              console.log(item.UserID);
+              await firebase
+                .firestore()
+                .collection("users")
+                .where("id", "==", item.UserID)
+                .get()
+                .then((res) => {
+                  this.rating = res.docs[0].data().Rating;
+                  this.name = res.docs[0].data().Name;
+                  this.numRating = res.docs[0].data().numRatings;
+                  this.profileURL = res.docs[0].data().ProfileURL;
+                  this.items.push([
+                    doc.id,
+                    item,
+                    this.rating,
+                    this.name,
+                    this.numRating,
+                    this.profileURL,
+                  ]);
+                });
             });
           });
-        // console.log(this.items);
-        console.log(this.profiles);
+        console.log(this.items);
       } else {
         firebase
           .firestore()
-          .collection("Listings").where("Type", '==', 'rent')
+          .collection("Listings")
+          .where("Type", "==", "rent")
           .where("Subcat", "==", x)
           .get()
           .then((querySnapShot) => {
@@ -118,157 +221,4 @@ export default {
 };
 </script>
 
-<style scoped>
-/* Flex-related code */
-.flex {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center; /* Or space-between or space-around */
-}
-
-.flex > section {
-  align-items: center;
-  display: flex;
-  flex: 1 1 0;
-  flex-direction: column;
-  text-align: center;
-  max-width: 400px;
-}
-
-.flex > section > p {
-  flex-grow: 1;
-}
-
-.flex > section > h4 {
-  text-align: left;
-}
-
-/* This rule ist just because of the responsive images */
-@media (max-width: 1600px) {
-  .flex > section {
-    max-width: 250px;
-  }
-}
-
-/* .flex div {
-  display: flex;
-  justify-content: space-between;
-} */
-
-.flex aside {
-  width: 100%;
-}
-
-/* Basic styling for UI */
-
-body {
-  font: 16px "Titillium Web", sans-serif;
-  margin: 0;
-}
-
-img {
-  width: 400px;
-}
-
-@media (max-width: 1600px) {
-  img {
-    width: 282px;
-  }
-}
-
-/* nav {
-  background: #330099;
-}
-
-nav ul {
-  display: flex;
-  justify-content: space-around;
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-nav ul li {
-  flex-grow: 1;
-}
-
-nav ul li a {
-  text-align: center;
-  color: #fff;
-  padding: 0.5em;
-  display: block;
-  text-transform: uppercase;
-  text-decoration: none;
-}
-
-nav ul li a.active {
-  background: #24006B;
-}
-
-nav ul li a:hover {
-  background: #AA80FF;
-  color: #000;
-  font-weight: 700;
-}
-
-header {
-  text-align: center;
-}
-
-h1 {
-  color: #777380;
-  font-weight: 200;
-  font-size: 35px;
-}
-*/
-
-h2 {
-  font-size: 25px;
-  word-wrap: break-all;
-}
-
-.flex > section {
-  background: #fff;
-  padding: 0em;
-  margin: 0.5em;
-  border-radius: 10px;
-  box-shadow: 0px 0px 15px #aaaaaa;
-}
-
-.flex > section:hover {
-  box-shadow: 0px 0px 20px #ffa600;
-}
-
-button:hover {
-  background-color: #006b6b;
-  background-size: 3em;
-  background-position: 1.5em 50%;
-}
-
-.hh {
-  background: rgb(255, 153, 0);
-  color: #fff;
-  font-weight: 700;
-  padding: 0.3em 0.6em;
-  border-radius: 1em;
-  display: flex;
-  font-size: 120%;
-  word-break: break-all;
-}
-
-.profile {
-  text-align: left;
-  background-repeat: no-repeat;
-  background-position: 0.5em 50%;
-  background-size: 2em;
-  border: 0;
-  cursor: pointer;
-  color: rgb(0, 0, 0);
-  /* font-size: 13px; */
-  /* padding: -5em 150em; */
-  padding-left: 3em;
-  padding-top: 0.5em;
-  display: block;
-  width: 100%;
-}
-</style>
+<style scoped></style>
