@@ -2,7 +2,7 @@
 <div>
     <h1>Post your listing</h1><br>
     <div id="commonOptions">
-        <v-radio-group v-model="radioGroup"></v-radio-group>
+        <!-- <v-radio-group v-model="radioGroup"></v-radio-group> -->
         <h2><i>1. Choose your category</i></h2><br>
             <input type="radio" id="sale" name="listingtype" v-on:click="selectedType='sale'" checked>I am selling an item
             <input type="radio" id="rent" name="listingtype" v-on:click="selectedType='rent'">I am renting out an item
@@ -49,7 +49,7 @@
             <option v-for="x in rent_intervals" :key="x.id" v-bind:value="x" selected = 'selected'>{{x}}</option>
         </select>
         <h2><i>8. Name your rules</i></h2><br>
-        <textarea type='text' maxlength="50" rows="8" cols = '70' v-model="tnc"></textarea><br>
+        <textarea type='text' rows="8" cols = '70' v-model="tnc"></textarea><br>
         <button v-on:click="submitListing('rent')">Submit</button>
     </div>
 </div>
@@ -59,12 +59,12 @@
 // import database from '../firebase.js'
 import firebase from 'firebase'
 
-
 export default {
     components:{},
     name: 'NewListing',
     data() {
         return {
+            radioGroup: '', 
             listing: {}, 
             selectedType: 'sale', 
             selectedSubcat : '',

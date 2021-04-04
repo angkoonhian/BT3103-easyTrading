@@ -40,19 +40,9 @@
         
         <img v-bind:src="x[1]['images']" /> {{ x.id }}
         <h2>{{ x[1]["Title"] }}</h2>
-        <!-- {{x[1]}} -->
-        {{ x.id }}
-
-        <div v-if="x[1]['Price'] != ''" class="hh">${{ x[1]["Price"] }}</div>
-        <div v-if="x[1]['sale']['Alternatives'] != '' && x[1]['Price'] != ''">
-          -or-
-        </div>
-        <div v-if="x[1]['sale']['Alternatives'] != '' && x[1]['Price'] == ''">
-          -trading for-
-        </div>
-        <div v-if="x[1]['sale']['Alternatives'] != ''" class="hh">
-          {{ x[1]["sale"]["Alternatives"] }}
-        </div>
+        <div class="hh">${{ x[1]["Price"] }}</div>
+        per
+        {{x[1]['rent']['Interval']}}
         <i> {{ x[1]["Location"] }}</i>
         <aside>
           <!-- {{ x[1]["UserID"] }} -->
@@ -72,13 +62,7 @@ export default {
     return {
       items: [],
       profiles: [],
-      subcats: [
-        "Mobile & Electronics",
-        "Hobbies & Games",
-        "Sports",
-        "Education",
-        "Fashion",
-      ],
+      subcats: ['Automobiles', 'Property', 'Books', 'Games', 'Electronics'],
     };
   },
   methods: {
@@ -89,7 +73,7 @@ export default {
       if (x === "all") {
         firebase
           .firestore()
-          .collection("Listings").where("Type", '==', 'sale')
+          .collection("Listings").where("Type", '==', 'rent')
           .get()
           .then((querySnapShot) => {
             let item = {};
@@ -104,7 +88,7 @@ export default {
       } else {
         firebase
           .firestore()
-          .collection("Listings").where("Type", '==', 'sale')
+          .collection("Listings").where("Type", '==', 'rent')
           .where("Subcat", "==", x)
           .get()
           .then((querySnapShot) => {
