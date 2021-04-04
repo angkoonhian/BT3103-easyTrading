@@ -1,5 +1,5 @@
 <template>
-  <v-app style="margin: 0px">
+  <v-app style="margin-top: 50px">
     <template>
       <v-carousel
         cycle
