@@ -28,7 +28,7 @@
             lg="3"
           >
             <v-card :loading="loading" class="mx-auto my-12" max-width="374">
-              <v-card-actions>
+              <v-card-actions @click="toProfile(x[6])" style="cursor: pointer">
                 <v-list-item class="grow" style="font-weight: 700">
                   <v-list-item-avatar color="grey darken-3">
                     <img v-bind:src="x[5]" class="elevation-6" alt="" />
@@ -207,11 +207,28 @@ export default {
           .where("Subcat", "==", x)
           .get()
           .then((querySnapShot) => {
-            let item = {};
-            querySnapShot.forEach((doc) => {
-              item = doc.data();
-              // console.log("executed: "+item);
-              this.items.push([doc.id, item]);
+            querySnapShot.forEach(async(doc) => {
+              let item = doc.data();
+              await firebase
+                .firestore()
+                .collection("users")
+                .where("id", "==", item.UserID)
+                .get()
+                .then((res) => {
+                  this.rating = res.docs[0].data().Rating;
+                  this.name = res.docs[0].data().Name;
+                  this.numRating = res.docs[0].data().numRatings;
+                  this.profileURL = res.docs[0].data().ProfileURL;
+                  this.items.push([
+                    doc.id,
+                    item,
+                    this.rating,
+                    this.name,
+                    this.numRating,
+                    this.profileURL,
+                    item.UserID,
+                  ]);
+                });
             });
           });
       }
@@ -226,6 +243,14 @@ export default {
           });
       });
     },
+    toProfile: function(x) {
+      this.$router.push({
+        path: `/profile`,
+        name: "profile",
+        params: { user: x },
+        props: true,
+      });
+    }, 
     contactOwner: function(ownerId) {
       const chatRoomUsers = [ownerId, this.user];
       firebase

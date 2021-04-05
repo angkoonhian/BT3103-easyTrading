@@ -17,6 +17,7 @@
             <v-list-item-subtitle>Software Engineer | dokanee</v-list-item-subtitle> -->
           </v-list-item-content>
           <template>
+            
             <v-row style="padding-left: 30px">
               <v-dialog v-model="dialog" persistent max-width="600px">
                 <template v-slot:activator="{ on, attrs }">
@@ -100,7 +101,24 @@
         {{ biography }}
       </h4>
     </v-card>
+    <v-tabs
+      v-model="tab"
+      background-color="orange accent-4"
+      centered
+      dark
+      icons-and-text
+    >
+      <v-tabs-slider></v-tabs-slider>
+      <v-tab>
+        Listings
+      </v-tab>
+
+      <v-tab>
+        Reviews
+      </v-tab>
+    </v-tabs>
     <v-btn
+      v-show = "this.user === this.currentid"
       text
       style="margin-top: 20px; height: 100px; width: 150px"
       @click="toListing"
@@ -117,6 +135,7 @@
       v-bind:numRatings="numRatings"
       v-bind:name="name"
       v-bind:profileURL="profile"
+      v-bind:isSameUser="isSameUser"
     ></UserListings>
   </div>
 </template>
@@ -135,13 +154,22 @@ export default {
       rating: 0,
       biography: "",
       dialog: false,
+      currentid: "", 
+      isSameUser: false
     };
   },
   components: {
     UserListings,
   },
   created() {
-    console.log(this.user);
+    console.log("yoyoyo"+this.user);
+    this.currentid = localStorage.UID; 
+
+    if (this.user=== undefined) {
+      this.user = localStorage.UID; 
+    }
+    this.isSameUser = this.currentid === this.user; 
+    
     firebase
       .firestore()
       .collection("users")
@@ -156,7 +184,6 @@ export default {
         this.biography = data.Biography;
         this.rating = data.Rating;
         this.numRatings = data.numRatings;
-        console.log(this.name);
       });
   },
   methods: {
@@ -165,7 +192,7 @@ export default {
       firebase
         .firestore()
         .collection("users")
-        .doc(this.user)
+        .doc(localStorage.UID)
         .update({
           Name: this.name,
           Biography: this.biography,
