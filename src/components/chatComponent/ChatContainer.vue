@@ -168,7 +168,7 @@ export default {
       const roomUserIds = [];
       rooms.forEach((room) => {
         room.data().users.forEach((userId) => {
-          const foundUser = this.allUsers.find((user) => user._id === userId);
+          const foundUser = this.allUsers.find((user) => user.id === userId);
           if (!foundUser && roomUserIds.indexOf(userId) === -1) {
             roomUserIds.push(userId);
           }
@@ -194,7 +194,7 @@ export default {
         console.log(room.data());
         console.log(this.allUsers);
         room.data().users.forEach((userId) => {
-          const foundUser = this.allUsers.find((user) => user._id === userId);
+          const foundUser = this.allUsers.find((user) => user.id === userId);
           if (foundUser) roomList[room.id].users.push(foundUser);
         });
       });
@@ -205,7 +205,7 @@ export default {
         const room = roomList[key];
 
         const roomContacts = room.users.filter(
-          (user) => user._id !== this.currentUserId
+          (user) => user.id !== this.currentUserId
         );
         //console.log(roomContacts[0].ProfileURL);
         room.roomName =
@@ -383,7 +383,7 @@ export default {
 
     formatMessage(room, message) {
       const senderUser = room.users.find(
-        (user) => message.data().sender_id === user._id
+        (user) => message.data().sender_id === user.id
       );
 
       const { sender_id, timestamp } = message.data();
@@ -452,11 +452,11 @@ export default {
 
       this.rooms.forEach((room) => {
         if (room.users.length === 2) {
-          const userId1 = room.users[0]._id;
-          const userId2 = room.users[1]._id;
+          const userId1 = room.users[0].id;
+          const userId2 = room.users[1].id;
           if (
-            (userId1 === user._id || userId1 === this.currentUserId) &&
-            (userId2 === user._id || userId2 === this.currentUserId)
+            (userId1 === user.id || userId1 === this.currentUserId) &&
+            (userId2 === user.id || userId2 === this.currentUserId)
           ) {
             roomId = room.roomId;
           }
@@ -466,7 +466,7 @@ export default {
       if (roomId) return (this.roomId = roomId);
 
       const query1 = await roomsRef
-        .where("users", "==", [this.currentUserId, user._id])
+        .where("users", "==", [this.currentUserId, user.id])
         .get();
 
       if (!query1.empty) {
@@ -474,7 +474,7 @@ export default {
       }
 
       let query2 = await roomsRef
-        .where("users", "==", [user._id, this.currentUserId])
+        .where("users", "==", [user.id, this.currentUserId])
         .get();
 
       if (!query2.empty) {
@@ -482,7 +482,7 @@ export default {
       }
 
       const room = await roomsRef.add({
-        users: [user._id, this.currentUserId],
+        users: [user.id, this.currentUserId],
         lastUpdated: new Date(),
       });
 
@@ -660,7 +660,7 @@ export default {
         room.users.map((user) => {
           const listener = firebase
             .database()
-            .ref("/status/" + user._id)
+            .ref("/status/" + user.id)
             .on("value", (snapshot) => {
               if (!snapshot || !snapshot.val()) return;
 
@@ -691,7 +691,7 @@ export default {
       this.disableForm = true;
 
       const { id } = await usersRef.add({ username: this.addRoomUsername });
-      await usersRef.doc(id).update({ _id: id });
+      await usersRef.doc(id).update({ id: id });
       await roomsRef.add({
         users: [id, this.currentUserId],
         lastUpdated: new Date(),
@@ -711,7 +711,7 @@ export default {
       this.disableForm = true;
 
       const { id } = await usersRef.add({ username: this.invitedUsername });
-      await usersRef.doc(id).update({ _id: id });
+      await usersRef.doc(id).update({ id: id });
 
       await roomsRef
         .doc(this.inviteRoomId)

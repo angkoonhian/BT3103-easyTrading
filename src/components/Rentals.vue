@@ -151,14 +151,14 @@ export default {
     };
   },
   methods: {
-      toProfile: function(x) {
+    toProfile: function(x) {
       this.$router.push({
         path: `/profile`,
         name: "profile",
         params: { user: x },
         props: true,
       });
-    }, 
+    },
     fetchItems: function(x) {
       // database.collection('Listings').get()
       // firebase.firestore().collection('Listings').get()
@@ -190,7 +190,7 @@ export default {
                     this.name,
                     this.numRating,
                     this.profileURL,
-                    item.UserID
+                    item.UserID,
                   ]);
                 });
             });
@@ -206,7 +206,7 @@ export default {
           .then((querySnapShot) => {
             querySnapShot.forEach(async (doc) => {
               let item = doc.data();
-              console.log(item.UserID);
+              //console.log(item.UserID);
               await firebase
                 .firestore()
                 .collection("users")
@@ -224,6 +224,7 @@ export default {
                     this.name,
                     this.numRating,
                     this.profileURL,
+                    item.UserID,
                   ]);
                 });
             });
