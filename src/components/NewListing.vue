@@ -49,6 +49,7 @@
           type="radio"
           name="subcat"
           v-on:click="selectedSubcat = x"
+          checked="checked" 
           required
         />{{ x }}
       </div>
@@ -82,10 +83,11 @@
         v-model="loc"
       />
       <h2><i>6. Upload your pictures:</i></h2>
+      <div v-if="imgcount>0">You can upload more than one photo by clicking on the upload button again.</div>
       <br />
       <div>
         <div>
-          <button @click="click1">choose a photo</button>
+          <button @click="click1">Upload from Computer</button>
           <input
             type="file"
             ref="input1"
@@ -124,7 +126,6 @@
           v-for="x in rent_intervals"
           :key="x.id"
           v-bind:value="x"
-          selected="selected"
           >{{ x }}</option
         >
       </select>
@@ -145,10 +146,11 @@ export default {
   name: "NewListing",
   data() {
     return {
+      imgcount: 0, 
       radioGroup: "",
       listing: {},
       selectedType: "sale",
-      selectedSubcat: "",
+      selectedSubcat: "Miscellaneous",
       title: "",
       desc: "",
       loc: "",
@@ -161,10 +163,11 @@ export default {
         "Sports",
         "Education",
         "Fashion",
+        "Miscellaneous"
       ],
-      subcat_rent: ["Automobiles", "Property", "Books", "Games", "Electronics"],
+      subcat_rent: ["Automobiles", "Property", "Books", "Games", "Electronics", "Miscellaneous"],
       rent_intervals: ["hour", "day", "week", "month", "year"],
-      interval: "",
+      interval: "hour",
       tnc: "",
       img1: "",
       imageData: null,
@@ -246,7 +249,8 @@ export default {
           storageRef.snapshot.ref.getDownloadURL().then((url) => {
             this.img1 = url;
             this.imgurls.push(this.img1);
-            console.log(this.imgurls);
+            console.log("imgurl array "+this.imgurls);
+            this.imgcount++; 
           });
         }
       );
