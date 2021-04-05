@@ -37,5 +37,6 @@ export default [
     name: "profile",
     component: Profile,
     meta: { requiresAuth: true },
-  }
+    props: true,
+  },
 ];

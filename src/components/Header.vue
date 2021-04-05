@@ -46,6 +46,10 @@
             {{ item.title }}
           </v-btn>
         </template>
+        <v-btn text v-if="loginState === 'true'" @click="toProfile">
+          <v-icon left dark>mdi-account-arrow-right</v-icon>
+          Profile
+        </v-btn>
         <v-btn text v-if="loginState === 'true'" @click="signOut">
           <v-icon left dark>lock_open</v-icon>
           Sign Out
@@ -79,13 +83,6 @@ export default {
           show: true,
           method: "",
         },
-        {
-          title: "Profile",
-          path: "/profile",
-          icon: "mdi-account-arrow-right",
-          show: true,
-          method: "",
-        }
       ],
       loginState: false,
     };
@@ -101,6 +98,14 @@ export default {
           localStorage.setItem("login", false);
           location.reload();
         });
+    },
+    toProfile: function() {
+      this.$router.push({
+        path: `/profile`,
+        name: "profile",
+        params: { user: localStorage.UID },
+        props: true,
+      });
     },
   },
   components: {},

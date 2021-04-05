@@ -207,7 +207,7 @@ export default {
         const roomContacts = room.users.filter(
           (user) => user._id !== this.currentUserId
         );
-        console.log(roomContacts[0].ProfileURL);
+        //console.log(roomContacts[0].ProfileURL);
         room.roomName =
           roomContacts.map((user) => user.username).join(", ") || "Myself";
 
