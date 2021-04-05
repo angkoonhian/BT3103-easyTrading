@@ -195,11 +195,29 @@ export default {
           .where("Subcat", "==", x)
           .get()
           .then((querySnapShot) => {
-            let item = {};
-            querySnapShot.forEach((doc) => {
-              item = doc.data();
-              // console.log("executed: "+item);
-              this.items.push([doc.id, item]);
+            querySnapShot.forEach(async (doc) => {
+              let item = doc.data();
+              //console.log(item.UserID);
+              await firebase
+                .firestore()
+                .collection("users")
+                .where("id", "==", item.UserID)
+                .get()
+                .then((res) => {
+                  this.rating = res.docs[0].data().Rating;
+                  this.name = res.docs[0].data().Name;
+                  this.numRating = res.docs[0].data().numRatings;
+                  this.profileURL = res.docs[0].data().ProfileURL;
+                  this.items.push([
+                    doc.id,
+                    item,
+                    this.rating,
+                    this.name,
+                    this.numRating,
+                    this.profileURL,
+                    item.UserID,
+                  ]);
+                });
             });
           });
       }

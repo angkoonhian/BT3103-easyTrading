@@ -7,6 +7,7 @@ import Home from "./components/Home.vue";
 import Chat from "./components/chatComponent/Chat.vue";
 import UserListings from "./components/UserListings.vue";
 import Profile from "./components/Profile.vue";
+import Shopfront from "./components/Shopfront.vue";
 
 export default [
   { path: "/", component: Login },
@@ -36,6 +37,13 @@ export default [
     path: "/profile",
     name: "profile",
     component: Profile,
+    meta: { requiresAuth: true },
+    props: true,
+  },
+  {
+    path: "/Shopfront",
+    name: "Shopfront",
+    component: Shopfront,
     meta: { requiresAuth: true },
     props: true,
   },
