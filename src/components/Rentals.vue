@@ -28,7 +28,7 @@
             lg="3"
           >
             <v-card :loading="loading" class="mx-auto my-12" max-width="374">
-              <v-card-actions>
+              <v-card-actions @click="toProfile(x[6])" style="cursor: pointer">
                 <v-list-item class="grow" style="font-weight: 700">
                   <v-list-item-avatar color="grey darken-3">
                     <img v-bind:src="x[5]" class="elevation-6" alt="" />
@@ -151,6 +151,14 @@ export default {
     };
   },
   methods: {
+    toProfile: function(x) {
+      this.$router.push({
+        path: `/profile`,
+        name: "profile",
+        params: { user: x },
+        props: true,
+      });
+    },
     fetchItems: function(x) {
       // database.collection('Listings').get()
       // firebase.firestore().collection('Listings').get()
@@ -182,6 +190,7 @@ export default {
                     this.name,
                     this.numRating,
                     this.profileURL,
+                    item.UserID,
                   ]);
                 });
             });

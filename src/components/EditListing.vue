@@ -1,30 +1,8 @@
 <template>
   <div style="margin-top: 50px">
-    <h1>Post your listing</h1>
+    <h1>Edit your listing</h1>
     <br />
     <div id="commonOptions">
-      <!-- <v-radio-group v-model="radioGroup"></v-radio-group> -->
-      <h2><i>1. Choose your category</i></h2>
-      <br />
-      <input
-        type="radio"
-        id="sale"
-        name="listingtype"
-        v-on:click="selectedType = 'sale'"
-        checked
-      />I am selling an item
-      <input
-        type="radio"
-        id="rent"
-        name="listingtype"
-        v-on:click="selectedType = 'rent'"
-      />I am renting out an item
-      <input
-        type="radio"
-        id="service"
-        name="listingtype"
-        v-on:click="selectedType = 'service'"
-      />I am providing a service
 
       
       <h2>2. Choose your sub-category</h2>
@@ -37,6 +15,7 @@
           type="radio"
           name="subcat"
           v-on:click="selectedSubcat = x"
+          selected="selected"
           required
         />{{ x }}
       </div>
@@ -94,7 +73,7 @@
             accept="image/*"
           />
         </div>
-        <div v-if="imageData != null">
+        <div v-if="imageData != null || img1 != null">
           <img class="preview" height="268" width="356" :src="img1" /><br />
         </div>
       </div>
@@ -105,15 +84,8 @@
       $ <input type="number" step="0.01" v-model="price" /><br />
       -or-<br />
       <input type="text" maxlength="50" size="70" v-model="alt_trade" />
-      <h2><i>8. Name your transaction/delivery preferences</i></h2>
-      <br />
-      <input
-        type="text"
-        placeholder="e.g. pick up at mrt, cash only, etc"
-        size="70"
-        v-model="trans_method"
-      /><br />
-      <button v-on:click="submitListing('sale')">Submit</button>
+      
+      <button v-on:click="submitListing('sale', listingid)">Submit</button>
     </div>
     <div id="additionalOptions" v-show="selectedType === 'rent'">
       <h2><i>7. Name your price</i></h2>
@@ -131,7 +103,7 @@
       <h2><i>8. Name your rules</i></h2>
       <br />
       <textarea type="text" rows="8" cols="70" v-model="tnc"></textarea><br />
-      <button v-on:click="submitListing('rent')">Submit</button>
+      <button v-on:click="submitListing('rent', listingid)">Submit</button>
     </div>
   </div>
 </template>
@@ -145,7 +117,6 @@ export default {
   name: "NewListing",
   data() {
     return {
-      radioGroup: "",
       listing: {},
       selectedType: "sale",
       selectedSubcat: "",
@@ -154,7 +125,7 @@ export default {
       loc: "",
       price: "",
       alt_trade: "",
-      trans_method: "",
+      listingid: "", 
       subcat_sales: [
         "Mobile & Electronics",
         "Hobbies & Games",
@@ -171,8 +142,12 @@ export default {
       imgurls: [],
     };
   },
+  created() {
+      this.fetchListing();
+  }, 
   methods: {
-    submitListing: function(x) {
+    submitListing: function(x, y) {
+        console.log("mofo"+y);
       this.listing["Type"] = this.selectedType;
       this.listing["Subcat"] = this.selectedSubcat;
       this.listing["Title"] = this.title;
@@ -184,39 +159,50 @@ export default {
       if (x === "sale") {
         var others = {};
         others["Alternatives"] = this.alt_trade;
-        others["Transaction method"] = this.trans_method;
+        
         this.listing["sale"] = others;
+        // console.log(this.listing["sale"])
       } else if (x === "rent") {
         var others2 = {};
         others2["Interval"] = this.interval;
         others2["Terms and Conditions"] = this.tnc;
         this.listing["rent"] = others2;
       }
-      // firebase.database().ref('Listings').push(this.listing).then(
-      //     ()=>
-      //         {location.reload()});
       firebase
         .firestore()
         .collection("Listings")
-        .add(this.listing)
+        .doc(y)
+        .update(this.listing)
         .then(() => {
-          location.reload();
+          this.$router.push('/profile')
         });
-      console.log(this.listing);
+        // console.log("listingid"+y);
     },
-    // create () {
-    //     const post = {
-    //         photo: this.img1,
-    //         caption: this.caption
-    //     }
-    //     firebase.database().ref('PhotoGallery').push(post)
-    //     .then((response) => {
-    //         console.log(response)
-    //     })
-    //     .catch(err => {
-    //         console.log(err)
-    //     })
-    // },
+    fetchListing: function() {
+       let doc_id = this.$route.params.doc_id; 
+       this.listingid = doc_id; 
+       console.log('CALLED!'+doc_id); 
+        firebase.firestore().collection('Listings').doc(doc_id).get().then( (doc) => {
+            let x = doc.data(); 
+            this.title = x['Title']; 
+            this.desc = x['Description']; 
+            this.selectedType = x['Type']; 
+            this.selectedSubcat = x['Subcat']; 
+            this.loc = x['Location']; 
+            this.price = x['Price']; 
+            this.img1 = x['images'][0];
+            this.imgurls = x['images'];
+            console.log(this.imgurls); 
+            if (this.selectedType == 'rent') {
+                this.interval = x['rent']['Interval']; 
+                this.tnc = x['rent']['Terms and Conditions'];
+            } else if (this.selectedType == 'sale') {
+                this.alt_trade = x['sale']['Alternatives'];
+                this.trans_method = x['sale']['Alternatives']['Transaction method']
+            }
+        });
+        console.log(this.listingid); 
+    }, 
     click1() {
       this.$refs.input1.click();
     },
