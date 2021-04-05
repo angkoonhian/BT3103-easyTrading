@@ -4,27 +4,26 @@
     <br />
     <div id="commonOptions">
       <!-- <v-radio-group v-model="radioGroup"></v-radio-group> -->
-      <h2><i>1. Choose your category</i></h2>
-      <br />
+      <h2><i>1. Choose a listing type</i></h2>
       <input
         type="radio"
         id="sale"
         name="listingtype"
         v-on:click="selectedType = 'sale'"
         checked
-      />I am selling an item
+      /> I am selling/trading an item
       <input
         type="radio"
         id="rent"
         name="listingtype"
         v-on:click="selectedType = 'rent'"
-      />I am renting out an item
+      /> I am renting an item
       <input
         type="radio"
         id="service"
         name="listingtype"
         v-on:click="selectedType = 'service'"
-      />I am providing a service
+      /> I am providing a service
 
       
       <h2>2. Choose your sub-category</h2>
@@ -37,8 +36,9 @@
           type="radio"
           name="subcat"
           v-on:click="selectedSubcat = x"
+          checked="checked"
           required
-        />{{ x }}
+        /> {{ x }}
       </div>
       <div
         v-show="selectedType === 'rent'"
@@ -51,10 +51,9 @@
           v-on:click="selectedSubcat = x"
           checked="checked" 
           required
-        />{{ x }}
+        /> {{ x }}
       </div>
       <h2><i>3. Give your listing a title</i></h2>
-      <br />
       <input
         type="text"
         id="listingname"
@@ -64,16 +63,13 @@
         v-model="title"
       />
       <h2><i>4. Describe your listing</i></h2>
-      <br />
       <textarea
         type="text"
         rows="8"
         cols="70"
         v-model="desc"
-        style="background-color: #f9f9f9"
       ></textarea>
       <h2><i>5. Location where you want to deal</i></h2>
-      <br />
       <input
         type="text"
         id="listingloc"
@@ -87,7 +83,7 @@
       <br />
       <div>
         <div>
-          <button @click="click1">Upload from Computer</button>
+          <v-btn @click="click1">Upload from Computer</v-btn>
           <input
             type="file"
             ref="input1"
@@ -103,19 +99,27 @@
     </div>
     <div id="additionalOptions" v-show="selectedType === 'sale'">
       <h2><i>7. Name your price and/or trades</i></h2>
-      <br />
-      $ <input type="number" step="0.01" v-model="price" /><br />
+      $<v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <input type="number" step="0.01" v-model="price" v-bind="attrs" v-on="on" />
+          </template>
+        <span>Price field is optional if you just want to purely trade for another item</span>
+      </v-tooltip><br />
       -or-<br />
-      <input type="text" maxlength="50" size="70" v-model="alt_trade" />
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <input type="text" maxlength="50" size="70" v-model="alt_trade" v-bind="attrs" v-on="on" placeholder="item you want to trade for"/>
+          </template>
+        <span>This field is optional if you want a purely monetary transaction</span>
+      </v-tooltip>
       <h2><i>8. Name your transaction/delivery preferences</i></h2>
-      <br />
       <input
         type="text"
         placeholder="e.g. pick up at mrt, cash only, etc"
         size="70"
         v-model="trans_method"
       /><br />
-      <button v-on:click="submitListing('sale')">Submit</button>
+      <v-btn v-on:click="submitListing('sale')">Submit</v-btn>
     </div>
     <div id="additionalOptions" v-show="selectedType === 'rent'">
       <h2><i>7. Name your price</i></h2>
@@ -132,7 +136,7 @@
       <h2><i>8. Name your rules</i></h2>
       <br />
       <textarea type="text" rows="8" cols="70" v-model="tnc"></textarea><br />
-      <button v-on:click="submitListing('rent')">Submit</button>
+      <v-btn v-on:click="submitListing('rent')">Submit</v-btn>
     </div>
   </div>
 </template>
@@ -198,6 +202,9 @@ export default {
       // firebase.database().ref('Listings').push(this.listing).then(
       //     ()=>
       //         {location.reload()});
+      if (this.title===''||this.imgurls.length===0||this.selectedSubcat==='') {
+        alert('One or more required fields is not filled in!')
+      } else {
       firebase
         .firestore()
         .collection("Listings")
@@ -205,7 +212,7 @@ export default {
         .then(() => {
           location.reload();
         });
-      console.log(this.listing);
+      console.log(this.listing); }
     },
     // create () {
     //     const post = {
@@ -272,9 +279,13 @@ h2 {
   text-align: center;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   color: #e09d20;
+  padding-top:20px
 }
 #additionalOptions,
 #commonOptions {
   text-align: center;
+}
+textarea {
+  background-color: #fff8e1
 }
 </style>

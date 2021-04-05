@@ -141,7 +141,7 @@ export default {
     return {
       items: [],
       profiles: [],
-      subcats: ["Automobiles", "Property", "Books", "Games", "Electronics"],
+      subcats: ["Automobiles", "Property", "Books", "Games", "Electronics", "Miscellaneous"],
     };
   },
   methods: {

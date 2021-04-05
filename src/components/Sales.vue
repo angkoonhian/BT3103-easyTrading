@@ -153,6 +153,7 @@ export default {
         "Sports",
         "Education",
         "Fashion",
+        'Miscellaneous'
       ],
       rating: 0,
       name: "",
