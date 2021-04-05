@@ -7,6 +7,7 @@ import Home from "./components/Home.vue";
 import Chat from "./components/chatComponent/Chat.vue";
 import UserListings from "./components/UserListings.vue";
 import Profile from "./components/Profile.vue";
+import ItemPage from "./components/ItemPage.vue";
 
 export default [
   { path: "/", component: Login },
@@ -38,5 +39,10 @@ export default [
     component: Profile,
     meta: { requiresAuth: true },
     props: true,
+  },
+  { path: "/ItemPage", 
+    name: "itemPage", 
+    component: ItemPage,
+    props: true, 
   },
 ];

@@ -81,7 +81,7 @@
 
               <v-divider class="mx-4"></v-divider>
               <v-card-actions>
-                <v-btn color="orange darken-2" text>
+                <v-btn color="orange darken-2" text @click="getItemPage(x[0])">
                   View
                 </v-btn>
                 <v-btn color="orange darken-2" text @click="contactOwner(x[6])">
@@ -240,6 +240,9 @@ export default {
         });
       this.$router.push({ path: `/chat` });
     },
+    getItemPage: function(listingID) {
+      this.$router.push({ name: 'itemPage', params: {listing: listingID }});
+    },  
   },
   created() {
     this.fetchItems("all");

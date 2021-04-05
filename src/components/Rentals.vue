@@ -81,7 +81,7 @@
 
               <v-divider class="mx-4"></v-divider>
               <v-card-actions>
-                <v-btn color="orange darken-2" text>
+                <v-btn color="orange darken-2" text @click="getItemPage(x[0])">
                   View
                 </v-btn>
                 <v-btn color="orange darken-2" text>
@@ -214,6 +214,9 @@ export default {
           });
       });
     },
+    getItemPage: function(listingID) {
+      this.$router.push({ name: 'itemPage', params: {listing: listingID }});
+    }, 
   },
   created() {
     this.fetchItems("all");
