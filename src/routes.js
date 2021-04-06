@@ -9,6 +9,7 @@ import UserListings from "./components/UserListings.vue";
 import Profile from "./components/Profile.vue";
 import Shopfront from "./components/Shopfront.vue";
 import EditListing from "./components/EditListing.vue";
+import Search from "./components/Search.vue"
 
 export default [
   { path: "/", component: Login },
@@ -55,4 +56,10 @@ export default [
     meta: { requiresAuth: true },
     props: true,
   },
+  {
+    path: "/search",
+    name: "search",
+    component: Search,
+    props: true,
+  }
 ];

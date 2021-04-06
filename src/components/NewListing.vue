@@ -202,8 +202,8 @@ export default {
       // firebase.database().ref('Listings').push(this.listing).then(
       //     ()=>
       //         {location.reload()});
-      if (this.title===''||this.imgurls.length===0||this.selectedSubcat==='') {
-        alert('One or more required fields is not filled in!')
+      if (this.title===''||this.imgurls.length===0||this.desc==='') {
+        alert('Please fill in your title/description and upload your images')
       } else {
       firebase
         .firestore()
