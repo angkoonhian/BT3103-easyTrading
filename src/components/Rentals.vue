@@ -64,19 +64,13 @@
 
               <v-img height="250" v-bind:src="x[1].images[0]"></v-img>
 
-              <v-card-title>{{ x[1]["Title"] }}</v-card-title>
+              <v-card-title style="word-wrap:break-all">{{ x[1]["Title"] }}</v-card-title>
 
               <v-card-text>
                 <div class="my-2 subtitle-1">
                   <strong>Location:</strong> {{ x[1]["Location"] }}
                 </div>
-                <div class="subtitle-1">
-                  <strong>Type:</strong> {{ x[1]["Type"] }}
-                </div>
-                <div>
-                  <strong>Description:</strong> {{ x[1]["Description"] }}
-                </div>
-                <div><strong>Options:</strong> ${{ x[1]["Price"] }}</div>
+                <div><strong>Price:</strong> ${{ x[1]["Price"] }} per {{x[1]['rent']['Interval']}}</div>
               </v-card-text>
 
               <v-divider class="mx-4"></v-divider>
@@ -147,7 +141,7 @@ export default {
     return {
       items: [],
       profiles: [],
-      subcats: ["Automobiles", "Property", "Books", "Games", "Electronics"],
+      subcats: ["Automobiles", "Property", "Books", "Games", "Electronics", "Miscellaneous"],
     };
   },
   methods: {

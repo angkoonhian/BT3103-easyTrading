@@ -73,13 +73,9 @@
                 <div class="my-2 subtitle-1">
                   <strong>Location:</strong> {{ x[1]["Location"] }}
                 </div>
-                <div class="subtitle-1">
-                  <strong>Type:</strong> {{ x[1]["Type"] }}
-                </div>
-                <div>
-                  <strong>Description:</strong> {{ x[1]["Description"] }}
-                </div>
-                <div><strong>Options:</strong> ${{ x[1]["Price"] }}</div>
+                
+                <div v-if="x[1].Price != ''"><strong>Price:</strong> ${{ x[1]["Price"] }}</div>
+                 <div v-if="x[1]['sale']['Alternatives'] != ''"><strong>Can trade for:</strong> {{ x[1]['sale']["Alternatives"] }}</div>
               </v-card-text>
 
               <v-divider class="mx-4"></v-divider>
@@ -157,6 +153,7 @@ export default {
         "Sports",
         "Education",
         "Fashion",
+        'Miscellaneous'
       ],
       rating: 0,
       name: "",
@@ -296,5 +293,4 @@ export default {
 </script>
 
 <style scoped>
-/*  */
 </style>

@@ -60,11 +60,11 @@
         placeholder="no more than 50 chars"
         v-model="loc"
       />
-      <h2><i>6. Upload your pictures:</i></h2>
+      <h2><i>6. Upload more pictures</i></h2>
       <br />
       <div>
         <div>
-          <button @click="click1">choose a photo</button>
+          <button @click="click1">Upload from Computer</button>
           <input
             type="file"
             ref="input1"
