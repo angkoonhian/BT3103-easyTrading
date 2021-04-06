@@ -27,10 +27,13 @@
             md="4"
             lg="3"
           >
-            <v-card :loading="loading" class="mx-auto my-12" max-width="374">
+            <v-card :loading="false" class="mx-auto my-12" max-width="374">
               <v-card-actions>
                 <v-list-item class="grow" style="font-weight: 700">
-                  <v-list-item-avatar color="grey darken-3">
+                  <v-list-item-avatar
+                    color="grey darken-3"
+                    @click="goToShopFront(x[6])"
+                  >
                     <img v-bind:src="x[5]" class="elevation-6" alt="" />
                   </v-list-item-avatar>
                   {{ x[3] }}
@@ -141,6 +144,7 @@
 <script>
 // import firebase from 'firebase'
 import firebase from "firebase";
+import { roomsRef } from "../firebase";
 
 export default {
   data() {
@@ -175,7 +179,7 @@ export default {
           .then((querySnapShot) => {
             querySnapShot.forEach(async (doc) => {
               let item = doc.data();
-              console.log(item.UserID);
+              //console.log(item.UserID);
               await firebase
                 .firestore()
                 .collection("users")
@@ -207,11 +211,29 @@ export default {
           .where("Subcat", "==", x)
           .get()
           .then((querySnapShot) => {
-            let item = {};
-            querySnapShot.forEach((doc) => {
-              item = doc.data();
-              // console.log("executed: "+item);
-              this.items.push([doc.id, item]);
+            querySnapShot.forEach(async (doc) => {
+              let item = doc.data();
+              //console.log(item.UserID);
+              await firebase
+                .firestore()
+                .collection("users")
+                .where("id", "==", item.UserID)
+                .get()
+                .then((res) => {
+                  this.rating = res.docs[0].data().Rating;
+                  this.name = res.docs[0].data().Name;
+                  this.numRating = res.docs[0].data().numRatings;
+                  this.profileURL = res.docs[0].data().ProfileURL;
+                  this.items.push([
+                    doc.id,
+                    item,
+                    this.rating,
+                    this.name,
+                    this.numRating,
+                    this.profileURL,
+                    item.UserID,
+                  ]);
+                });
             });
           });
       }
@@ -226,19 +248,42 @@ export default {
           });
       });
     },
-    contactOwner: function(ownerId) {
-      const chatRoomUsers = [ownerId, this.user];
-      firebase
-        .firestore()
-        .collection("chatRooms")
-        .where("users", "array-contains", chatRoomUsers)
-        .get()
-        .then((res) => {
-          if (res.empty == true) {
-            console.log("no chat room for them yet");
-          }
+    contactOwner: async function(ownerId) {
+      if (ownerId == this.user) {
+        return alert("this is your own store!");
+      }
+      //const chatRoomUsers = [ownerId, this.user];
+      const query1 = await roomsRef
+        .where("users", "==", [ownerId, this.user])
+        .get();
+
+      if (!query1.empty) {
+        return this.$router.push({ path: `/chat` });
+      }
+
+      let query2 = await roomsRef
+        .where("users", "==", [this.user, ownerId])
+        .get();
+
+      if (!query2.empty) {
+        return this.$router.push({ path: `/chat` });
+      }
+      roomsRef
+        .add({
+          users: [ownerId, this.user],
+          lastUpdated: new Date(),
+        })
+        .then(() => {
+          this.$router.push({ path: `/chat` });
         });
-      this.$router.push({ path: `/chat` });
+    },
+    goToShopFront: function(userId) {
+      this.$router.push({
+        path: "/Shopfront",
+        name: "Shopfront",
+        params: { user: userId },
+        props: true,
+      });
     },
     getItemPage: function(listingID) {
       this.$router.push({ name: 'itemPage', params: {listing: listingID }});

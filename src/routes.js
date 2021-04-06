@@ -7,7 +7,12 @@ import Home from "./components/Home.vue";
 import Chat from "./components/chatComponent/Chat.vue";
 import UserListings from "./components/UserListings.vue";
 import Profile from "./components/Profile.vue";
+<<<<<<< HEAD
 import ItemPage from "./components/ItemPage.vue";
+=======
+import Shopfront from "./components/Shopfront.vue";
+import EditListing from "./components/EditListing.vue";
+>>>>>>> 19226ff554be0ea0c9f45bb788e2a72951a0e6c3
 
 export default [
   { path: "/", component: Login },
@@ -28,6 +33,13 @@ export default [
   { path: "/Signup", name: "signUp", component: SignUp },
   { path: "/sales", name: "sales", component: Sales },
   {
+    path: "/edit",
+    component: EditListing,
+    name: "edit",
+    meta: { requiresAuth: true },
+    props: true,
+  },
+  {
     path: "/chat",
     name: "chat",
     component: Chat,
@@ -40,9 +52,18 @@ export default [
     meta: { requiresAuth: true },
     props: true,
   },
+<<<<<<< HEAD
   { path: "/ItemPage", 
     name: "itemPage", 
     component: ItemPage,
     props: true, 
+=======
+  {
+    path: "/Shopfront",
+    name: "Shopfront",
+    component: Shopfront,
+    meta: { requiresAuth: true },
+    props: true,
+>>>>>>> 19226ff554be0ea0c9f45bb788e2a72951a0e6c3
   },
 ];
