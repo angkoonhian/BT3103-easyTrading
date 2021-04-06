@@ -4,8 +4,10 @@ import Login from "./components/Login.vue";
 import SignUp from "./components/SignUp.vue";
 import Sales from "./components/Sales.vue";
 import Home from "./components/Home.vue";
-import Chat from "./components/Chat.vue";
+import Chat from "./components/chatComponent/Chat.vue";
 import UserListings from "./components/UserListings.vue";
+import Profile from "./components/Profile.vue";
+import ItemPage from "./components/ItemPage.vue";
 
 export default [
   { path: "/", component: Login },
@@ -30,5 +32,17 @@ export default [
     name: "chat",
     component: Chat,
     meta: { requiresAuth: true },
+  },
+  {
+    path: "/profile",
+    name: "profile",
+    component: Profile,
+    meta: { requiresAuth: true },
+    props: true,
+  },
+  { path: "/ItemPage", 
+    name: "itemPage", 
+    component: ItemPage,
+    props: true, 
   },
 ];
