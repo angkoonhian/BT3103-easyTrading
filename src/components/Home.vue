@@ -46,7 +46,6 @@
   </v-app>
 </template>
 <script>
-import firebase from "firebase";
 import Sales from "./Sales";
 import Rentals from "./Rentals";
 import Services from "./Services";
@@ -90,26 +89,8 @@ export default {
       },
     };
   },
-  methods: {
-    fetchItems: function() {
-      console.log("fetching items");
-      firebase
-        .firestore()
-        .collection("Listings")
-        .get()
-        .then((querySnapShot) => {
-          let item = {};
-          querySnapShot.forEach((doc) => {
-            item = doc.data();
-            this.items.push(item);
-          });
-        });
-      console.log(this.items);
-    },
-  },
-  created() {
-    this.fetchItems();
-  },
+  methods: {},
+  created() {},
 };
 </script>
 <style scoped>

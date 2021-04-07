@@ -1,31 +1,39 @@
 <template>
-  <div style="margin-top: 50px">
+  <div style="margin-top: 50px; text-align: center;">
     <h1>Post your listing</h1>
     <br />
     <div id="commonOptions">
       <!-- <v-radio-group v-model="radioGroup"></v-radio-group> -->
       <h2><i>1. Choose a listing type</i></h2>
+      <v-select
+        :items="items"
+        label="Solo field"
+        solo
+        style="width: 300px; text-align:center"
+      ></v-select>
       <input
         type="radio"
         id="sale"
         name="listingtype"
         v-on:click="selectedType = 'sale'"
         checked
-      /> I am selling/trading an item
+      />
+      I am selling/trading an item
       <input
         type="radio"
         id="rent"
         name="listingtype"
         v-on:click="selectedType = 'rent'"
-      /> I am renting an item
+      />
+      I am renting an item
       <input
         type="radio"
         id="service"
         name="listingtype"
         v-on:click="selectedType = 'service'"
-      /> I am providing a service
+      />
+      I am providing a service
 
-      
       <h2>2. Choose your sub-category</h2>
       <div
         v-show="selectedType === 'sale'"
@@ -38,7 +46,8 @@
           v-on:click="selectedSubcat = x"
           checked="checked"
           required
-        /> {{ x }}
+        />
+        {{ x }}
       </div>
       <div
         v-show="selectedType === 'rent'"
@@ -49,9 +58,10 @@
           type="radio"
           name="subcat"
           v-on:click="selectedSubcat = x"
-          checked="checked" 
+          checked="checked"
           required
-        /> {{ x }}
+        />
+        {{ x }}
       </div>
       <h2><i>3. Give your listing a title</i></h2>
       <input
@@ -63,12 +73,7 @@
         v-model="title"
       />
       <h2><i>4. Describe your listing</i></h2>
-      <textarea
-        type="text"
-        rows="8"
-        cols="70"
-        v-model="desc"
-      ></textarea>
+      <textarea type="text" rows="8" cols="70" v-model="desc"></textarea>
       <h2><i>5. Location where you want to deal</i></h2>
       <input
         type="text"
@@ -79,7 +84,10 @@
         v-model="loc"
       />
       <h2><i>6. Upload your pictures:</i></h2>
-      <div v-if="imgcount>0">You can upload more than one photo by clicking on the upload button again.</div>
+      <div v-if="imgcount > 0">
+        You can upload more than one photo by clicking on the upload button
+        again.
+      </div>
       <br />
       <div>
         <div>
@@ -101,16 +109,36 @@
       <h2><i>7. Name your price and/or trades</i></h2>
       $<v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-          <input type="number" step="0.01" v-model="price" v-bind="attrs" v-on="on" />
-          </template>
-        <span>Price field is optional if you just want to purely trade for another item</span>
-      </v-tooltip><br />
+          <input
+            type="number"
+            step="0.01"
+            v-model="price"
+            v-bind="attrs"
+            v-on="on"
+          />
+        </template>
+        <span
+          >Price field is optional if you just want to purely trade for another
+          item</span
+        > </v-tooltip
+      ><br />
       -or-<br />
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-          <input type="text" maxlength="50" size="70" v-model="alt_trade" v-bind="attrs" v-on="on" placeholder="item you want to trade for"/>
-          </template>
-        <span>This field is optional if you want a purely monetary transaction</span>
+          <input
+            type="text"
+            maxlength="50"
+            size="70"
+            v-model="alt_trade"
+            v-bind="attrs"
+            v-on="on"
+            placeholder="item you want to trade for"
+          />
+        </template>
+        <span
+          >This field is optional if you want a purely monetary
+          transaction</span
+        >
       </v-tooltip>
       <h2><i>8. Name your transaction/delivery preferences</i></h2>
       <input
@@ -126,12 +154,9 @@
       <br />
       $ <input type="number" step="0.01" v-model="price" /> per
       <select v-model="interval" required>
-        <option
-          v-for="x in rent_intervals"
-          :key="x.id"
-          v-bind:value="x"
-          >{{ x }}</option
-        >
+        <option v-for="x in rent_intervals" :key="x.id" v-bind:value="x">{{
+          x
+        }}</option>
       </select>
       <h2><i>8. Name your rules</i></h2>
       <br />
@@ -150,7 +175,7 @@ export default {
   name: "NewListing",
   data() {
     return {
-      imgcount: 0, 
+      imgcount: 0,
       radioGroup: "",
       listing: {},
       selectedType: "sale",
@@ -167,9 +192,16 @@ export default {
         "Sports",
         "Education",
         "Fashion",
-        "Miscellaneous"
+        "Miscellaneous",
       ],
-      subcat_rent: ["Automobiles", "Property", "Books", "Games", "Electronics", "Miscellaneous"],
+      subcat_rent: [
+        "Automobiles",
+        "Property",
+        "Books",
+        "Games",
+        "Electronics",
+        "Miscellaneous",
+      ],
       rent_intervals: ["hour", "day", "week", "month", "year"],
       interval: "hour",
       tnc: "",
@@ -202,17 +234,22 @@ export default {
       // firebase.database().ref('Listings').push(this.listing).then(
       //     ()=>
       //         {location.reload()});
-      if (this.title===''||this.imgurls.length===0||this.selectedSubcat==='') {
-        alert('One or more required fields is not filled in!')
+      if (
+        this.title === "" ||
+        this.imgurls.length === 0 ||
+        this.selectedSubcat === ""
+      ) {
+        alert("One or more required fields is not filled in!");
       } else {
-      firebase
-        .firestore()
-        .collection("Listings")
-        .add(this.listing)
-        .then(() => {
-          location.reload();
-        });
-      console.log(this.listing); }
+        firebase
+          .firestore()
+          .collection("Listings")
+          .add(this.listing)
+          .then(() => {
+            location.reload();
+          });
+        console.log(this.listing);
+      }
     },
     // create () {
     //     const post = {
@@ -256,8 +293,8 @@ export default {
           storageRef.snapshot.ref.getDownloadURL().then((url) => {
             this.img1 = url;
             this.imgurls.push(this.img1);
-            console.log("imgurl array "+this.imgurls);
-            this.imgcount++; 
+            console.log("imgurl array " + this.imgurls);
+            this.imgcount++;
           });
         }
       );
@@ -279,13 +316,13 @@ h2 {
   text-align: center;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   color: #e09d20;
-  padding-top:20px
+  padding-top: 20px;
 }
 #additionalOptions,
 #commonOptions {
   text-align: center;
 }
 textarea {
-  background-color: #fff8e1
+  background-color: #fff8e1;
 }
 </style>
