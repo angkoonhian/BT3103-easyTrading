@@ -1,7 +1,6 @@
 <template>
   <div style="margin-top: 50px">
-    Searching for '{{this.searchterm}}'
-
+    Searching for '{{this.searchterm}}' 
     <v-tabs
       v-model="tab"
       background-color="orange accent-4"
@@ -17,8 +16,14 @@
       <v-tab  v-on:click="fetchItems('rent')">
         Rental
       </v-tab>
+
+      
     </v-tabs>
+    <div v-if="this.items.length===0">
+    No search results found!
+    </div>
     <div class="flex">
+      
         <v-row style="">
           <v-col
             v-for="(x, i) in items"
@@ -90,13 +95,13 @@
           </v-col>
         </v-row>
       </div>
-
     
   </div>
 </template>
 
 <script>
 import firebase from "firebase";
+import { roomsRef } from "../firebase";
 
 export default {
   data() {
@@ -108,7 +113,8 @@ export default {
       profileURL: "",
       items: [], 
       searchterm: '', 
-      currentTab: 'sale'
+      currentTab: 'sale', 
+      user: localStorage.UID
     };
   },
   components: {
@@ -117,6 +123,43 @@ export default {
       this.fetchItems('sale'); 
   },
   methods: {
+    contactOwner: async function(ownerId) {
+      if (ownerId == this.user) {
+        return alert("this is your own store!");
+      }
+      //const chatRoomUsers = [ownerId, this.user];
+      const query1 = await roomsRef
+        .where("users", "==", [ownerId, this.user])
+        .get();
+
+      if (!query1.empty) {
+        return this.$router.push({ path: `/chat` });
+      }
+
+      let query2 = await roomsRef
+        .where("users", "==", [this.user, ownerId])
+        .get();
+
+      if (!query2.empty) {
+        return this.$router.push({ path: `/chat` });
+      }
+      roomsRef
+        .add({
+          users: [ownerId, this.user],
+          lastUpdated: new Date(),
+        })
+        .then(() => {
+          this.$router.push({ path: `/chat` });
+        });
+    },
+    goToShopFront: function(userId) {
+      this.$router.push({
+        path: "/Shopfront",
+        name: "Shopfront",
+        params: { user: userId },
+        props: true,
+      });
+    },
     fetchItems: function(x) {
       // database.collection('Listings').get()
       // firebase.firestore().collection('Listings').get()
