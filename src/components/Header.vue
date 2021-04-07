@@ -32,6 +32,8 @@
         label="Search"
         prepend-inner-icon="mdi-magnify"
         solo-inverted
+        v-model = "searchterm"
+        v-on:keyup.enter="toSearch(searchterm)"
       ></v-text-field>
       <v-toolbar-items class="d-sm-none d-md-flex">
         <template v-for="item in menuItems">
@@ -85,6 +87,7 @@ export default {
         },
       ],
       loginState: false,
+      searchterm: '', 
     };
   },
   methods: {
@@ -107,6 +110,15 @@ export default {
         props: true,
       });
     },
+    toSearch: function(x) {
+        console.log("routig"+x); 
+        console.log(this.$route.path);
+        if (this.$route.path==="/search") {
+           this.$router.push({ name: 'blank', params: { searchterm: x }});
+        } else {
+        this.$router.push({ name: 'search', params: { searchterm: x } }) }
+        // this.$router.push({ name: 'search', params: { searchterm: x } }).then(this.$router.push({ name: 'search', params: { searchterm: x } }))
+    }
   },
   components: {},
   created() {

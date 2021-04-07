@@ -240,15 +240,22 @@ export default {
         this.selectedSubcat === ""
       ) {
         alert("One or more required fields is not filled in!");
-      } else {
-        firebase
-          .firestore()
-          .collection("Listings")
-          .add(this.listing)
-          .then(() => {
-            location.reload();
-          });
-        console.log(this.listing);
+        if (
+          this.title === "" ||
+          this.imgurls.length === 0 ||
+          this.desc === ""
+        ) {
+          alert("Please fill in your title/description and upload your images");
+        } else {
+          firebase
+            .firestore()
+            .collection("Listings")
+            .add(this.listing)
+            .then(() => {
+              location.reload();
+            });
+          console.log(this.listing);
+        }
       }
     },
     // create () {

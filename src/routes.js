@@ -10,6 +10,8 @@ import Profile from "./components/Profile.vue";
 import ItemPage from "./components/ItemPage.vue";
 import Shopfront from "./components/Shopfront.vue";
 import EditListing from "./components/EditListing.vue";
+import Search from "./components/Search.vue"
+import Blank from "./components/Blank.vue"
 
 export default [
   { path: "/", component: Login },
@@ -62,4 +64,16 @@ export default [
     meta: { requiresAuth: true },
     props: true,
   },
+  {
+    path: "/search",
+    name: "search",
+    component: Search,
+    props: true,
+  }, 
+  {
+    path: "/blank",
+    name: "blank",
+    component: Blank,
+    props: true,
+  }
 ];

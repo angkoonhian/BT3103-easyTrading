@@ -20,9 +20,11 @@
                 indeterminate
               ></v-progress-linear>
             </template>
-
-            <v-img height="250" v-bind:src="x[1].images[0]"></v-img>
-
+              
+            <v-img height="250" v-bind:src="x[1].images[0]">
+              <div class="hh">for {{ x[1]["Type"] }}</div>
+            </v-img>
+            
             <v-card-title>{{ x[1]["Title"] }}</v-card-title>
 
             <v-card-text>
@@ -110,4 +112,15 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.hh {
+  background: rgb(255, 153, 0);
+  color: #fff;
+  font-weight: 700;
+  padding: 0.3em 0.6em;
+  border-radius: 0em;
+  display: flex;
+  font-size: 100%;
+  word-break: break-all;
+}
+</style>
