@@ -1,111 +1,209 @@
 <template>
-  <div style="margin-top: 50px">
-    <h1>Edit your listing</h1>
-    <br />
-    <div id="commonOptions">
+  <b-container
+    class="bv-example-row bv-example-row-flex-cols"
+    style="padding-top: 100px;"
+  >
+    <v-card elevation="2" style="padding-bottom: 100px">
+      <b-row align-h="center">
+        <b-col cols="8">
+          <h1>Post your listing</h1>
+          <br />
+          <div id="commonOptions">
+            <h3><strong>2. Choose your sub-category</strong></h3>
+            <v-select :items="subcat_sales" label="Solo field" solo></v-select>
+            <div
+              v-show="selectedType === 'sale'"
+              v-for="x in subcat_sales"
+              :key="x.id"
+            >
+              <input
+                type="radio"
+                name="subcat"
+                v-on:click="selectedSubcat = x"
+                checked="checked"
+                required
+              />
+              {{ x }}
+            </div>
+            <div
+              v-show="selectedType === 'rent'"
+              v-for="x in subcat_rent"
+              :key="x.id"
+            >
+              <input
+                type="radio"
+                name="subcat"
+                v-on:click="selectedSubcat = x"
+                checked="checked"
+                required
+              />
+              {{ x }}
+            </div>
+            <h3><strong>3. Give your listing a title</strong></h3>
+            <v-col cols="12" sm="12" md="12">
+              <v-text-field
+                label="Listing Name"
+                solo
+                type="text"
+                id="listingname"
+                maxlength="50"
+                size="70"
+                placeholder="no more than 50 chars"
+                v-model="title"
+              ></v-text-field>
+            </v-col>
+            <h3><strong>4. Describe your listing</strong></h3>
+            <v-col cols="12" md="12">
+              <v-textarea
+                solo
+                name="input-7-4"
+                label="Listing Description"
+                type="text"
+                rows="6"
+                cols="70"
+                v-model="desc"
+              ></v-textarea>
+            </v-col>
+            <h3><strong>5. Location where you want to deal</strong></h3>
+            <v-col cols="12" sm="12" md="12">
+              <v-text-field
+                label="Location"
+                solo
+                type="text"
+                id="listingloc"
+                maxlength="50"
+                size="70"
+                placeholder="no more than 50 chars"
+                v-model="loc"
+              ></v-text-field>
+            </v-col>
+            <h3><strong>6. Upload your pictures:</strong></h3>
+            <div v-if="imgcount > 0">
+              You can upload more than one photo by clicking on the upload
+              button again.
+            </div>
+            <br />
+            <div>
+              <div>
+                <v-btn
+                  @click="click1"
+                  color="warning"
+                  style="margin-bottom: 20px"
+                  >Upload from Computer</v-btn
+                >
+                <input
+                  type="file"
+                  ref="input1"
+                  style="display: none"
+                  @change="previewImage"
+                  accept="image/*"
+                />
+              </div>
+              <div v-if="imageData != null">
+                <img
+                  class="preview"
+                  height="268"
+                  width="356"
+                  :src="img1"
+                /><br />
+              </div>
+            </div>
+            <div id="additionalOptions" v-show="selectedType === 'sale'">
+              <h3><strong>7. Name your price and/or trades</strong></h3>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-col cols="12" sm="12" md="12">
+                    <v-text-field
+                      label="$"
+                      solo
+                      type="number"
+                      step="0.01"
+                      v-model="price"
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </v-col>
+                </template>
+                <span
+                  >Price field is optional if you just want to purely trade for
+                  another item</span
+                >
+              </v-tooltip>
+              -or-<br />
+              <br />
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-col cols="12" sm="12" md="12">
+                    <v-text-field
+                      label="Item you want to trade for"
+                      solo
+                      type="text"
+                      maxlength="50"
+                      size="70"
+                      v-model="alt_trade"
+                      v-bind="attrs"
+                      v-on="on"
+                      placeholder="item you want to trade for"
+                    ></v-text-field>
+                  </v-col>
+                </template>
+                <span
+                  >This field is optional if you want a purely monetary
+                  transaction</span
+                >
+              </v-tooltip>
+              <h3>
+                <strong>8. Name your transaction/delivery preferences</strong>
+              </h3>
+              <v-col cols="12" sm="12" md="12">
+                <v-text-field
+                  label="e.g. pick up at mrt, cash only, etc"
+                  solo
+                  type="text"
+                  placeholder="e.g. pick up at mrt, cash only, etc"
+                  size="70"
+                  v-model="trans_method"
+                ></v-text-field>
+              </v-col>
+              <v-btn v-on:click="submitListing('sale')" color="warning"
+                >Update Listing</v-btn
+              >
+            </div>
+          </div>
+          <div id="additionalOptions" v-show="selectedType === 'rent'">
+            <h3><strong>7. Name your price</strong></h3>
+            <br />
 
-      
-      <h2>2. Choose your sub-category</h2>
-      <div
-        v-show="selectedType === 'sale'"
-        v-for="x in subcat_sales"
-        :key="x.id"
-      >
-        <input
-          type="radio"
-          name="subcat"
-          v-on:click="selectedSubcat = x"
-          selected="selected"
-          required
-        />{{ x }}
-      </div>
-      <div
-        v-show="selectedType === 'rent'"
-        v-for="x in subcat_rent"
-        :key="x.id"
-      >
-        <input
-          type="radio"
-          name="subcat"
-          v-on:click="selectedSubcat = x"
-          required
-        />{{ x }}
-      </div>
-      <h2><i>3. Give your listing a title</i></h2>
-      <br />
-      <input
-        type="text"
-        id="listingname"
-        maxlength="50"
-        size="70"
-        placeholder="no more than 50 chars"
-        v-model="title"
-      />
-      <h2><i>4. Describe your listing</i></h2>
-      <br />
-      <textarea
-        type="text"
-        rows="8"
-        cols="70"
-        v-model="desc"
-        style="background-color: #f9f9f9"
-      ></textarea>
-      <h2><i>5. Location where you want to deal</i></h2>
-      <br />
-      <input
-        type="text"
-        id="listingloc"
-        maxlength="50"
-        size="70"
-        placeholder="no more than 50 chars"
-        v-model="loc"
-      />
-      <h2><i>6. Upload more pictures</i></h2>
-      <br />
-      <div>
-        <div>
-          <button @click="click1">Upload from Computer</button>
-          <input
-            type="file"
-            ref="input1"
-            style="display: none"
-            @change="previewImage"
-            accept="image/*"
-          />
-        </div>
-        <div v-if="imageData != null || img1 != null">
-          <img class="preview" height="268" width="356" :src="img1" /><br />
-        </div>
-      </div>
-    </div>
-    <div id="additionalOptions" v-show="selectedType === 'sale'">
-      <h2><i>7. Name your price and/or trades</i></h2>
-      <br />
-      $ <input type="number" step="0.01" v-model="price" /><br />
-      -or-<br />
-      <input type="text" maxlength="50" size="70" v-model="alt_trade" />
-      
-      <button v-on:click="submitListing('sale', listingid)">Submit</button>
-    </div>
-    <div id="additionalOptions" v-show="selectedType === 'rent'">
-      <h2><i>7. Name your price</i></h2>
-      <br />
-      $ <input type="number" step="0.01" v-model="price" /> per
-      <select v-model="interval" required>
-        <option
-          v-for="x in rent_intervals"
-          :key="x.id"
-          v-bind:value="x"
-          selected="selected"
-          >{{ x }}</option
-        >
-      </select>
-      <h2><i>8. Name your rules</i></h2>
-      <br />
-      <textarea type="text" rows="8" cols="70" v-model="tnc"></textarea><br />
-      <button v-on:click="submitListing('rent', listingid)">Submit</button>
-    </div>
-  </div>
+            $ <input type="number" step="0.01" v-model="price" /> per
+            <select v-model="interval" required>
+              <option
+                v-for="x in rent_intervals"
+                :key="x.id"
+                v-bind:value="x"
+                >{{ x }}</option
+              >
+            </select>
+            <h3><strong>8. Name your rules</strong></h3>
+            <br />
+            <v-col cols="12" md="12">
+              <v-textarea
+                solo
+                name="input-7-4"
+                label="Name your rules"
+                type="text"
+                rows="5"
+                cols="70"
+                v-model="tnc"
+              ></v-textarea> </v-col
+            ><br />
+            <v-btn v-on:click="submitListing('rent')" color="warning"
+              >Update Listing</v-btn
+            >
+          </div>
+        </b-col>
+      </b-row>
+    </v-card>
+  </b-container>
 </template>
 
 <script>
@@ -125,7 +223,7 @@ export default {
       loc: "",
       price: "",
       alt_trade: "",
-      listingid: "", 
+      listingid: "",
       subcat_sales: [
         "Mobile & Electronics",
         "Hobbies & Games",
@@ -143,11 +241,11 @@ export default {
     };
   },
   created() {
-      this.fetchListing();
-  }, 
+    this.fetchListing();
+  },
   methods: {
     submitListing: function(x, y) {
-        console.log("mofo"+y);
+      console.log("mofo" + y);
       this.listing["Type"] = this.selectedType;
       this.listing["Subcat"] = this.selectedSubcat;
       this.listing["Title"] = this.title;
@@ -159,7 +257,7 @@ export default {
       if (x === "sale") {
         var others = {};
         others["Alternatives"] = this.alt_trade;
-        
+
         this.listing["sale"] = others;
         // console.log(this.listing["sale"])
       } else if (x === "rent") {
@@ -174,35 +272,40 @@ export default {
         .doc(y)
         .update(this.listing)
         .then(() => {
-          this.$router.push('/profile')
+          this.$router.push("/profile");
         });
-        // console.log("listingid"+y);
+      // console.log("listingid"+y);
     },
     fetchListing: function() {
-       let doc_id = this.$route.params.doc_id; 
-       this.listingid = doc_id; 
-       console.log('CALLED!'+doc_id); 
-        firebase.firestore().collection('Listings').doc(doc_id).get().then( (doc) => {
-            let x = doc.data(); 
-            this.title = x['Title']; 
-            this.desc = x['Description']; 
-            this.selectedType = x['Type']; 
-            this.selectedSubcat = x['Subcat']; 
-            this.loc = x['Location']; 
-            this.price = x['Price']; 
-            this.img1 = x['images'][0];
-            this.imgurls = x['images'];
-            console.log(this.imgurls); 
-            if (this.selectedType == 'rent') {
-                this.interval = x['rent']['Interval']; 
-                this.tnc = x['rent']['Terms and Conditions'];
-            } else if (this.selectedType == 'sale') {
-                this.alt_trade = x['sale']['Alternatives'];
-                this.trans_method = x['sale']['Alternatives']['Transaction method']
-            }
+      let doc_id = this.$route.params.doc_id;
+      this.listingid = doc_id;
+      console.log("CALLED!" + doc_id);
+      firebase
+        .firestore()
+        .collection("Listings")
+        .doc(doc_id)
+        .get()
+        .then((doc) => {
+          let x = doc.data();
+          this.title = x["Title"];
+          this.desc = x["Description"];
+          this.selectedType = x["Type"];
+          this.selectedSubcat = x["Subcat"];
+          this.loc = x["Location"];
+          this.price = x["Price"];
+          this.img1 = x["images"][0];
+          this.imgurls = x["images"];
+          console.log(this.imgurls);
+          if (this.selectedType == "rent") {
+            this.interval = x["rent"]["Interval"];
+            this.tnc = x["rent"]["Terms and Conditions"];
+          } else if (this.selectedType == "sale") {
+            this.alt_trade = x["sale"]["Alternatives"];
+            this.trans_method = x["sale"]["Alternatives"]["Transaction method"];
+          }
         });
-        console.log(this.listingid); 
-    }, 
+      console.log(this.listingid);
+    },
     click1() {
       this.$refs.input1.click();
     },
@@ -250,13 +353,21 @@ h1 {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   color: #2c3e50;
 }
-h2 {
-  text-align: center;
+h3 {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   color: #e09d20;
+  padding-top: 20px;
+}
+strong {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  color: #e09d20;
+  padding-top: 20px;
 }
 #additionalOptions,
 #commonOptions {
-  text-align: center;
+  text-align: start;
+}
+textarea {
+  background-color: #fff8e1;
 }
 </style>

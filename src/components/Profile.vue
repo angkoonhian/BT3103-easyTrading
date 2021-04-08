@@ -17,7 +17,6 @@
             <v-list-item-subtitle>Software Engineer | dokanee</v-list-item-subtitle> -->
           </v-list-item-content>
           <template>
-            
             <v-row style="padding-left: 30px">
               <v-dialog v-model="dialog" persistent max-width="600px">
                 <template v-slot:activator="{ on, attrs }">
@@ -109,67 +108,65 @@
       icons-and-text
     >
       <v-tabs-slider></v-tabs-slider>
-      <v-tab>
+      <v-tab v-on:click="currentTab = 'Listings'">
         Listings
       </v-tab>
 
-      <v-tab>
+      <v-tab v-on:click="currentTab = 'reviews'">
         Reviews
       </v-tab>
     </v-tabs>
-    <v-btn
-      v-show = "this.user === this.currentid"
-      text
-      style="margin-top: 20px; height: 100px; width: 150px"
-      @click="toListing"
-    >
-      <v-icon dark color="orange">
-        mdi-plus
-      </v-icon>
-      New listing
-    </v-btn>
-    <UserListings
-      v-bind:user="user"
-      v-bind:profile="true"
-      v-bind:rating="rating"
-      v-bind:numRatings="numRatings"
-      v-bind:name="name"
-      v-bind:profileURL="profile"
-      v-bind:isSameUser="isSameUser"
-    ></UserListings>
+
+    <div v-if="currentTab === 'Listings'">
+      <UserListings
+        v-bind:user="user"
+        v-bind:profile="true"
+        v-bind:rating="rating"
+        v-bind:numRatings="numRatings"
+        v-bind:name="name"
+        v-bind:profileURL="profile"
+        v-bind:isSameUser="isSameUser"
+      ></UserListings>
+    </div>
+    <div v-if="currentTab === 'reviews'">
+      <Reviews v-bind:user="user"></Reviews>
+    </div>
   </div>
 </template>
 
 <script>
 import firebase from "firebase";
 import UserListings from "./UserListings";
+import Reviews from "./Reviews";
 
 export default {
   props: ["user"],
   data() {
     return {
+      currentTab: "Listings",
       name: "",
       email: "",
       profile: "",
       rating: 0,
       biography: "",
       dialog: false,
-      currentid: "", 
-      isSameUser: false
+      currentid: "",
+      isSameUser: false,
     };
   },
   components: {
     UserListings,
+    Reviews,
   },
   created() {
-    console.log("yoyoyo"+this.user);
-    this.currentid = localStorage.UID; 
+    console.log("yoyoyo" + this.user);
+    this.currentid = localStorage.UID;
 
-    if (this.user=== undefined) {
-      this.user = localStorage.UID; 
+    if (this.user === undefined) {
+      this.user = localStorage.UID;
     }
-    this.isSameUser = this.currentid === this.user; 
-    
+    this.isSameUser = this.currentid === this.user;
+
     firebase
       .firestore()
       .collection("users")
@@ -197,10 +194,6 @@ export default {
           Name: this.name,
           Biography: this.biography,
         });
-    },
-
-    toListing: function() {
-      this.$router.push({ path: `/newListing`, name: "newListing" });
     },
   },
 };

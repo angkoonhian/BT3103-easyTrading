@@ -34,27 +34,20 @@
         <v-tab v-on:click="currentTab = 'rentals'">
           Rental
         </v-tab>
-
-        <v-tab href="#tab-3">
-          Services
-        </v-tab>
       </v-tabs>
       <div v-if="currentTab === 'sales'"><Sales></Sales></div>
       <div v-if="currentTab === 'rentals'"><Rentals></Rentals></div>
-      <div v-if="currentTab === 'services'"><Services></Services></div>
     </template>
   </v-app>
 </template>
 <script>
 import Sales from "./Sales";
 import Rentals from "./Rentals";
-import Services from "./Services";
 
 export default {
   components: {
     Sales,
     Rentals,
-    Services,
   },
   data() {
     return {

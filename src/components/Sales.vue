@@ -73,9 +73,14 @@
                 <div class="my-2 subtitle-1">
                   <strong>Location:</strong> {{ x[1]["Location"] }}
                 </div>
-                
-                <div v-if="x[1].Price != ''"><strong>Price:</strong> ${{ x[1]["Price"] }}</div>
-                 <div v-if="x[1]['sale']['Alternatives'] != ''"><strong>Can trade for:</strong> {{ x[1]['sale']["Alternatives"] }}</div>
+
+                <div v-if="x[1].Price != ''">
+                  <strong>Price:</strong> ${{ x[1]["Price"] }}
+                </div>
+                <div v-if="x[1]['sale']['Alternatives'] != ''">
+                  <strong>Can trade for:</strong>
+                  {{ x[1]["sale"]["Alternatives"] }}
+                </div>
               </v-card-text>
 
               <v-divider class="mx-4"></v-divider>
@@ -91,48 +96,6 @@
           </v-col>
         </v-row>
       </div>
-      <!-- <section v-for="(x, i) in items" v-bind:key="i">
-        <div
-          class="profile"
-          v-bind:style="{
-            backgroundImage:
-              'url(' +
-              'https://media.wired.com/photos/5b8999943667562d3024c321/master/w_2560%2Cc_limit/trash2-01.jpg' +
-              ')',
-          }"
-        >
-          {{ x[3] }}
-          <v-rating
-            v-bind:value="x[2]"
-            color="amber"
-            dense
-            half-increments
-            readonly
-            size="14"
-          ></v-rating
-          >{{ x[2] }}
-        </div>
-
-        <img v-bind:src="x[1]['images']" /> {{ x.id }}
-        <h2>{{ x[1]["Title"] }}</h2>
-        {{x[1]}}
-        {{ x.id }}
-
-        <div v-if="x[1]['Price'] != ''" class="hh">${{ x[1]["Price"] }}</div>
-        <div v-if="x[1]['sale']['Alternatives'] != '' && x[1]['Price'] != ''">
-          -or-
-        </div>
-        <div v-if="x[1]['sale']['Alternatives'] != '' && x[1]['Price'] == ''">
-          -trading for-
-        </div>
-        <div v-if="x[1]['sale']['Alternatives'] != ''" class="hh">
-          {{ x[1]["sale"]["Alternatives"] }}
-        </div>
-        <i> {{ x[1]["Location"] }}</i>
-        <aside>
-          {{ profiles["id"] }}
-        </aside>
-      </section> -->
     </div>
   </div>
 </template>
@@ -153,7 +116,7 @@ export default {
         "Sports",
         "Education",
         "Fashion",
-        'Miscellaneous'
+        "Miscellaneous",
       ],
       rating: 0,
       name: "",
@@ -283,8 +246,8 @@ export default {
       });
     },
     getItemPage: function(listingID) {
-      this.$router.push({ name: 'itemPage', params: {listing: listingID }});
-    },  
+      this.$router.push({ name: "itemPage", params: { listing: listingID } });
+    },
   },
   created() {
     this.fetchItems("all");
@@ -292,5 +255,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
