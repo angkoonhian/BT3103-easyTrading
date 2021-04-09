@@ -68,13 +68,13 @@
             <v-card-actions>
               <v-spacer></v-spacer>
 
-              <v-btn color="warning">
+              <v-btn color="warning" @click="contactOwner(userId)">
                 Chat Now
               </v-btn>
-              <v-btn color="white">
+              <v-btn color="white" @click="toReviews">
                 See all reviews
               </v-btn>
-              <v-btn color="error">
+              <v-btn color="error" @click="reportListing">
                 Report Listing
               </v-btn>
             </v-card-actions>
@@ -88,9 +88,10 @@
 <script>
 // import firebase from 'firebase'
 import firebase from "firebase";
+import { roomsRef } from "../firebase";
 
 export default {
-  props: ["listing"],
+  props: ["listing", "userId"],
   data() {
     return {
       itemInfo: [],
@@ -102,6 +103,46 @@ export default {
     };
   },
   methods: {
+    reportListing: function() {
+      alert("This listing has been reported, Thanks for your feedback!");
+    },
+    contactOwner: async function(ownerId) {
+      if (ownerId == this.user) {
+        return alert("this is your own store!");
+      }
+      //const chatRoomUsers = [ownerId, this.user];
+      const query1 = await roomsRef
+        .where("users", "==", [ownerId, this.user])
+        .get();
+
+      if (!query1.empty) {
+        return this.$router.push({ path: `/chat` });
+      }
+
+      let query2 = await roomsRef
+        .where("users", "==", [this.user, ownerId])
+        .get();
+
+      if (!query2.empty) {
+        return this.$router.push({ path: `/chat` });
+      }
+      roomsRef
+        .add({
+          users: [ownerId, this.user],
+          lastUpdated: new Date(),
+        })
+        .then(() => {
+          this.$router.push({ path: `/chat` });
+        });
+    },
+    toReviews: function() {
+      this.$router.push({
+        path: "/Shopfront",
+        name: "Shopfront",
+        params: { user: this.userId, tabs: "reviews" },
+        props: true,
+      });
+    },
     fetchItem: function(listing) {
       this.itemInfo = [];
       firebase

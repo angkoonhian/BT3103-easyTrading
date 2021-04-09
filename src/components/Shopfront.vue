@@ -28,25 +28,49 @@
       </h4>
       <h3 style="padding-bottom: 30px">Welcome to {{ name }}'s shop!!</h3>
     </v-card>
-    <UserListings
-      v-bind:user="user"
-      v-bind:profile="true"
-      v-bind:rating="rating"
-      v-bind:numRatings="numRatings"
-      v-bind:name="name"
-      v-bind:profileURL="profile"
-    ></UserListings>
+    <v-tabs
+      v-model="tab"
+      background-color="orange accent-4"
+      centered
+      dark
+      icons-and-text
+    >
+      <v-tabs-slider></v-tabs-slider>
+      <v-tab v-on:click="currentTab = 'Listings'">
+        Listings
+      </v-tab>
+
+      <v-tab v-on:click="currentTab = 'reviews'">
+        Reviews
+      </v-tab>
+    </v-tabs>
+    <div v-if="currentTab === 'Listings'">
+      <UserListings
+        v-bind:user="user"
+        v-bind:profile="true"
+        v-bind:rating="rating"
+        v-bind:numRatings="numRatings"
+        v-bind:name="name"
+        v-bind:profileURL="profile"
+        v-bind:isSameUser="isSameUser"
+      ></UserListings>
+    </div>
+    <div v-if="currentTab === 'reviews'">
+      <Reviews v-bind:shopOwner="user"></Reviews>
+    </div>
   </div>
 </template>
 
 <script>
 import firebase from "firebase";
 import UserListings from "./UserListings";
+import Reviews from "./Reviews";
 
 export default {
-  props: ["user"],
+  props: ["user", "tabs"],
   data() {
     return {
+      currentTab: this.tabs,
       name: "",
       email: "",
       profile: "",
@@ -57,6 +81,7 @@ export default {
   },
   components: {
     UserListings,
+    Reviews,
   },
   created() {
     console.log(this.user);

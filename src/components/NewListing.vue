@@ -262,6 +262,7 @@ export default {
       this.listing["Price"] = this.price;
       this.listing["UserID"] = localStorage.getItem("UID");
       this.listing["images"] = this.imgurls;
+      this.listing["date"] = new Date();
       console.log(x);
       console.log("submitting");
       if (x === "sale") {

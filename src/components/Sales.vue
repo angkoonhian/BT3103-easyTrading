@@ -39,6 +39,7 @@
                   {{ x[3] }}
                 </v-list-item>
               </v-card-actions>
+
               <v-row
                 align="center"
                 class="mx-0"
@@ -52,7 +53,11 @@
                   readonly
                   size="14"
                 ></v-rating>
-
+                <timeago
+                  :datetime="x[1]['date'].toDate()"
+                  :auto-update="60"
+                  style="padding-left: 20px; font-weight: 100; font-size: 15px"
+                ></timeago>
                 <div class="grey--text ml-4">
                   {{ x[2] }} ({{ x[4] }} reviews)
                 </div>
@@ -85,7 +90,11 @@
 
               <v-divider class="mx-4"></v-divider>
               <v-card-actions>
-                <v-btn color="orange darken-2" text @click="getItemPage(x[0])">
+                <v-btn
+                  color="orange darken-2"
+                  text
+                  @click="getItemPage(x[0], x[6])"
+                >
                   View
                 </v-btn>
                 <v-btn color="orange darken-2" text @click="contactOwner(x[6])">
@@ -123,6 +132,7 @@ export default {
       numRatings: 0,
       profileURL: "",
       user: localStorage.UID,
+      date: new Date(),
     };
   },
   methods: {
@@ -146,7 +156,14 @@ export default {
                 .where("id", "==", item.UserID)
                 .get()
                 .then((res) => {
-                  this.rating = res.docs[0].data().Rating;
+                  if (res.docs[0].data().numRatings == 0) {
+                    this.rating = 0;
+                  } else {
+                    this.rating = (
+                      res.docs[0].data().Rating / res.docs[0].data().numRatings
+                    ).toFixed(2);
+                  }
+
                   this.name = res.docs[0].data().Name;
                   this.numRating = res.docs[0].data().numRatings;
                   this.profileURL = res.docs[0].data().ProfileURL;
@@ -180,7 +197,13 @@ export default {
                 .where("id", "==", item.UserID)
                 .get()
                 .then((res) => {
-                  this.rating = res.docs[0].data().Rating;
+                  if (res.docs[0].data().numRatings == 0) {
+                    this.rating = 0;
+                  } else {
+                    this.rating = (
+                      res.docs[0].data().Rating / res.docs[0].data().numRatings
+                    ).toFixed(2);
+                  }
                   this.name = res.docs[0].data().Name;
                   this.numRating = res.docs[0].data().numRatings;
                   this.profileURL = res.docs[0].data().ProfileURL;
@@ -241,12 +264,15 @@ export default {
       this.$router.push({
         path: "/Shopfront",
         name: "Shopfront",
-        params: { user: userId },
+        params: { user: userId, tabs: "Listings" },
         props: true,
       });
     },
-    getItemPage: function(listingID) {
-      this.$router.push({ name: "itemPage", params: { listing: listingID } });
+    getItemPage: function(listingID, userId) {
+      this.$router.push({
+        name: "itemPage",
+        params: { listing: listingID, userId: userId },
+      });
     },
   },
   created() {

@@ -129,7 +129,7 @@
       ></UserListings>
     </div>
     <div v-if="currentTab === 'reviews'">
-      <Reviews v-bind:user="user"></Reviews>
+      <Reviews v-bind:shopOwner="user"></Reviews>
     </div>
   </div>
 </template>
