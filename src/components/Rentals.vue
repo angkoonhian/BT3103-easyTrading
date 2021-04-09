@@ -27,15 +27,19 @@
             md="4"
             lg="3"
           >
-            <v-card :loading="loading" class="mx-auto my-12" max-width="374">
-              <v-card-actions @click="toProfile(x[6])" style="cursor: pointer">
+            <v-card :loading="false" class="mx-auto my-12" max-width="374">
+              <v-card-actions>
                 <v-list-item class="grow" style="font-weight: 700">
-                  <v-list-item-avatar color="grey darken-3">
+                  <v-list-item-avatar
+                    color="grey darken-3"
+                    @click="goToShopFront(x[6])"
+                  >
                     <img v-bind:src="x[5]" class="elevation-6" alt="" />
                   </v-list-item-avatar>
                   {{ x[3] }}
                 </v-list-item>
               </v-card-actions>
+
               <v-row
                 align="center"
                 class="mx-0"
@@ -49,6 +53,7 @@
                   readonly
                   size="14"
                 ></v-rating>
+
                 <div class="grey--text ml-4">
                   {{ x[2] }} ({{ x[4] }} reviews)
                 </div>
@@ -63,17 +68,15 @@
 
               <v-img height="250" v-bind:src="x[1].images[0]"></v-img>
 
-              <v-card-title style="word-wrap:break-all">{{
-                x[1]["Title"]
-              }}</v-card-title>
+              <v-card-title>{{ x[1]["Title"] }}</v-card-title>
 
               <v-card-text>
                 <div class="my-2 subtitle-1">
                   <strong>Location:</strong> {{ x[1]["Location"] }}
                 </div>
                 <div>
-                  <strong>Price:</strong> ${{ x[1]["Price"] }} per
-                  {{ x[1]["rent"]["Interval"] }}
+                  <strong>Price:</strong>
+                  ${{ x[1]["Price"] }} per {{ x[1]["rent"]["Interval"] }}
                 </div>
                 <div class="my-2">
                   <strong>TimeListed:</strong>
@@ -117,24 +120,22 @@ export default {
       items: [],
       profiles: [],
       subcats: [
-        "Automobiles",
-        "Property",
-        "Books",
-        "Games",
-        "Electronics",
+        "Mobile & Electronics",
+        "Hobbies & Games",
+        "Sports",
+        "Education",
+        "Fashion",
         "Miscellaneous",
       ],
+      rating: 0,
+      name: "",
+      numRatings: 0,
+      profileURL: "",
+      user: localStorage.UID,
+      date: new Date(),
     };
   },
   methods: {
-    toProfile: function(x) {
-      this.$router.push({
-        path: `/profile`,
-        name: "profile",
-        params: { user: x, tabs: "Listings" },
-        props: true,
-      });
-    },
     fetchItems: function(x) {
       // database.collection('Listings').get()
       // firebase.firestore().collection('Listings').get()
@@ -149,6 +150,7 @@ export default {
           .then((querySnapShot) => {
             querySnapShot.forEach(async (doc) => {
               let item = doc.data();
+              //console.log(item.UserID);
               await firebase
                 .firestore()
                 .collection("users")
@@ -162,6 +164,7 @@ export default {
                       res.docs[0].data().Rating / res.docs[0].data().numRatings
                     ).toFixed(2);
                   }
+
                   this.name = res.docs[0].data().Name;
                   this.numRating = res.docs[0].data().numRatings;
                   this.profileURL = res.docs[0].data().ProfileURL;
@@ -229,14 +232,7 @@ export default {
           });
       });
     },
-    getItemPage: function(listingID, userId) {
-      this.$router.push({
-        name: "itemPage",
-        params: { listing: listingID, userId: userId },
-      });
-    },
     contactOwner: async function(ownerId) {
-      console.log(ownerId);
       if (ownerId == this.user) {
         return alert("this is your own store!!!");
       }
@@ -265,8 +261,21 @@ export default {
           this.$router.push({ path: `/chat` });
         });
     },
+    goToShopFront: function(userId) {
+      this.$router.push({
+        path: "/Shopfront",
+        name: "Shopfront",
+        params: { user: userId, tabs: "Listings" },
+        props: true,
+      });
+    },
+    getItemPage: function(listingID, userId) {
+      this.$router.push({
+        name: "itemPageRent",
+        params: { listing: listingID, userId: userId },
+      });
+    },
   },
-
   created() {
     this.fetchItems("all");
   },
