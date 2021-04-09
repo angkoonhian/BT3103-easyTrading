@@ -15,7 +15,7 @@ import Blank from "./components/Blank.vue";
 import ItemPageRent from "./components/ItemPageRent.vue";
 
 export default [
-  { path: "/", component: Login },
+  { path: "/home", component: Home },
   { path: "/login", component: Login },
   { path: "/home", component: Home },
   {
