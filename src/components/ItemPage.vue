@@ -13,11 +13,18 @@
               <v-row no-gutters>
                 <v-col md="6">
                   <v-card color="grey lighten-4">
-                    <v-img
+                    <v-carousel>
+                      <v-carousel-item
+                        v-for="(item, i) in x[1].images"
+                        :key="i"
+                        :src="item"
+                      ></v-carousel-item>
+                    </v-carousel>
+                    <!-- <v-img
                       height="600"
                       :width="600"
                       v-bind:src="x[1].images[0]"
-                    ></v-img>
+                    ></v-img> -->
                   </v-card>
                 </v-col>
                 <v-col md="6">
@@ -44,7 +51,9 @@
                         size="14"
                       ></v-rating>
 
-                      <div>{{ x[2] }} ({{ x[4] }} reviews)</div>
+                      <div style="padding-left: 5px">
+                        {{ x[2] }} ({{ x[4] }} reviews)
+                      </div>
                     </v-row>
                     <v-card-text class="text-left">
                       <p><strong>Options:</strong> ${{ x[1]["Price"] }}</p>
@@ -60,6 +69,14 @@
                         {{ x[1]["sale"]["Alternatives"] }}
                       </p>
                       <p><strong>Location:</strong> {{ x[1]["Location"] }}</p>
+                      <div class="my-2">
+                        <strong>TimeListed:</strong>
+                        <timeago
+                          :datetime="x[1]['date'].toDate()"
+                          :auto-update="60"
+                          style="padding-left: 5px; font-weight: 100; font-size: 15px"
+                        ></timeago>
+                      </div>
                     </v-card-text>
                   </v-card>
                 </v-col>
@@ -152,7 +169,6 @@ export default {
         .get()
         .then((doc) => {
           let item = doc.data();
-          console.log(item.UserID);
           firebase
             .firestore()
             .collection("users")
@@ -174,7 +190,6 @@ export default {
               ]);
             });
         });
-      console.log(this.itemInfo);
     },
   },
   components: {},

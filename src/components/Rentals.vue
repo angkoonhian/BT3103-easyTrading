@@ -49,11 +49,6 @@
                   readonly
                   size="14"
                 ></v-rating>
-                <timeago
-                  :datetime="x[1]['date'].toDate()"
-                  :auto-update="60"
-                  style="padding-left: 20px; font-weight: 100; font-size: 15px"
-                ></timeago>
                 <div class="grey--text ml-4">
                   {{ x[2] }} ({{ x[4] }} reviews)
                 </div>
@@ -80,6 +75,14 @@
                   <strong>Price:</strong> ${{ x[1]["Price"] }} per
                   {{ x[1]["rent"]["Interval"] }}
                 </div>
+                <div class="my-2">
+                  <strong>TimeListed:</strong>
+                  <timeago
+                    :datetime="x[1]['date'].toDate()"
+                    :auto-update="60"
+                    style="padding-left: 5px; font-weight: 100; font-size: 15px"
+                  ></timeago>
+                </div>
               </v-card-text>
 
               <v-divider class="mx-4"></v-divider>
@@ -91,7 +94,7 @@
                 >
                   View
                 </v-btn>
-                <v-btn color="orange darken-2" text>
+                <v-btn color="orange darken-2" text @click="contactOwner(x[6])">
                   Contact
                 </v-btn>
               </v-card-actions>
@@ -106,6 +109,7 @@
 <script>
 // import firebase from 'firebase'
 import firebase from "firebase";
+import { roomsRef } from "../firebase";
 
 export default {
   data() {
@@ -140,11 +144,11 @@ export default {
           .firestore()
           .collection("Listings")
           .where("Type", "==", "rent")
+          .orderBy("date", "desc")
           .get()
           .then((querySnapShot) => {
             querySnapShot.forEach(async (doc) => {
               let item = doc.data();
-              console.log(item.UserID);
               await firebase
                 .firestore()
                 .collection("users")
@@ -164,7 +168,7 @@ export default {
                   this.items.push([
                     doc.id,
                     item,
-                    this.rating.toFixed(2),
+                    this.rating,
                     this.name,
                     this.numRating,
                     this.profileURL,
@@ -173,13 +177,13 @@ export default {
                 });
             });
           });
-        console.log(this.items);
       } else {
         firebase
           .firestore()
           .collection("Listings")
           .where("Type", "==", "rent")
           .where("Subcat", "==", x)
+          .orderBy("date", "desc")
           .get()
           .then((querySnapShot) => {
             querySnapShot.forEach(async (doc) => {
@@ -231,7 +235,38 @@ export default {
         params: { listing: listingID, userId: userId },
       });
     },
+    contactOwner: async function(ownerId) {
+      console.log(ownerId);
+      if (ownerId == this.user) {
+        return alert("this is your own store!!!");
+      }
+      //const chatRoomUsers = [ownerId, this.user];
+      const query1 = await roomsRef
+        .where("users", "==", [ownerId, this.user])
+        .get();
+
+      if (!query1.empty) {
+        return this.$router.push({ path: `/chat` });
+      }
+
+      let query2 = await roomsRef
+        .where("users", "==", [this.user, ownerId])
+        .get();
+
+      if (!query2.empty) {
+        return this.$router.push({ path: `/chat` });
+      }
+      roomsRef
+        .add({
+          users: [ownerId, this.user],
+          lastUpdated: new Date(),
+        })
+        .then(() => {
+          this.$router.push({ path: `/chat` });
+        });
+    },
   },
+
   created() {
     this.fetchItems("all");
   },

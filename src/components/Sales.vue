@@ -53,11 +53,7 @@
                   readonly
                   size="14"
                 ></v-rating>
-                <timeago
-                  :datetime="x[1]['date'].toDate()"
-                  :auto-update="60"
-                  style="padding-left: 20px; font-weight: 100; font-size: 15px"
-                ></timeago>
+
                 <div class="grey--text ml-4">
                   {{ x[2] }} ({{ x[4] }} reviews)
                 </div>
@@ -85,6 +81,14 @@
                 <div v-if="x[1]['sale']['Alternatives'] != ''">
                   <strong>Can trade for:</strong>
                   {{ x[1]["sale"]["Alternatives"] }}
+                </div>
+                <div class="my-2">
+                  <strong>TimeListed:</strong>
+                  <timeago
+                    :datetime="x[1]['date'].toDate()"
+                    :auto-update="60"
+                    style="padding-left: 5px; font-weight: 100; font-size: 15px"
+                  ></timeago>
                 </div>
               </v-card-text>
 
@@ -145,6 +149,7 @@ export default {
           .firestore()
           .collection("Listings")
           .where("Type", "==", "sale")
+          .orderBy("date", "desc")
           .get()
           .then((querySnapShot) => {
             querySnapShot.forEach(async (doc) => {
@@ -179,13 +184,13 @@ export default {
                 });
             });
           });
-        console.log(this.items);
       } else {
         firebase
           .firestore()
           .collection("Listings")
           .where("Type", "==", "sale")
           .where("Subcat", "==", x)
+          .orderBy("date", "desc")
           .get()
           .then((querySnapShot) => {
             querySnapShot.forEach(async (doc) => {
