@@ -233,7 +233,7 @@ export default {
     },
     contactOwner: async function(ownerId) {
       if (ownerId == this.user) {
-        return alert("this is your own store!");
+        return alert("this is your own store!!");
       }
       //const chatRoomUsers = [ownerId, this.user];
       const query1 = await roomsRef
