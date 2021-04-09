@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div style="margin-top: 50px">
+    Searching for '{{this.searchterm}}' 
     <v-tabs
       v-model="tab"
       background-color="orange accent-4"
@@ -8,16 +9,21 @@
       icons-and-text
     >
       <v-tabs-slider></v-tabs-slider>
-      <v-tab v-on:click="fetchItems('all')">
-        All
+      <v-tab v-on:click="fetchItems('sale')">
+        Sale/Trade
       </v-tab>
 
-      <v-tab v-for="x in subcats" :key="x.id" v-on:click="fetchItems(x)">
-        {{ x }}
+      <v-tab  v-on:click="fetchItems('rent')">
+        Rental
       </v-tab>
+
+      
     </v-tabs>
+    <div v-if="this.items.length===0">
+    No search results found!
+    </div>
     <div class="flex">
-      <div class="flex">
+      
         <v-row style="">
           <v-col
             v-for="(x, i) in items"
@@ -27,10 +33,13 @@
             md="4"
             lg="3"
           >
-            <v-card :loading="loading" class="mx-auto my-12" max-width="374">
+            <v-card :loading="false" class="mx-auto my-12" max-width="374">
               <v-card-actions>
                 <v-list-item class="grow" style="font-weight: 700">
-                  <v-list-item-avatar color="grey darken-3">
+                  <v-list-item-avatar
+                    color="grey darken-3"
+                    @click="goToShopFront(x[6])"
+                  >
                     <img v-bind:src="x[5]" class="elevation-6" alt="" />
                   </v-list-item-avatar>
                   {{ x[3] }}
@@ -70,13 +79,7 @@
                 <div class="my-2 subtitle-1">
                   <strong>Location:</strong> {{ x[1]["Location"] }}
                 </div>
-                <div class="subtitle-1">
-                  <strong>Type:</strong> {{ x[1]["Type"] }}
-                </div>
-                <div>
-                  <strong>Description:</strong> {{ x[1]["Description"] }}
-                </div>
-                <div><strong>Options:</strong> ${{ x[1]["Price"] }}</div>
+                
               </v-card-text>
 
               <v-divider class="mx-4"></v-divider>
@@ -84,7 +87,7 @@
                 <v-btn color="orange darken-2" text>
                   View
                 </v-btn>
-                <v-btn color="orange darken-2" text>
+                <v-btn color="orange darken-2" text @click="contactOwner(x[6])">
                   Contact
                 </v-btn>
               </v-card-actions>
@@ -92,89 +95,85 @@
           </v-col>
         </v-row>
       </div>
-      <!-- <section v-for="(x, i) in items" v-bind:key="i">
-        <div
-          class="profile"
-          v-bind:style="{
-            backgroundImage:
-              'url(' +
-              'https://media.wired.com/photos/5b8999943667562d3024c321/master/w_2560%2Cc_limit/trash2-01.jpg' +
-              ')',
-          }"
-        >
-          {{ x[3] }}
-          <v-rating
-            v-bind:value="x[2]"
-            color="amber"
-            dense
-            half-increments
-            readonly
-            size="14"
-          ></v-rating
-          >{{ x[2] }}
-        </div>
-
-        <img v-bind:src="x[1]['images']" /> {{ x.id }}
-        <h2>{{ x[1]["Title"] }}</h2>
-        {{x[1]}}
-        {{ x.id }}
-
-        <div v-if="x[1]['Price'] != ''" class="hh">${{ x[1]["Price"] }}</div>
-        <div v-if="x[1]['sale']['Alternatives'] != '' && x[1]['Price'] != ''">
-          -or-
-        </div>
-        <div v-if="x[1]['sale']['Alternatives'] != '' && x[1]['Price'] == ''">
-          -trading for-
-        </div>
-        <div v-if="x[1]['sale']['Alternatives'] != ''" class="hh">
-          {{ x[1]["sale"]["Alternatives"] }}
-        </div>
-        <i> {{ x[1]["Location"] }}</i>
-        <aside>
-          {{ profiles["id"] }}
-        </aside>
-      </section> -->
-    </div>
+    
   </div>
 </template>
 
 <script>
-// import firebase from 'firebase'
 import firebase from "firebase";
+import { roomsRef } from "../firebase";
 
 export default {
   data() {
     return {
-      items: [],
-      profiles: [],
-      subcats: [
-        "Education",
-        "Hobbies & Games",
-        "Coaching",
-        "Tutoring",
-        "Teaching",
-      ],
-      rating: 0,
       name: "",
+      profile: "",
+      rating: 0,
       numRatings: 0,
       profileURL: "",
+      items: [], 
+      searchterm: '', 
+      currentTab: 'sale', 
+      user: localStorage.UID
     };
   },
+  components: {
+  },
+  created() { 
+      this.fetchItems('sale'); 
+  },
   methods: {
+    contactOwner: async function(ownerId) {
+      if (ownerId == this.user) {
+        return alert("this is your own store!");
+      }
+      //const chatRoomUsers = [ownerId, this.user];
+      const query1 = await roomsRef
+        .where("users", "==", [ownerId, this.user])
+        .get();
+
+      if (!query1.empty) {
+        return this.$router.push({ path: `/chat` });
+      }
+
+      let query2 = await roomsRef
+        .where("users", "==", [this.user, ownerId])
+        .get();
+
+      if (!query2.empty) {
+        return this.$router.push({ path: `/chat` });
+      }
+      roomsRef
+        .add({
+          users: [ownerId, this.user],
+          lastUpdated: new Date(),
+        })
+        .then(() => {
+          this.$router.push({ path: `/chat` });
+        });
+    },
+    goToShopFront: function(userId) {
+      this.$router.push({
+        path: "/Shopfront",
+        name: "Shopfront",
+        params: { user: userId },
+        props: true,
+      });
+    },
     fetchItems: function(x) {
       // database.collection('Listings').get()
       // firebase.firestore().collection('Listings').get()
+      this.searchterm = this.$route.params.searchterm; 
       this.items = [];
-      if (x === "all") {
         firebase
           .firestore()
           .collection("Listings")
-          .where("Type", "==", "services")
+          .where("Type", "==", x)
           .get()
           .then((querySnapShot) => {
             querySnapShot.forEach(async (doc) => {
               let item = doc.data();
-              console.log(item.UserID);
+              //console.log(item.UserID);
               await firebase
                 .firestore()
                 .collection("users")
@@ -185,6 +184,7 @@ export default {
                   this.name = res.docs[0].data().Name;
                   this.numRating = res.docs[0].data().numRatings;
                   this.profileURL = res.docs[0].data().ProfileURL;
+                  if(item['Title'].includes(this.searchterm.toLowerCase())) {
                   this.items.push([
                     doc.id,
                     item,
@@ -192,27 +192,13 @@ export default {
                     this.name,
                     this.numRating,
                     this.profileURL,
-                  ]);
+                    item.UserID,
+                  ]); }
                 });
             });
           });
-        console.log(this.items);
-      } else {
-        firebase
-          .firestore()
-          .collection("Listings")
-          .where("Type", "==", "services")
-          .where("Subcat", "==", x)
-          .get()
-          .then((querySnapShot) => {
-            let item = {};
-            querySnapShot.forEach((doc) => {
-              item = doc.data();
-              // console.log("executed: "+item);
-              this.items.push([doc.id, item]);
-            });
-          });
-      }
+        // console.log("title"+this.items[0][1]['Title']);
+    //  this.items.filter(x=> x[1]['Title'].includes(this.searchterm)); 
       this.items.forEach((x) => {
         firebase
           .firestore()
@@ -225,12 +211,12 @@ export default {
       });
     },
   },
-  created() {
-    this.fetchItems("all");
-  },
 };
 </script>
 
 <style scoped>
-/*  */
+#mx-auto {
+  position: absolute;
+  top: 50px;
+}
 </style>

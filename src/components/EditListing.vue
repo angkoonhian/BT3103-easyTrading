@@ -9,32 +9,35 @@
           <h1>Post your listing</h1>
           <br />
           <div id="commonOptions">
-            <!-- <v-radio-group v-model="radioGroup"></v-radio-group> -->
-            <h3><strong>1. Choose a listing type</strong></h3>
-            <v-select
-              :items="type"
-              v-model="selectedType"
-              label="Listing Type"
-              solo
-            ></v-select>
-
             <h3><strong>2. Choose your sub-category</strong></h3>
-
-            <div v-show="selectedType === 'sale'">
-              <v-select
-                :items="subcat_sales"
-                label="Sub Category"
-                v-model="selectedSubcat"
-                solo
-              ></v-select>
+            <v-select :items="subcat_sales" label="Solo field" solo></v-select>
+            <div
+              v-show="selectedType === 'sale'"
+              v-for="x in subcat_sales"
+              :key="x.id"
+            >
+              <input
+                type="radio"
+                name="subcat"
+                v-on:click="selectedSubcat = x"
+                checked="checked"
+                required
+              />
+              {{ x }}
             </div>
-            <div v-show="selectedType === 'rent'">
-              <v-select
-                :items="subcat_rent"
-                label="Sub Category"
-                v-model="selectedSubcat"
-                solo
-              ></v-select>
+            <div
+              v-show="selectedType === 'rent'"
+              v-for="x in subcat_rent"
+              :key="x.id"
+            >
+              <input
+                type="radio"
+                name="subcat"
+                v-on:click="selectedSubcat = x"
+                checked="checked"
+                required
+              />
+              {{ x }}
             </div>
             <h3><strong>3. Give your listing a title</strong></h3>
             <v-col cols="12" sm="12" md="12">
@@ -105,67 +108,67 @@
                 /><br />
               </div>
             </div>
-          </div>
-          <div id="additionalOptions" v-show="selectedType === 'sale'">
-            <h3><strong>7. Name your price and/or trades</strong></h3>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-col cols="12" sm="12" md="12">
-                  <v-text-field
-                    label="$"
-                    solo
-                    type="number"
-                    step="0.01"
-                    v-model="price"
-                    v-bind="attrs"
-                    v-on="on"
-                  ></v-text-field>
-                </v-col>
-              </template>
-              <span
-                >Price field is optional if you just want to purely trade for
-                another item</span
+            <div id="additionalOptions" v-show="selectedType === 'sale'">
+              <h3><strong>7. Name your price and/or trades</strong></h3>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-col cols="12" sm="12" md="12">
+                    <v-text-field
+                      label="$"
+                      solo
+                      type="number"
+                      step="0.01"
+                      v-model="price"
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </v-col>
+                </template>
+                <span
+                  >Price field is optional if you just want to purely trade for
+                  another item</span
+                >
+              </v-tooltip>
+              -or-<br />
+              <br />
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-col cols="12" sm="12" md="12">
+                    <v-text-field
+                      label="Item you want to trade for"
+                      solo
+                      type="text"
+                      maxlength="50"
+                      size="70"
+                      v-model="alt_trade"
+                      v-bind="attrs"
+                      v-on="on"
+                      placeholder="item you want to trade for"
+                    ></v-text-field>
+                  </v-col>
+                </template>
+                <span
+                  >This field is optional if you want a purely monetary
+                  transaction</span
+                >
+              </v-tooltip>
+              <h3>
+                <strong>8. Name your transaction/delivery preferences</strong>
+              </h3>
+              <v-col cols="12" sm="12" md="12">
+                <v-text-field
+                  label="e.g. pick up at mrt, cash only, etc"
+                  solo
+                  type="text"
+                  placeholder="e.g. pick up at mrt, cash only, etc"
+                  size="70"
+                  v-model="trans_method"
+                ></v-text-field>
+              </v-col>
+              <v-btn v-on:click="submitListing('sale')" color="warning"
+                >Update Listing</v-btn
               >
-            </v-tooltip>
-            -or-<br />
-            <br />
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-col cols="12" sm="12" md="12">
-                  <v-text-field
-                    label="Item you want to trade for"
-                    solo
-                    type="text"
-                    maxlength="50"
-                    size="70"
-                    v-model="alt_trade"
-                    v-bind="attrs"
-                    v-on="on"
-                    placeholder="item you want to trade for"
-                  ></v-text-field>
-                </v-col>
-              </template>
-              <span
-                >This field is optional if you want a purely monetary
-                transaction</span
-              >
-            </v-tooltip>
-            <h3>
-              <strong>8. Name your transaction/delivery preferences</strong>
-            </h3>
-            <v-col cols="12" sm="12" md="12">
-              <v-text-field
-                label="e.g. pick up at mrt, cash only, etc"
-                solo
-                type="text"
-                placeholder="e.g. pick up at mrt, cash only, etc"
-                size="70"
-                v-model="trans_method"
-              ></v-text-field>
-            </v-col>
-            <v-btn v-on:click="submitListing('sale')" color="warning"
-              >Post Listing</v-btn
-            >
+            </div>
           </div>
           <div id="additionalOptions" v-show="selectedType === 'rent'">
             <h3><strong>7. Name your price</strong></h3>
@@ -194,7 +197,7 @@
               ></v-textarea> </v-col
             ><br />
             <v-btn v-on:click="submitListing('rent')" color="warning"
-              >Post Listing</v-btn
+              >Update Listing</v-btn
             >
           </div>
         </b-col>
@@ -212,48 +215,37 @@ export default {
   name: "NewListing",
   data() {
     return {
-      type: [
-        { text: "I am selling/trading an item", value: "sale" },
-        { text: "I am renting an item", value: "rent" },
-        { text: "I am providing a service", value: "service" },
-      ],
-      imgcount: 0,
-      radioGroup: "",
       listing: {},
       selectedType: "sale",
-      selectedSubcat: "Miscellaneous",
+      selectedSubcat: "",
       title: "",
       desc: "",
       loc: "",
       price: "",
       alt_trade: "",
-      trans_method: "",
+      listingid: "",
       subcat_sales: [
-        { text: "Mobile & Electronics", value: "Mobile & Electronics" },
-        { text: "Hobbies & Games", value: "Hobbies & Games" },
-        { text: "Sports", value: "Sports" },
-        { text: "Education", value: "Education" },
-        { text: "Fashion", value: "Fashion" },
-        { text: "Miscellaneous", value: "Miscellaneous" },
+        "Mobile & Electronics",
+        "Hobbies & Games",
+        "Sports",
+        "Education",
+        "Fashion",
       ],
-      subcat_rent: [
-        { text: "Automobiles", value: "Automobiles" },
-        { text: "Property", value: "Property" },
-        { text: "Books", value: "Books" },
-        { text: "Games", value: "Games" },
-        { text: "Electronics", value: "Electronics" },
-        { text: "Miscellaneous", value: "Miscellaneous" },
-      ],
+      subcat_rent: ["Automobiles", "Property", "Books", "Games", "Electronics"],
       rent_intervals: ["hour", "day", "week", "month", "year"],
-      interval: "hour",
+      interval: "",
       tnc: "",
       img1: "",
       imageData: null,
       imgurls: [],
     };
   },
+  created() {
+    this.fetchListing();
+  },
   methods: {
-    submitListing: function(x) {
+    submitListing: function(x, y) {
+      console.log("mofo" + y);
       this.listing["Type"] = this.selectedType;
       this.listing["Subcat"] = this.selectedSubcat;
       this.listing["Title"] = this.title;
@@ -262,61 +254,58 @@ export default {
       this.listing["Price"] = this.price;
       this.listing["UserID"] = localStorage.getItem("UID");
       this.listing["images"] = this.imgurls;
-      this.listing["date"] = new Date();
-      console.log(x);
-      console.log("submitting");
       if (x === "sale") {
         var others = {};
         others["Alternatives"] = this.alt_trade;
-        others["Transaction method"] = this.trans_method;
+
         this.listing["sale"] = others;
+        // console.log(this.listing["sale"])
       } else if (x === "rent") {
         var others2 = {};
         others2["Interval"] = this.interval;
         others2["Terms and Conditions"] = this.tnc;
         this.listing["rent"] = others2;
       }
-      // firebase.database().ref('Listings').push(this.listing).then(
-      //     ()=>
-      //         {location.reload()});
-      if (
-        this.title === "" ||
-        this.imgurls.length === 0 ||
-        this.selectedSubcat === ""
-      ) {
-        alert("One or more required fields is not filled in!");
-      }
-      if (this.title === "" || this.imgurls.length === 0 || this.desc === "") {
-        alert("Please fill in your title/description and upload your images");
-      } else {
-        firebase
-          .firestore()
-          .collection("Listings")
-          .add(this.listing)
-          .then(() => {
-            this.$router.push({
-              path: `/profile`,
-              name: "profile",
-              params: { user: localStorage.UID },
-              props: true,
-            });
-          });
-        console.log(this.listing);
-      }
+      firebase
+        .firestore()
+        .collection("Listings")
+        .doc(y)
+        .update(this.listing)
+        .then(() => {
+          this.$router.push("/profile");
+        });
+      // console.log("listingid"+y);
     },
-    // create () {
-    //     const post = {
-    //         photo: this.img1,
-    //         caption: this.caption
-    //     }
-    //     firebase.database().ref('PhotoGallery').push(post)
-    //     .then((response) => {
-    //         console.log(response)
-    //     })
-    //     .catch(err => {
-    //         console.log(err)
-    //     })
-    // },
+    fetchListing: function() {
+      let doc_id = this.$route.params.doc_id;
+      this.listingid = doc_id;
+      console.log("CALLED!" + doc_id);
+      firebase
+        .firestore()
+        .collection("Listings")
+        .doc(doc_id)
+        .get()
+        .then((doc) => {
+          let x = doc.data();
+          this.title = x["Title"];
+          this.desc = x["Description"];
+          this.selectedType = x["Type"];
+          this.selectedSubcat = x["Subcat"];
+          this.loc = x["Location"];
+          this.price = x["Price"];
+          this.img1 = x["images"][0];
+          this.imgurls = x["images"];
+          console.log(this.imgurls);
+          if (this.selectedType == "rent") {
+            this.interval = x["rent"]["Interval"];
+            this.tnc = x["rent"]["Terms and Conditions"];
+          } else if (this.selectedType == "sale") {
+            this.alt_trade = x["sale"]["Alternatives"];
+            this.trans_method = x["sale"]["Alternatives"]["Transaction method"];
+          }
+        });
+      console.log(this.listingid);
+    },
     click1() {
       this.$refs.input1.click();
     },
@@ -346,8 +335,7 @@ export default {
           storageRef.snapshot.ref.getDownloadURL().then((url) => {
             this.img1 = url;
             this.imgurls.push(this.img1);
-            console.log("imgurl array " + this.imgurls);
-            this.imgcount++;
+            console.log(this.imgurls);
           });
         }
       );

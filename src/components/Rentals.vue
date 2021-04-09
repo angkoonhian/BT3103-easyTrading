@@ -28,7 +28,7 @@
             lg="3"
           >
             <v-card :loading="loading" class="mx-auto my-12" max-width="374">
-              <v-card-actions>
+              <v-card-actions @click="toProfile(x[6])" style="cursor: pointer">
                 <v-list-item class="grow" style="font-weight: 700">
                   <v-list-item-avatar color="grey darken-3">
                     <img v-bind:src="x[5]" class="elevation-6" alt="" />
@@ -49,7 +49,11 @@
                   readonly
                   size="14"
                 ></v-rating>
-
+                <timeago
+                  :datetime="x[1]['date'].toDate()"
+                  :auto-update="60"
+                  style="padding-left: 20px; font-weight: 100; font-size: 15px"
+                ></timeago>
                 <div class="grey--text ml-4">
                   {{ x[2] }} ({{ x[4] }} reviews)
                 </div>
@@ -64,24 +68,27 @@
 
               <v-img height="250" v-bind:src="x[1].images[0]"></v-img>
 
-              <v-card-title>{{ x[1]["Title"] }}</v-card-title>
+              <v-card-title style="word-wrap:break-all">{{
+                x[1]["Title"]
+              }}</v-card-title>
 
               <v-card-text>
                 <div class="my-2 subtitle-1">
                   <strong>Location:</strong> {{ x[1]["Location"] }}
                 </div>
-                <div class="subtitle-1">
-                  <strong>Type:</strong> {{ x[1]["Type"] }}
-                </div>
                 <div>
-                  <strong>Description:</strong> {{ x[1]["Description"] }}
+                  <strong>Price:</strong> ${{ x[1]["Price"] }} per
+                  {{ x[1]["rent"]["Interval"] }}
                 </div>
-                <div><strong>Options:</strong> ${{ x[1]["Price"] }}</div>
               </v-card-text>
 
               <v-divider class="mx-4"></v-divider>
               <v-card-actions>
-                <v-btn color="orange darken-2" text>
+                <v-btn
+                  color="orange darken-2"
+                  text
+                  @click="getItemPage(x[0], x[6])"
+                >
                   View
                 </v-btn>
                 <v-btn color="orange darken-2" text>
@@ -92,48 +99,6 @@
           </v-col>
         </v-row>
       </div>
-      <!-- <section v-for="(x, i) in items" v-bind:key="i">
-        <div
-          class="profile"
-          v-bind:style="{
-            backgroundImage:
-              'url(' +
-              'https://media.wired.com/photos/5b8999943667562d3024c321/master/w_2560%2Cc_limit/trash2-01.jpg' +
-              ')',
-          }"
-        >
-          {{ x[3] }}
-          <v-rating
-            v-bind:value="x[2]"
-            color="amber"
-            dense
-            half-increments
-            readonly
-            size="14"
-          ></v-rating
-          >{{ x[2] }}
-        </div>
-
-        <img v-bind:src="x[1]['images']" /> {{ x.id }}
-        <h2>{{ x[1]["Title"] }}</h2>
-        {{x[1]}}
-        {{ x.id }}
-
-        <div v-if="x[1]['Price'] != ''" class="hh">${{ x[1]["Price"] }}</div>
-        <div v-if="x[1]['sale']['Alternatives'] != '' && x[1]['Price'] != ''">
-          -or-
-        </div>
-        <div v-if="x[1]['sale']['Alternatives'] != '' && x[1]['Price'] == ''">
-          -trading for-
-        </div>
-        <div v-if="x[1]['sale']['Alternatives'] != ''" class="hh">
-          {{ x[1]["sale"]["Alternatives"] }}
-        </div>
-        <i> {{ x[1]["Location"] }}</i>
-        <aside>
-          {{ profiles["id"] }}
-        </aside>
-      </section> -->
     </div>
   </div>
 </template>
@@ -147,10 +112,25 @@ export default {
     return {
       items: [],
       profiles: [],
-      subcats: ["Automobiles", "Property", "Books", "Games", "Electronics"],
+      subcats: [
+        "Automobiles",
+        "Property",
+        "Books",
+        "Games",
+        "Electronics",
+        "Miscellaneous",
+      ],
     };
   },
   methods: {
+    toProfile: function(x) {
+      this.$router.push({
+        path: `/profile`,
+        name: "profile",
+        params: { user: x, tabs: "Listings" },
+        props: true,
+      });
+    },
     fetchItems: function(x) {
       // database.collection('Listings').get()
       // firebase.firestore().collection('Listings').get()
@@ -171,17 +151,24 @@ export default {
                 .where("id", "==", item.UserID)
                 .get()
                 .then((res) => {
-                  this.rating = res.docs[0].data().Rating;
+                  if (res.docs[0].data().numRatings == 0) {
+                    this.rating = 0;
+                  } else {
+                    this.rating = (
+                      res.docs[0].data().Rating / res.docs[0].data().numRatings
+                    ).toFixed(2);
+                  }
                   this.name = res.docs[0].data().Name;
                   this.numRating = res.docs[0].data().numRatings;
                   this.profileURL = res.docs[0].data().ProfileURL;
                   this.items.push([
                     doc.id,
                     item,
-                    this.rating,
+                    this.rating.toFixed(2),
                     this.name,
                     this.numRating,
                     this.profileURL,
+                    item.UserID,
                   ]);
                 });
             });
@@ -195,11 +182,35 @@ export default {
           .where("Subcat", "==", x)
           .get()
           .then((querySnapShot) => {
-            let item = {};
-            querySnapShot.forEach((doc) => {
-              item = doc.data();
-              // console.log("executed: "+item);
-              this.items.push([doc.id, item]);
+            querySnapShot.forEach(async (doc) => {
+              let item = doc.data();
+              //console.log(item.UserID);
+              await firebase
+                .firestore()
+                .collection("users")
+                .where("id", "==", item.UserID)
+                .get()
+                .then((res) => {
+                  if (res.docs[0].data().numRatings == 0) {
+                    this.rating = 0;
+                  } else {
+                    this.rating = (
+                      res.docs[0].data().Rating / res.docs[0].data().numRatings
+                    ).toFixed(2);
+                  }
+                  this.name = res.docs[0].data().Name;
+                  this.numRating = res.docs[0].data().numRatings;
+                  this.profileURL = res.docs[0].data().ProfileURL;
+                  this.items.push([
+                    doc.id,
+                    item,
+                    this.rating,
+                    this.name,
+                    this.numRating,
+                    this.profileURL,
+                    item.UserID,
+                  ]);
+                });
             });
           });
       }
@@ -212,6 +223,12 @@ export default {
           .then((x) => {
             this.profiles.push(x);
           });
+      });
+    },
+    getItemPage: function(listingID, userId) {
+      this.$router.push({
+        name: "itemPage",
+        params: { listing: listingID, userId: userId },
       });
     },
   },

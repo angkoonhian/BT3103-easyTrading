@@ -100,48 +100,73 @@
         {{ biography }}
       </h4>
     </v-card>
-    <v-btn
-      text
-      style="margin-top: 20px; height: 100px; width: 150px"
-      @click="toListing"
+    <v-tabs
+      v-model="tab"
+      background-color="orange accent-4"
+      centered
+      dark
+      icons-and-text
     >
-      <v-icon dark color="orange">
-        mdi-plus
-      </v-icon>
-      New listing
-    </v-btn>
-    <UserListings
-      v-bind:user="user"
-      v-bind:profile="true"
-      v-bind:rating="rating"
-      v-bind:numRatings="numRatings"
-      v-bind:name="name"
-      v-bind:profileURL="profile"
-    ></UserListings>
+      <v-tabs-slider></v-tabs-slider>
+      <v-tab v-on:click="currentTab = 'Listings'">
+        Listings
+      </v-tab>
+
+      <v-tab v-on:click="currentTab = 'reviews'">
+        Reviews
+      </v-tab>
+    </v-tabs>
+
+    <div v-if="currentTab === 'Listings'">
+      <UserListings
+        v-bind:user="user"
+        v-bind:profile="true"
+        v-bind:rating="rating"
+        v-bind:numRatings="numRatings"
+        v-bind:name="name"
+        v-bind:profileURL="profile"
+        v-bind:isSameUser="isSameUser"
+      ></UserListings>
+    </div>
+    <div v-if="currentTab === 'reviews'">
+      <Reviews v-bind:shopOwner="user"></Reviews>
+    </div>
   </div>
 </template>
 
 <script>
 import firebase from "firebase";
 import UserListings from "./UserListings";
+import Reviews from "./Reviews";
 
 export default {
   props: ["user"],
   data() {
     return {
+      currentTab: "Listings",
       name: "",
       email: "",
       profile: "",
       rating: 0,
       biography: "",
       dialog: false,
+      currentid: "",
+      isSameUser: false,
     };
   },
   components: {
     UserListings,
+    Reviews,
   },
   created() {
-    console.log(this.user);
+    console.log("yoyoyo" + this.user);
+    this.currentid = localStorage.UID;
+
+    if (this.user === undefined) {
+      this.user = localStorage.UID;
+    }
+    this.isSameUser = this.currentid === this.user;
+
     firebase
       .firestore()
       .collection("users")
@@ -156,7 +181,6 @@ export default {
         this.biography = data.Biography;
         this.rating = data.Rating;
         this.numRatings = data.numRatings;
-        console.log(this.name);
       });
   },
   methods: {
@@ -165,15 +189,11 @@ export default {
       firebase
         .firestore()
         .collection("users")
-        .doc(this.user)
+        .doc(localStorage.UID)
         .update({
           Name: this.name,
           Biography: this.biography,
         });
-    },
-
-    toListing: function() {
-      this.$router.push({ path: `/newListing`, name: "newListing" });
     },
   },
 };

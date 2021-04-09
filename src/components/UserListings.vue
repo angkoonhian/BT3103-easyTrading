@@ -1,5 +1,17 @@
 <template>
   <div>
+    <v-btn
+      v-show="this.user === this.currentid"
+      text
+      style="margin-top: 20px; height: 100px; width: 150px"
+      v-on:click="toListing"
+    >
+      <v-icon dark color="orange">
+        mdi-plus
+      </v-icon>
+      New listing
+    </v-btn>
+    <CfmDlg ref="confirm" />
     <div class="flex">
       <v-row style="">
         <v-col
@@ -11,30 +23,6 @@
           lg="3"
         >
           <v-card :loading="loading" class="mx-auto my-12" max-width="374">
-            <v-card-actions>
-              <v-list-item class="grow" style="font-weight: 700">
-                <v-list-item-avatar color="grey darken-3">
-                  <img v-bind:src="profileURL" class="elevation-6" alt="" />
-                </v-list-item-avatar>
-                {{ name }}
-              </v-list-item>
-            </v-card-actions>
-            <v-row
-              align="center"
-              class="mx-0"
-              style="margin-bottom: 10px; padding-left: 20px;"
-            >
-              <v-rating
-                v-bind:value="rating"
-                color="amber"
-                dense
-                half-increments
-                readonly
-                size="14"
-              ></v-rating>
-
-              <div class="grey--text ml-4">{{ rating }} ({{ numRatings }})</div>
-            </v-row>
             <template slot="progress">
               <v-progress-linear
                 color="deep-purple"
@@ -43,7 +31,9 @@
               ></v-progress-linear>
             </template>
 
-            <v-img height="250" v-bind:src="x[1].images[0]"></v-img>
+            <v-img height="250" v-bind:src="x[1].images[0]">
+              <div class="hh">for {{ x[1]["Type"] }}</div>
+            </v-img>
 
             <v-card-title>{{ x[1]["Title"] }}</v-card-title>
 
@@ -59,12 +49,12 @@
             </v-card-text>
 
             <v-divider class="mx-4"></v-divider>
-            <v-card-actions>
-              <v-btn color="orange darken-2" text>
-                View
+            <v-card-actions v-show="isSameUser">
+              <v-btn color="orange darken-2" text v-on:click="route(x[0])">
+                edit
               </v-btn>
-              <v-btn color="orange darken-2" text v-if="profile">
-                Contact
+              <v-btn color="orange darken-2" text @click="delRecord(x[0])">
+                delete
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -76,16 +66,29 @@
 
 <script>
 import firebase from "firebase";
+import CfmDlg from "./CfmDlg";
 
 export default {
-  props: ["user", "profile", "rating", "numRatings", "name", "profileURL"],
+  props: [
+    "user",
+    "profile",
+    "rating",
+    "numRatings",
+    "name",
+    "profileURL",
+    "isSameUser",
+  ],
   data() {
     return {
+      currentid: localStorage.UID,
       items: [],
     };
   },
-  components: {},
+  components: { CfmDlg },
   methods: {
+    toListing: function() {
+      this.$router.push({ path: `/newListing`, name: "newListing" });
+    },
     fetchItems: function() {
       // database.collection('Listings').get()
       // firebase.firestore().collection('Listings').get()
@@ -105,6 +108,28 @@ export default {
           });
         });
     },
+    async delRecord(x) {
+      if (
+        await this.$refs.confirm.open(
+          "Confirm Deletion",
+          "Are you sure you want to delete this listing permanently?"
+        )
+      ) {
+        this.deleteRecord(x);
+      }
+    },
+    deleteRecord(x) {
+      firebase
+        .firestore()
+        .collection("Listings")
+        .doc(x)
+        .delete()
+        .then(() => location.reload());
+    },
+    route: function(x) {
+      console.log("routig" + x);
+      this.$router.push({ name: "edit", params: { doc_id: x } });
+    },
   },
   created() {
     console.log(this.user);
@@ -114,4 +139,15 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.hh {
+  background: rgb(255, 153, 0);
+  color: #fff;
+  font-weight: 700;
+  padding: 0.3em 0.6em;
+  border-radius: 0em;
+  display: flex;
+  font-size: 100%;
+  word-break: break-all;
+}
+</style>

@@ -34,28 +34,20 @@
         <v-tab v-on:click="currentTab = 'rentals'">
           Rental
         </v-tab>
-
-        <v-tab href="#tab-3">
-          Services
-        </v-tab>
       </v-tabs>
       <div v-if="currentTab === 'sales'"><Sales></Sales></div>
       <div v-if="currentTab === 'rentals'"><Rentals></Rentals></div>
-      <div v-if="currentTab === 'services'"><Services></Services></div>
     </template>
   </v-app>
 </template>
 <script>
-import firebase from "firebase";
 import Sales from "./Sales";
 import Rentals from "./Rentals";
-import Services from "./Services";
 
 export default {
   components: {
     Sales,
     Rentals,
-    Services,
   },
   data() {
     return {
@@ -90,26 +82,8 @@ export default {
       },
     };
   },
-  methods: {
-    fetchItems: function() {
-      console.log("fetching items");
-      firebase
-        .firestore()
-        .collection("Listings")
-        .get()
-        .then((querySnapShot) => {
-          let item = {};
-          querySnapShot.forEach((doc) => {
-            item = doc.data();
-            this.items.push(item);
-          });
-        });
-      console.log(this.items);
-    },
-  },
-  created() {
-    this.fetchItems();
-  },
+  methods: {},
+  created() {},
 };
 </script>
 <style scoped>
