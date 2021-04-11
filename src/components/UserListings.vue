@@ -52,18 +52,12 @@
             </v-card-text>
 
             <v-divider class="mx-4"></v-divider>
-            <v-card-actions v-show="isSameUser">
+            <v-card-actions>
               <v-btn color="orange darken-2" text  @click="getItemPage(x[0], user)" v-if="x[1]['Type']==='sale'" >
                 view
               </v-btn>
               <v-btn color="orange darken-2" text  @click="getItemRentalPage(x[0], user)" v-if="x[1]['Type']==='rent'" >
                 view
-              </v-btn>
-              <v-btn color="orange darken-2" text v-on:click="route(x[0])">
-                edit
-              </v-btn>
-              <v-btn color="orange darken-2" text @click="delRecord(x[0])">
-                delete
               </v-btn>
             </v-card-actions>
           </v-card>
