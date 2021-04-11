@@ -120,12 +120,7 @@ export default {
       items: [],
       profiles: [],
       subcats: [
-        "Mobile & Electronics",
-        "Hobbies & Games",
-        "Sports",
-        "Education",
-        "Fashion",
-        "Miscellaneous",
+        "Automobiles", "Property", "Books", "Games", "Electronics", "Miscellaneous"
       ],
       rating: 0,
       name: "",

@@ -238,8 +238,7 @@ export default {
     return {
       type: [
         { text: "I am selling/trading an item", value: "sale" },
-        { text: "I am renting an item", value: "rent" },
-        { text: "I am providing a service", value: "service" },
+        { text: "I am renting an item", value: "rent" }
       ],
       imgcount: 0,
       radioGroup: "",
