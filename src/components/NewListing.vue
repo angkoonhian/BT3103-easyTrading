@@ -308,9 +308,8 @@ export default {
       //     ()=>
       //         {location.reload()});
       if (
-        this.title === "" ||
-        this.imgurls.length === 0 ||
-        this.selectedSubcat === ""
+        this.selectedType === "rent" &&
+        !this.tnc
       ) {
         alert("One or more required fields is not filled in!");
       }

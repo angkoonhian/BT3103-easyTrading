@@ -160,6 +160,11 @@ export default {
       });
     },
     fetchItem: function(listing) {
+      if (listing) {
+        localStorage.setItem("lastRentalViewed", listing) 
+      } else {
+        listing = localStorage.getItem("lastRentalViewed")
+      }
       this.itemInfo = [];
       firebase
         .firestore()

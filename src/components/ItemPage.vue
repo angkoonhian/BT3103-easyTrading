@@ -56,17 +56,18 @@
                       </div>
                     </v-row>
                     <v-card-text class="text-left">
-                      <p><strong>Options:</strong> ${{ x[1]["Price"] }}</p>
-                      <p>
-                        <strong>Transaction method:</strong>
-                        {{ x[1]["sale"]["Transaction method"] }}
-                      </p>
+                      
                       <p>
                         <strong>Description:</strong> {{ x[1]["Description"] }}
                       </p>
-                      <p>
-                        <strong>Alternatives:</strong>
+                      <p v-if="x[1].Price != ''"><strong>Price:</strong> ${{ x[1]["Price"] }}</p>
+                      <p v-if="x[1]['sale']['Alternatives'] != ''">
+                        <strong>Can also trade for:</strong>
                         {{ x[1]["sale"]["Alternatives"] }}
+                      </p>
+                      <p v-if="x[1]['sale']['Transaction method']">
+                        <strong>Transaction method:</strong>
+                        {{ x[1]["sale"]["Transaction method"] }}
                       </p>
                       <p><strong>Location:</strong> {{ x[1]["Location"] }}</p>
                       <div class="my-2">
@@ -161,6 +162,11 @@ export default {
       });
     },
     fetchItem: function(listing) {
+      if (listing) {
+        localStorage.setItem("lastItemViewed", listing) 
+      } else {
+        listing = localStorage.getItem("lastItemViewed")
+      }
       this.itemInfo = [];
       firebase
         .firestore()
