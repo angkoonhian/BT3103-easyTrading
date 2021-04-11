@@ -70,7 +70,7 @@
                       </p>
                       <p><strong>Location:</strong> {{ x[1]["Location"] }}</p>
                       <div class="my-2">
-                        <strong>TimeListed:</strong>
+                        <strong>Posted:</strong>
                         <timeago
                           :datetime="x[1]['date'].toDate()"
                           :auto-update="60"

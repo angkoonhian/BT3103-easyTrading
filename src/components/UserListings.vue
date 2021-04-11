@@ -56,6 +56,9 @@
               <v-btn color="orange darken-2" text  @click="getItemPage(x[0], user)" v-if="x[1]['Type']==='sale'" >
                 view
               </v-btn>
+              <v-btn color="orange darken-2" text  @click="getItemRentalPage(x[0], user)" v-if="x[1]['Type']==='rent'" >
+                view
+              </v-btn>
               <v-btn color="orange darken-2" text v-on:click="route(x[0])">
                 edit
               </v-btn>
@@ -93,6 +96,12 @@ export default {
   },
   components: { CfmDlg },
   methods: {
+    getItemRentalPage: function(listingID, userId) {
+      this.$router.push({
+        name: "itemPageRent",
+        params: { listing: listingID, userId: userId },
+      });
+    },
     getItemPage: function(listingID, userId) {
       this.$router.push({
         name: "itemPage",

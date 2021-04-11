@@ -79,7 +79,7 @@
                   ${{ x[1]["Price"] }} per {{ x[1]["rent"]["Interval"] }}
                 </div>
                 <div class="my-2">
-                  <strong>TimeListed:</strong>
+                  <strong>Posted:</strong>
                   <timeago
                     :datetime="x[1]['date'].toDate()"
                     :auto-update="60"
