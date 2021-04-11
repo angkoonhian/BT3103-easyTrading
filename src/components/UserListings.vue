@@ -59,6 +59,12 @@
               <v-btn color="orange darken-2" text  @click="getItemRentalPage(x[0], user)" v-if="x[1]['Type']==='rent'" >
                 view
               </v-btn>
+              <v-btn v-show="isSameUser" color="orange darken-2" text v-on:click="route(x[0])">
+                edit
+              </v-btn>
+              <v-btn v-show="isSameUser" color="orange darken-2" text @click="delRecord(x[0])">
+                delete
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
