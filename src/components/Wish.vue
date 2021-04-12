@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Add what you want here!</h1>
+    <h1>Put what you wish to buy here!</h1>
     <v-btn
       text
       style="margin-top: 20px; height: 100px; width: 150px"
@@ -65,20 +65,19 @@
 
               <v-img height="250" v-bind:src="x[1].images[0]"></v-img>
 
-              <v-card-title>{{ x[1]["Title"] }}</v-card-title>
+              <v-card-title>Wish to buy: {{ x[1]["Title"] }}</v-card-title>
 
               <v-card-text>
                 <div class="my-2 subtitle-1">
-                  <strong>Location:</strong> {{ x[1]["Location"] }}
+                  <strong>Description</strong> 
+                  <p>{{ x[1]["Description"] }}</p>
                 </div>
 
-                <div v-if="x[1].Price != ''">
-                  <strong>Price:</strong> ${{ x[1]["Price"] }}
+                <div class="my-2 subtitle-1">
+                  <strong>Location</strong> 
+                  <p>{{ x[1]["Location"] }}</p>
                 </div>
-                <div v-if="x[1]['sale']['Alternatives'] != ''">
-                  <strong>Can trade for:</strong>
-                  {{ x[1]["sale"]["Alternatives"] }}
-                </div>
+                
                 <div class="my-2">
                   <strong>TimeListed:</strong>
                   <timeago
@@ -91,13 +90,6 @@
 
               <v-divider class="mx-4"></v-divider>
               <v-card-actions>
-                <v-btn
-                  color="orange darken-2"
-                  text
-                  @click="getItemPage(x[0], x[6])"
-                >
-                  View
-                </v-btn>
                 <v-btn color="orange darken-2" text @click="contactOwner(x[6])">
                   Contact
                 </v-btn>
@@ -144,91 +136,50 @@ export default {
     toListing: function() {
       this.$router.push({ path: `/newListing`, name: "newListing" });
     },
-    fetchItems: function(x) {
+    fetchItems: function() {
       // database.collection('Listings').get()
       // firebase.firestore().collection('Listings').get()
       this.items = [];
-      if (x === "all") {
-        firebase
-          .firestore()
-          .collection("Listings")
-          .where("Type", "==", "sale")
-          .orderBy("date", "desc")
-          .get()
-          .then((querySnapShot) => {
-            querySnapShot.forEach(async (doc) => {
-              let item = doc.data();
-              //console.log(item.UserID);
-              await firebase
-                .firestore()
-                .collection("users")
-                .where("id", "==", item.UserID)
-                .get()
-                .then((res) => {
-                  if (res.docs[0].data().numRatings == 0) {
-                    this.rating = 0;
-                  } else {
-                    this.rating = (
-                      res.docs[0].data().Rating / res.docs[0].data().numRatings
-                    ).toFixed(2);
-                  }
+      firebase
+        .firestore()
+        .collection("Listings")
+        .where("Type", "==", "wish")
+        .orderBy("date", "desc")
+        .get()
+        .then((querySnapShot) => {
+          querySnapShot.forEach(async (doc) => {
+            let item = doc.data();
+            //console.log(item.UserID);
+            await firebase
+              .firestore()
+              .collection("users")
+              .where("id", "==", item.UserID)
+              .get()
+              .then((res) => {
+                if (res.docs[0].data().numRatings == 0) {
+                  this.rating = 0;
+                } else {
+                  this.rating = (
+                    res.docs[0].data().Rating / res.docs[0].data().numRatings
+                  ).toFixed(2);
+                }
 
-                  this.name = res.docs[0].data().Name;
-                  this.numRating = res.docs[0].data().numRatings;
-                  this.profileURL = res.docs[0].data().ProfileURL;
-                  this.items.push([
-                    doc.id,
-                    item,
-                    this.rating,
-                    this.name,
-                    this.numRating,
-                    this.profileURL,
-                    item.UserID,
-                  ]);
-                });
-            });
+                this.name = res.docs[0].data().Name;
+                this.numRating = res.docs[0].data().numRatings;
+                this.profileURL = res.docs[0].data().ProfileURL;
+                this.items.push([
+                  doc.id,
+                  item,
+                  this.rating,
+                  this.name,
+                  this.numRating,
+                  this.profileURL,
+                  item.UserID,
+                ]);
+              });
           });
-      } else {
-        firebase
-          .firestore()
-          .collection("Listings")
-          .where("Type", "==", "sale")
-          .where("Subcat", "==", x)
-          .orderBy("date", "desc")
-          .get()
-          .then((querySnapShot) => {
-            querySnapShot.forEach(async (doc) => {
-              let item = doc.data();
-              //console.log(item.UserID);
-              await firebase
-                .firestore()
-                .collection("users")
-                .where("id", "==", item.UserID)
-                .get()
-                .then((res) => {
-                  if (res.docs[0].data().numRatings == 0) {
-                    this.rating = 0;
-                  } else {
-                    this.rating = (
-                      res.docs[0].data().Rating / res.docs[0].data().numRatings
-                    ).toFixed(2);
-                  }
-                  this.name = res.docs[0].data().Name;
-                  this.numRating = res.docs[0].data().numRatings;
-                  this.profileURL = res.docs[0].data().ProfileURL;
-                  this.items.push([
-                    doc.id,
-                    item,
-                    this.rating,
-                    this.name,
-                    this.numRating,
-                    this.profileURL,
-                    item.UserID,
-                  ]);
-                });
-            });
-          });
-      }
+      });
+      console.log(this.items);
       this.items.forEach((x) => {
         firebase
           .firestore()
@@ -285,7 +236,7 @@ export default {
     },
   },
   created() {
-    this.fetchItems("all");
+    this.fetchItems();
   },
 };
 </script>

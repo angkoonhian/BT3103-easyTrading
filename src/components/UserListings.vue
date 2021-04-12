@@ -12,6 +12,8 @@
       New listing
     </v-btn>
     <CfmDlg ref="confirm" />
+
+
     <div class="flex">
       <v-row style="">
         <v-col
@@ -69,6 +71,8 @@
         </v-col>
       </v-row>
     </div>
+
+    
   </div>
 </template>
 

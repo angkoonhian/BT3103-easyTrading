@@ -326,11 +326,9 @@ export default {
         others2["Interval"] = this.interval;
         others2["Terms and Conditions"] = this.tnc;
         this.listing["rent"] = others2;
-      } else if (x === "service") {
+      } else if (x === "wish") {
         var others3 = {};
-        others3["Interval"] = this.interval;
-        others3["Terms and Conditions"] = this.tnc;
-        this.listing["service"] = others3;
+        this.listing["wish"] = others3;
       }
       // firebase.database().ref('Listings').push(this.listing).then(
       //     ()=>

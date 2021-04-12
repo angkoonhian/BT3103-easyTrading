@@ -16,6 +16,8 @@
         {{ x }}
       </v-tab>
     </v-tabs>
+
+
     <div class="flex">
       <div class="flex">
         <v-row style="">
@@ -106,6 +108,8 @@
         </v-row>
       </div>
     </div>
+
+    
   </div>
 </template>
 
