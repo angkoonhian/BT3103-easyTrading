@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h1>Put what you wish to buy here!</h1>
+    <br>
+    <h3>Put what you wish to buy below!</h3>
     <v-btn
       text
       style="margin-top: 20px; height: 100px; width: 150px"
@@ -65,7 +66,7 @@
 
               <v-img height="250" v-bind:src="x[1].images[0]"></v-img>
 
-              <v-card-title>Wish to buy: {{ x[1]["Title"] }}</v-card-title>
+              <v-card-title>Wish: {{ x[1]["Title"] }}</v-card-title>
 
               <v-card-text>
                 <div class="my-2 subtitle-1">
