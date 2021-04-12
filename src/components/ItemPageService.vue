@@ -59,7 +59,7 @@
                       <p><strong>Options:</strong> ${{ x[1]["Price"] }}</p>
                       <p>
                         <strong>Price:</strong>
-                        ${{ x[1]["Price"] }} per {{ x[1]["rent"]["Interval"] }}
+                        ${{ x[1]["Price"] }} per {{ x[1]["service"]["Interval"] }}
                       </p>
                       <p>
                         <strong>Description:</strong> {{ x[1]["Description"] }}

@@ -1,6 +1,6 @@
 <template>
   <v-app style="margin-top: 50px">
-    <template>
+    <div>
       <v-carousel
         cycle
         height="500"
@@ -13,10 +13,10 @@
           :src="item.src"
         ></v-carousel-item>
       </v-carousel>
-    </template>
+    </div>
 
     <br />
-    <template>
+    <div>
       <!-- <v-card> -->
       <v-tabs
         v-model="tab"
@@ -35,26 +35,26 @@
           Rental
         </v-tab>
 
-        <v-tab v-on:click="currentTab = 'service'">
-          Service
+        <v-tab v-on:click="currentTab = 'wish'">
+          Wish List
         </v-tab>
       </v-tabs>
       <div v-if="currentTab === 'sales'"><Sales></Sales></div>
       <div v-if="currentTab === 'rentals'"><Rentals></Rentals></div>
-      <div v-if="currentTab === 'service'"><Service></Service></div>
-    </template>
+      <div v-if="currentTab === 'wish'"><Wish></Wish></div>     
+    </div>
   </v-app>
 </template>
 <script>
 import Sales from "./Sales";
 import Rentals from "./Rentals";
-import Service from "./Service";
+import Wish from "./Wish";
 
 export default {
   components: {
     Sales,
     Rentals,
-    Service
+    Wish
   },
   data() {
     return {

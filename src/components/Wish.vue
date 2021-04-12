@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-tabs
+    <!-- <v-tabs
       v-model="tab"
       background-color="orange accent-4"
       centered
@@ -15,7 +15,8 @@
       <v-tab v-for="x in subcats" :key="x.id" v-on:click="fetchItems(x)">
         {{ x }}
       </v-tab>
-    </v-tabs>
+    </v-tabs> -->
+    <h1>Add what you want here!</h1>
     <div class="flex">
       <div class="flex">
         <v-row style="">
@@ -74,9 +75,13 @@
                 <div class="my-2 subtitle-1">
                   <strong>Location:</strong> {{ x[1]["Location"] }}
                 </div>
-                <div>
-                  <strong>Price:</strong>
-                  ${{ x[1]["Price"] }} per {{ x[1]["service"]["Interval"] }}
+
+                <div v-if="x[1].Price != ''">
+                  <strong>Price:</strong> ${{ x[1]["Price"] }}
+                </div>
+                <div v-if="x[1]['sale']['Alternatives'] != ''">
+                  <strong>Can trade for:</strong>
+                  {{ x[1]["sale"]["Alternatives"] }}
                 </div>
                 <div class="my-2">
                   <strong>TimeListed:</strong>
@@ -120,11 +125,11 @@ export default {
       items: [],
       profiles: [],
       subcats: [
-        "Housework",
-        "Education & Child Care",
-        "Construction & Maintenance",
-        "Event Planning",
-        "Travel Agent",
+        "Mobile & Electronics",
+        "Hobbies & Games",
+        "Sports",
+        "Education",
+        "Fashion",
         "Miscellaneous",
       ],
       rating: 0,
@@ -144,7 +149,7 @@ export default {
         firebase
           .firestore()
           .collection("Listings")
-          .where("Type", "==", "service")
+          .where("Type", "==", "sale")
           .orderBy("date", "desc")
           .get()
           .then((querySnapShot) => {
@@ -184,7 +189,7 @@ export default {
         firebase
           .firestore()
           .collection("Listings")
-          .where("Type", "==", "service")
+          .where("Type", "==", "sale")
           .where("Subcat", "==", x)
           .orderBy("date", "desc")
           .get()
@@ -271,7 +276,7 @@ export default {
     },
     getItemPage: function(listingID, userId) {
       this.$router.push({
-        name: "itemPageService",
+        name: "itemPage",
         params: { listing: listingID, userId: userId },
       });
     },
@@ -283,3 +288,4 @@ export default {
 </script>
 
 <style scoped></style>
+

@@ -147,7 +147,7 @@
                     label="$"
                     solo
                     type="number"
-                    step="0.01"
+                    step="1"
                     v-model="price"
                     v-bind="attrs"
                     v-on="on"
@@ -203,7 +203,7 @@
             <h3><strong>7. Name your price</strong></h3>
             <br />
 
-            $ <input type="number" step="0.01" v-model="price" /> per
+            $ <input type="number" step="1" v-model="price" /> per
             <select v-model="interval" required>
               <option
                 v-for="x in rent_intervals"
@@ -228,6 +228,35 @@
             <v-btn v-on:click="submitListing('rent')" color="warning"
               >Post Listing</v-btn
             >
+          </div>
+          <div id="additionalOptions" v-show="selectedType === 'service'">
+            <h3><strong>7. Name your price</strong></h3>
+            <br />
+
+            $ <input type="number" step="1" v-model="price" /> per
+            <select v-model="interval" required>
+              <option
+                v-for="x in rent_intervals"
+                :key="x.id"
+                v-bind:value="x"
+                >{{ x }}</option
+              >
+            </select>
+            <h3><strong>8. Name your rules</strong></h3>
+            <br />
+            <v-col cols="12" md="12">
+              <v-textarea
+                solo
+                name="input-7-4"
+                label="Name your rules"
+                type="text"
+                rows="5"
+                cols="70"
+                v-model="tnc"
+              ></v-textarea> </v-col
+            ><br />
+            <v-btn v-on:click="submitListing('service')" color="warning"
+              >Post Listing</v-btn>
           </div>
         </b-col>
       </b-row>
@@ -320,6 +349,11 @@ export default {
         others2["Interval"] = this.interval;
         others2["Terms and Conditions"] = this.tnc;
         this.listing["rent"] = others2;
+      } else if (x === "service") {
+        var others3 = {};
+        others3["Interval"] = this.interval;
+        others3["Terms and Conditions"] = this.tnc;
+        this.listing["service"] = others3;
       }
       // firebase.database().ref('Listings').push(this.listing).then(
       //     ()=>
