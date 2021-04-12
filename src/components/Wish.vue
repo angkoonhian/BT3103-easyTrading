@@ -1,22 +1,18 @@
 <template>
   <div>
-    <!-- <v-tabs
-      v-model="tab"
-      background-color="orange accent-4"
-      centered
-      dark
-      icons-and-text
-    >
-      <v-tabs-slider></v-tabs-slider>
-      <v-tab v-on:click="fetchItems('all')">
-        All
-      </v-tab>
-
-      <v-tab v-for="x in subcats" :key="x.id" v-on:click="fetchItems(x)">
-        {{ x }}
-      </v-tab>
-    </v-tabs> -->
     <h1>Add what you want here!</h1>
+    <v-btn
+      text
+      style="margin-top: 20px; height: 100px; width: 150px"
+      v-on:click="toListing"
+    >
+      <v-icon dark color="orange">
+        mdi-plus
+      </v-icon>
+      New wish
+    </v-btn>
+    <CfmDlg ref="confirm" />
+    
     <div class="flex">
       <div class="flex">
         <v-row style="">
@@ -111,6 +107,8 @@
         </v-row>
       </div>
     </div>
+
+
   </div>
 </template>
 
@@ -118,6 +116,7 @@
 // import firebase from 'firebase'
 import firebase from "firebase";
 import { roomsRef } from "../firebase";
+import CfmDlg from "./CfmDlg";
 
 export default {
   data() {
@@ -140,7 +139,11 @@ export default {
       date: new Date(),
     };
   },
+  components: { CfmDlg },
   methods: {
+    toListing: function() {
+      this.$router.push({ path: `/newListing`, name: "newListing" });
+    },
     fetchItems: function(x) {
       // database.collection('Listings').get()
       // firebase.firestore().collection('Listings').get()
