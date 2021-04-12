@@ -28,8 +28,8 @@
             lg="3"
           >
             <v-card :loading="false" class="mx-auto my-12" max-width="374">
-              <v-card-actions>
-                <v-list-item class="grow" style="font-weight: 700">
+              <v-card-actions >
+                <v-list-item class="grow" style="font-weight: 700" @click="goToShopFront(x[6])">
                   <v-list-item-avatar
                     color="grey darken-3"
                     @click="goToShopFront(x[6])"
@@ -72,7 +72,7 @@
 
               <v-card-text>
                 <div class="my-2 subtitle-1">
-                  <strong>Location:</strong> {{ x[1]["Location"] }}
+                  <strong>Deal at:</strong> {{ x[1]["Location"] }}
                 </div>
 
                 <div v-if="x[1].Price != ''">
@@ -83,7 +83,7 @@
                   {{ x[1]["sale"]["Alternatives"] }}
                 </div>
                 <div class="my-2">
-                  <strong>TimeListed:</strong>
+                  <strong>Posted:</strong>
                   <timeago
                     :datetime="x[1]['date'].toDate()"
                     :auto-update="60"

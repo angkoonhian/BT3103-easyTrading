@@ -84,6 +84,20 @@ export default {
     Reviews,
   },
   created() {
+    if (this.user) {
+        localStorage.setItem("lastShopViewed", this.user) 
+      } else {
+        this.user = localStorage.getItem("lastShopViewed")
+      }
+    
+    // if (this.user === localStorage.getItem("UID")) {
+    //   this.$router.push({
+    //     path: `/profile`,
+    //     name: "profile",
+    //     params: { user: localStorage.UID },
+    //     props: true,
+    //   });
+    // }
     console.log(this.user);
     firebase
       .firestore()

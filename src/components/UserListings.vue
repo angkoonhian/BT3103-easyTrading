@@ -39,15 +39,10 @@
 
             <v-card-text>
               <div class="my-2 subtitle-1">
-                <strong>Location:</strong> {{ x[1]["Location"] }}
+                <strong>Deal at:</strong> {{ x[1]["Location"] }}
               </div>
-              <div class="subtitle-1">
-                <strong>Type:</strong> {{ x[1]["Type"] }}
-              </div>
-              <div><strong>Description:</strong> {{ x[1]["Description"] }}</div>
-              <div><strong>Options:</strong> ${{ x[1]["Price"] }}</div>
               <div class="my-2">
-                <strong>TimeListed:</strong>
+                <strong>Posted:</strong>
                 <timeago
                   :datetime="x[1]['date'].toDate()"
                   :auto-update="60"
@@ -57,11 +52,17 @@
             </v-card-text>
 
             <v-divider class="mx-4"></v-divider>
-            <v-card-actions v-show="isSameUser">
-              <v-btn color="orange darken-2" text v-on:click="route(x[0])">
+            <v-card-actions>
+              <v-btn color="orange darken-2" text  @click="getItemPage(x[0], user)" v-if="x[1]['Type']==='sale'" >
+                view
+              </v-btn>
+              <v-btn color="orange darken-2" text  @click="getItemRentalPage(x[0], user)" v-if="x[1]['Type']==='rent'" >
+                view
+              </v-btn>
+              <v-btn v-show="isSameUser" color="orange darken-2" text v-on:click="route(x[0])">
                 edit
               </v-btn>
-              <v-btn color="orange darken-2" text @click="delRecord(x[0])">
+              <v-btn v-show="isSameUser" color="orange darken-2" text @click="delRecord(x[0])">
                 delete
               </v-btn>
             </v-card-actions>
@@ -95,6 +96,18 @@ export default {
   },
   components: { CfmDlg },
   methods: {
+    getItemRentalPage: function(listingID, userId) {
+      this.$router.push({
+        name: "itemPageRent",
+        params: { listing: listingID, userId: userId },
+      });
+    },
+    getItemPage: function(listingID, userId) {
+      this.$router.push({
+        name: "itemPage",
+        params: { listing: listingID, userId: userId },
+      });
+    },
     toListing: function() {
       this.$router.push({ path: `/newListing`, name: "newListing" });
     },

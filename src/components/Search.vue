@@ -84,7 +84,10 @@
 
               <v-divider class="mx-4"></v-divider>
               <v-card-actions>
-                <v-btn color="orange darken-2" text>
+                <v-btn color="orange darken-2" text @click="getItemPage(x[0], x[6])" v-if="currentTab==='sale'">
+                  View
+                </v-btn>
+                <v-btn color="orange darken-2" text @click="getItemRentalPage(x[0], x[6])" v-if="currentTab==='rent'">
                   View
                 </v-btn>
                 <v-btn color="orange darken-2" text @click="contactOwner(x[6])">
@@ -123,6 +126,18 @@ export default {
       this.fetchItems('sale'); 
   },
   methods: {
+    getItemRentalPage: function(listingID, userId) {
+      this.$router.push({
+        name: "itemPageRent",
+        params: { listing: listingID, userId: userId },
+      });
+    },
+    getItemPage: function(listingID, userId) {
+      this.$router.push({
+        name: "itemPage",
+        params: { listing: listingID, userId: userId },
+      });
+    },
     contactOwner: async function(ownerId) {
       if (ownerId == this.user) {
         return alert("this is your own store!");
@@ -164,6 +179,7 @@ export default {
       // database.collection('Listings').get()
       // firebase.firestore().collection('Listings').get()
       this.searchterm = this.$route.params.searchterm; 
+      this.currentTab = x;
       this.items = [];
         firebase
           .firestore()
@@ -184,7 +200,7 @@ export default {
                   this.name = res.docs[0].data().Name;
                   this.numRating = res.docs[0].data().numRatings;
                   this.profileURL = res.docs[0].data().ProfileURL;
-                  if(item['Title'].includes(this.searchterm.toLowerCase())) {
+                  if(item['Title'].toLowerCase().includes(this.searchterm.toLowerCase())) {
                   this.items.push([
                     doc.id,
                     item,
