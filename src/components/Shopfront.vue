@@ -1,9 +1,9 @@
 <template>
   <div>
-    <v-card class="mx-auto" max-width="1000" tile>
+    <v-card class="mx-auto" tile>
       <v-img
         height="200"
-        src="https://cdn.vuetifyjs.com/images/cards/server-room.jpg"
+        src="https://raw.githubusercontent.com/Irislah/bt3103-week-6/main/bcg2.png"
       ></v-img>
       <v-row style="margin:2.5%;position:absolute; top: 130px">
         <v-list-item>
@@ -28,6 +28,7 @@
       </h4>
       <h3 style="padding-bottom: 30px">Welcome to {{ name }}'s shop!!</h3>
     </v-card>
+    <br><br>
     <v-tabs
       v-model="tab"
       background-color="orange accent-4"
