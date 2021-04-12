@@ -72,6 +72,14 @@ export default {
           src:
             "https://www.itl.cat/pngfile/big/251-2514844_facebook-ad-design.jpg",
         },
+        {
+          src:
+            "https://klgadgetguy.com/wp-content/uploads/2020/08/Shopee.jpg" 
+        },
+        {
+          src:
+            "https://cdn3.vectorstock.com/i/1000x1000/47/07/thin-line-mobile-e-commerce-poster-banner-vector-21474707.jpg" 
+        }
       ],
       tabs: null,
       text: "asdasdasdasdsads",
