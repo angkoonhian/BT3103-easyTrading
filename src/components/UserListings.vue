@@ -46,6 +46,14 @@
               </div>
               <div><strong>Description:</strong> {{ x[1]["Description"] }}</div>
               <div><strong>Options:</strong> ${{ x[1]["Price"] }}</div>
+              <div class="my-2">
+                <strong>TimeListed:</strong>
+                <timeago
+                  :datetime="x[1]['date'].toDate()"
+                  :auto-update="60"
+                  style="padding-left: 5px; font-weight: 100; font-size: 15px"
+                ></timeago>
+              </div>
             </v-card-text>
 
             <v-divider class="mx-4"></v-divider>
@@ -82,12 +90,18 @@ export default {
     return {
       currentid: localStorage.UID,
       items: [],
+      imgurls: [],
     };
   },
   components: { CfmDlg },
   methods: {
     toListing: function() {
       this.$router.push({ path: `/newListing`, name: "newListing" });
+    },
+    deleteImage: function(img) {
+      this.imgurls = this.imgurls.filter(function(value) {
+        return value != img;
+      });
     },
     fetchItems: function() {
       // database.collection('Listings').get()
@@ -97,6 +111,7 @@ export default {
         .firestore()
         .collection("Listings")
         .where("UserID", "==", this.user)
+        .orderBy("date", "desc")
         .get()
         .then((querySnapShot) => {
           let item = {};

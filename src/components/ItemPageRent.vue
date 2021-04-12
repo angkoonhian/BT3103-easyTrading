@@ -58,15 +58,11 @@
                     <v-card-text class="text-left">
                       <p><strong>Options:</strong> ${{ x[1]["Price"] }}</p>
                       <p>
-                        <strong>Transaction method:</strong>
-                        {{ x[1]["sale"]["Transaction method"] }}
+                        <strong>Price:</strong>
+                        ${{ x[1]["Price"] }} per {{ x[1]["rent"]["Interval"] }}
                       </p>
                       <p>
                         <strong>Description:</strong> {{ x[1]["Description"] }}
-                      </p>
-                      <p>
-                        <strong>Alternatives:</strong>
-                        {{ x[1]["sale"]["Alternatives"] }}
                       </p>
                       <p><strong>Location:</strong> {{ x[1]["Location"] }}</p>
                       <div class="my-2">

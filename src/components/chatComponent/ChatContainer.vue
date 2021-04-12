@@ -149,7 +149,6 @@ export default {
 
     async fetchMoreRooms() {
       if (this.endRooms && !this.startRooms) return (this.roomsLoaded = true);
-      console.log(this.currentUserId);
       let query = roomsRef
         .where("users", "array-contains", this.currentUserId)
         .orderBy("lastUpdated", "desc")
@@ -191,8 +190,6 @@ export default {
       const roomList = {};
       rooms.forEach((room) => {
         roomList[room.id] = { ...room.data(), users: [] };
-        console.log(room.data());
-        console.log(this.allUsers);
         room.data().users.forEach((userId) => {
           const foundUser = this.allUsers.find((user) => user.id === userId);
           if (foundUser) roomList[room.id].users.push(foundUser);

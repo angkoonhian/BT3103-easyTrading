@@ -99,14 +99,38 @@
                   accept="image/*"
                 />
               </div>
-              <div v-if="imageData != null">
-                <img
-                  class="preview"
-                  height="268"
-                  width="356"
-                  :src="img1"
-                /><br />
-              </div>
+              <v-row>
+                <div
+                  v-for="img in imgurls"
+                  :key="img.id"
+                  class="d-flex child-flex"
+                  cols="4"
+                  style="padding: 10px"
+                >
+                  <template>
+                    <h1>{{ img.id }}</h1>
+                    <v-hover v-slot="{ hover }">
+                      <v-img
+                        class="preview grey lighten-2"
+                        height="268"
+                        aspect-ratio="1"
+                        width="356"
+                        v-bind:src="img"
+                        ><v-expand-transition>
+                          <div
+                            v-if="hover"
+                            class="d-flex transition-fast-in-fast-out red v-card--reveal display-3 white--text"
+                            style="height: 100%;"
+                            @click="deleteImage(img)"
+                          >
+                            Delete Image
+                          </div>
+                        </v-expand-transition>
+                      </v-img>
+                    </v-hover>
+                  </template>
+                </div>
+              </v-row>
             </div>
             <div id="additionalOptions" v-show="selectedType === 'sale'">
               <h3><strong>7. Name your price and/or trades</strong></h3>
@@ -244,8 +268,8 @@ export default {
     this.fetchListing();
   },
   methods: {
-    submitListing: function(x, y) {
-      console.log("mofo" + y);
+    submitListing: function(x) {
+      let doc_id = this.$route.params.doc_id;
       this.listing["Type"] = this.selectedType;
       this.listing["Subcat"] = this.selectedSubcat;
       this.listing["Title"] = this.title;
@@ -269,12 +293,17 @@ export default {
       firebase
         .firestore()
         .collection("Listings")
-        .doc(y)
+        .doc(doc_id)
         .update(this.listing)
         .then(() => {
           this.$router.push("/profile");
         });
       // console.log("listingid"+y);
+    },
+    deleteImage: function(img) {
+      this.imgurls = this.imgurls.filter(function(value) {
+        return value != img;
+      });
     },
     fetchListing: function() {
       let doc_id = this.$route.params.doc_id;
@@ -369,5 +398,13 @@ strong {
 }
 textarea {
   background-color: #fff8e1;
+}
+.v-card--reveal {
+  align-items: center;
+  bottom: 0;
+  justify-content: center;
+  opacity: 0.7;
+  position: absolute;
+  width: 100%;
 }
 </style>

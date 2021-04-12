@@ -10,11 +10,12 @@ import Profile from "./components/Profile.vue";
 import ItemPage from "./components/ItemPage.vue";
 import Shopfront from "./components/Shopfront.vue";
 import EditListing from "./components/EditListing.vue";
-import Search from "./components/Search.vue"
-import Blank from "./components/Blank.vue"
+import Search from "./components/Search.vue";
+import Blank from "./components/Blank.vue";
+import ItemPageRent from "./components/ItemPageRent.vue";
 
 export default [
-  { path: "/", component: Login },
+  { path: "/home", component: Home },
   { path: "/login", component: Login },
   { path: "/home", component: Home },
   {
@@ -58,6 +59,12 @@ export default [
     props: true,
   },
   {
+    path: "/ItemPageRent",
+    name: "itemPageRent",
+    component: ItemPageRent,
+    props: true,
+  },
+  {
     path: "/Shopfront",
     name: "Shopfront",
     component: Shopfront,
@@ -69,11 +76,11 @@ export default [
     name: "search",
     component: Search,
     props: true,
-  }, 
+  },
   {
     path: "/blank",
     name: "blank",
     component: Blank,
     props: true,
-  }
+  },
 ];
