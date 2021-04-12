@@ -2,17 +2,6 @@
   <div>
     <br>
     <h3>Put what you wish to buy below!</h3>
-    <v-btn
-      text
-      style="margin-top: 20px; height: 100px; width: 150px"
-      v-on:click="toListing"
-    >
-      <v-icon dark color="orange">
-        mdi-plus
-      </v-icon>
-      New wish
-    </v-btn>
-    <CfmDlg ref="confirm" />
     
     <div class="flex">
       <div class="flex">
@@ -109,7 +98,6 @@
 // import firebase from 'firebase'
 import firebase from "firebase";
 import { roomsRef } from "../firebase";
-import CfmDlg from "./CfmDlg";
 
 export default {
   data() {
@@ -132,7 +120,6 @@ export default {
       date: new Date(),
     };
   },
-  components: { CfmDlg },
   methods: {
     toListing: function() {
       this.$router.push({ path: `/newListing`, name: "newListing" });
