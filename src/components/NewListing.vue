@@ -18,9 +18,8 @@
               solo
             ></v-select>
 
-            <h3><strong>2. Choose your sub-category</strong></h3>
-
             <div v-show="selectedType === 'sale'">
+              <h3><strong>--Choose your sub-category</strong></h3>
               <v-select
                 :items="subcat_sales"
                 label="Sub Category"
@@ -28,7 +27,9 @@
                 solo
               ></v-select>
             </div>
+
             <div v-show="selectedType === 'rent'">
+              <h3><strong>--Choose your sub-category</strong></h3>
               <v-select
                 :items="subcat_rent"
                 label="Sub Category"
@@ -36,7 +37,8 @@
                 solo
               ></v-select>
             </div>
-            <h3><strong>3. Give your listing a title</strong></h3>
+
+            <h3><strong>2. Give your listing a title</strong></h3>
             <v-col cols="12" sm="12" md="12">
               <v-text-field
                 label="Listing Name"
@@ -49,7 +51,7 @@
                 v-model="title"
               ></v-text-field>
             </v-col>
-            <h3><strong>4. Describe your listing</strong></h3>
+            <h3><strong>3. Describe your listing</strong></h3>
             <v-col cols="12" md="12">
               <v-textarea
                 solo
@@ -61,7 +63,7 @@
                 v-model="desc"
               ></v-textarea>
             </v-col>
-            <h3><strong>5. Location where you want to deal</strong></h3>
+            <h3><strong>4. Location where you want to deal</strong></h3>
             <v-col cols="12" sm="12" md="12">
               <v-text-field
                 label="Location"
@@ -74,7 +76,7 @@
                 v-model="loc"
               ></v-text-field>
             </v-col>
-            <h3><strong>6. Upload your pictures:</strong></h3>
+            <h3><strong>5. Upload your pictures:</strong></h3>
             <div v-if="imgcount > 0">
               You can upload more than one photo by clicking on the upload
               button again.
@@ -130,8 +132,11 @@
               </v-row>
             </div>
           </div>
+
+
           <div id="additionalOptions" v-show="selectedType === 'sale'">
-            <h3><strong>7. Name your price and/or trades</strong></h3>
+            <br><br>
+            <h3><strong>6. Name your price and/or trades</strong></h3>
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-col cols="12" sm="12" md="12">
@@ -139,10 +144,11 @@
                     label="$"
                     solo
                     type="number"
-                    step="0.01"
+                    step="1"
                     v-model="price"
                     v-bind="attrs"
                     v-on="on"
+                    style="width:100px"
                   ></v-text-field>
                 </v-col>
               </template>
@@ -151,7 +157,7 @@
                 another item</span
               >
             </v-tooltip>
-            -or-<br />
+            <h4><strong>--or--</strong></h4>
             <br />
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
@@ -175,7 +181,7 @@
               >
             </v-tooltip>
             <h3>
-              <strong>8. Name your transaction/delivery preferences</strong>
+              <strong>7. Name your transaction/delivery preferences</strong>
             </h3>
             <v-col cols="12" sm="12" md="12">
               <v-text-field
@@ -188,14 +194,16 @@
               ></v-text-field>
             </v-col>
             <v-btn v-on:click="submitListing('sale')" color="warning"
-              >Post Listing</v-btn
+              >Post for Sale</v-btn
             >
           </div>
+
+
           <div id="additionalOptions" v-show="selectedType === 'rent'">
-            <h3><strong>7. Name your price</strong></h3>
+            <h3><strong>6. Name your price</strong></h3>
             <br />
 
-            $ <input type="number" step="0.01" v-model="price" /> per
+            $ <input type="number" step="1" v-model="price" /> per
             <select v-model="interval" required>
               <option
                 v-for="x in rent_intervals"
@@ -204,7 +212,7 @@
                 >{{ x }}</option
               >
             </select>
-            <h3><strong>8. Name your rules</strong></h3>
+            <h3><strong>7. Name your rules</strong></h3>
             <br />
             <v-col cols="12" md="12">
               <v-textarea
@@ -218,8 +226,14 @@
               ></v-textarea> </v-col
             ><br />
             <v-btn v-on:click="submitListing('rent')" color="warning"
-              >Post Listing</v-btn
-            >
+              >Post for Rental</v-btn>
+          </div>
+
+
+          <div id="additionalOptions" v-show="selectedType === 'wish'">
+            <br><br>
+            <v-btn v-on:click="submitListing('wish')" color="warning"
+              >Post for Wish</v-btn>
           </div>
         </b-col>
       </b-row>
@@ -239,6 +253,8 @@ export default {
       type: [
         { text: "I am selling/trading an item", value: "sale" },
         { text: "I am renting an item", value: "rent" },
+        { text: "I want to add a wish item", value: "wish" },
+
       ],
       imgcount: 0,
       radioGroup: "",
@@ -265,6 +281,14 @@ export default {
         { text: "Books", value: "Books" },
         { text: "Games", value: "Games" },
         { text: "Electronics", value: "Electronics" },
+        { text: "Miscellaneous", value: "Miscellaneous" },
+      ],
+      subcat_service: [
+        { text: "Housework", value: "Housework" },
+        { text: "Education & Child Care", value: "Education & Child Care" },
+        { text: "Construction & Maintenance", value: "Construction & Maintenance" },
+        { text: "Event Planning", value: "Event Planning" },
+        { text: "Travel Agent", value: "Travel Agent" },
         { text: "Miscellaneous", value: "Miscellaneous" },
       ],
       rent_intervals: ["hour", "day", "week", "month", "year"],
@@ -304,6 +328,9 @@ export default {
         others2["Interval"] = this.interval;
         others2["Terms and Conditions"] = this.tnc;
         this.listing["rent"] = others2;
+      } else if (x === "wish") {
+        var others3 = {};
+        this.listing["wish"] = others3;
       }
       // firebase.database().ref('Listings').push(this.listing).then(
       //     ()=>

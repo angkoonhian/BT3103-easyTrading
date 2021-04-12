@@ -1,23 +1,19 @@
 <template>
   <div>
-    <v-tabs
-      v-model="tab"
-      background-color="orange accent-4"
-      centered
-      dark
-      icons-and-text
+    <br>
+    <h3>Put what you wish to buy below!</h3>
+    <v-btn
+      text
+      style="margin-top: 20px; height: 100px; width: 150px"
+      v-on:click="toListing"
     >
-      <v-tabs-slider></v-tabs-slider>
-      <v-tab v-on:click="fetchItems('all')">
-        All
-      </v-tab>
-
-      <v-tab v-for="x in subcats" :key="x.id" v-on:click="fetchItems(x)">
-        {{ x }}
-      </v-tab>
-    </v-tabs>
-
-
+      <v-icon dark color="orange">
+        mdi-plus
+      </v-icon>
+      New wish
+    </v-btn>
+    <CfmDlg ref="confirm" />
+    
     <div class="flex">
       <div class="flex">
         <v-row style="">
@@ -70,18 +66,21 @@
 
               <v-img height="250" v-bind:src="x[1].images[0]"></v-img>
 
-              <v-card-title>{{ x[1]["Title"] }}</v-card-title>
+              <v-card-title>Wish: {{ x[1]["Title"] }}</v-card-title>
 
               <v-card-text>
                 <div class="my-2 subtitle-1">
-                  <strong>Deal at:</strong> {{ x[1]["Location"] }}
+                  <strong>Description</strong> 
+                  <p>{{ x[1]["Description"] }}</p>
                 </div>
-                <div>
-                  <strong>Price:</strong>
-                  ${{ x[1]["Price"] }} per {{ x[1]["rent"]["Interval"] }}
+
+                <div class="my-2 subtitle-1">
+                  <strong>Location</strong> 
+                  <p>{{ x[1]["Location"] }}</p>
                 </div>
+                
                 <div class="my-2">
-                  <strong>Posted:</strong>
+                  <strong>TimeListed:</strong>
                   <timeago
                     :datetime="x[1]['date'].toDate()"
                     :auto-update="60"
@@ -92,13 +91,6 @@
 
               <v-divider class="mx-4"></v-divider>
               <v-card-actions>
-                <v-btn
-                  color="orange darken-2"
-                  text
-                  @click="getItemPage(x[0], x[6])"
-                >
-                  View
-                </v-btn>
                 <v-btn color="orange darken-2" text @click="contactOwner(x[6])">
                   Contact
                 </v-btn>
@@ -109,7 +101,7 @@
       </div>
     </div>
 
-    
+
   </div>
 </template>
 
@@ -117,6 +109,7 @@
 // import firebase from 'firebase'
 import firebase from "firebase";
 import { roomsRef } from "../firebase";
+import CfmDlg from "./CfmDlg";
 
 export default {
   data() {
@@ -124,12 +117,12 @@ export default {
       items: [],
       profiles: [],
       subcats: [
-        "Automobiles", 
-        "Property", 
-        "Books", 
-        "Games", 
-        "Electronics", 
-        "Miscellaneous"
+        "Mobile & Electronics",
+        "Hobbies & Games",
+        "Sports",
+        "Education",
+        "Fashion",
+        "Miscellaneous",
       ],
       rating: 0,
       name: "",
@@ -139,92 +132,55 @@ export default {
       date: new Date(),
     };
   },
+  components: { CfmDlg },
   methods: {
-    fetchItems: function(x) {
+    toListing: function() {
+      this.$router.push({ path: `/newListing`, name: "newListing" });
+    },
+    fetchItems: function() {
       // database.collection('Listings').get()
       // firebase.firestore().collection('Listings').get()
       this.items = [];
-      if (x === "all") {
-        firebase
-          .firestore()
-          .collection("Listings")
-          .where("Type", "==", "rent")
-          .orderBy("date", "desc")
-          .get()
-          .then((querySnapShot) => {
-            querySnapShot.forEach(async (doc) => {
-              let item = doc.data();
-              //console.log(item.UserID);
-              await firebase
-                .firestore()
-                .collection("users")
-                .where("id", "==", item.UserID)
-                .get()
-                .then((res) => {
-                  if (res.docs[0].data().numRatings == 0) {
-                    this.rating = 0;
-                  } else {
-                    this.rating = (
-                      res.docs[0].data().Rating / res.docs[0].data().numRatings
-                    ).toFixed(2);
-                  }
+      firebase
+        .firestore()
+        .collection("Listings")
+        .where("Type", "==", "wish")
+        .orderBy("date", "desc")
+        .get()
+        .then((querySnapShot) => {
+          querySnapShot.forEach(async (doc) => {
+            let item = doc.data();
+            //console.log(item.UserID);
+            await firebase
+              .firestore()
+              .collection("users")
+              .where("id", "==", item.UserID)
+              .get()
+              .then((res) => {
+                if (res.docs[0].data().numRatings == 0) {
+                  this.rating = 0;
+                } else {
+                  this.rating = (
+                    res.docs[0].data().Rating / res.docs[0].data().numRatings
+                  ).toFixed(2);
+                }
 
-                  this.name = res.docs[0].data().Name;
-                  this.numRating = res.docs[0].data().numRatings;
-                  this.profileURL = res.docs[0].data().ProfileURL;
-                  this.items.push([
-                    doc.id,
-                    item,
-                    this.rating,
-                    this.name,
-                    this.numRating,
-                    this.profileURL,
-                    item.UserID,
-                  ]);
-                });
-            });
+                this.name = res.docs[0].data().Name;
+                this.numRating = res.docs[0].data().numRatings;
+                this.profileURL = res.docs[0].data().ProfileURL;
+                this.items.push([
+                  doc.id,
+                  item,
+                  this.rating,
+                  this.name,
+                  this.numRating,
+                  this.profileURL,
+                  item.UserID,
+                ]);
+              });
           });
-      } else {
-        firebase
-          .firestore()
-          .collection("Listings")
-          .where("Type", "==", "rent")
-          .where("Subcat", "==", x)
-          .orderBy("date", "desc")
-          .get()
-          .then((querySnapShot) => {
-            querySnapShot.forEach(async (doc) => {
-              let item = doc.data();
-              //console.log(item.UserID);
-              await firebase
-                .firestore()
-                .collection("users")
-                .where("id", "==", item.UserID)
-                .get()
-                .then((res) => {
-                  if (res.docs[0].data().numRatings == 0) {
-                    this.rating = 0;
-                  } else {
-                    this.rating = (
-                      res.docs[0].data().Rating / res.docs[0].data().numRatings
-                    ).toFixed(2);
-                  }
-                  this.name = res.docs[0].data().Name;
-                  this.numRating = res.docs[0].data().numRatings;
-                  this.profileURL = res.docs[0].data().ProfileURL;
-                  this.items.push([
-                    doc.id,
-                    item,
-                    this.rating,
-                    this.name,
-                    this.numRating,
-                    this.profileURL,
-                    item.UserID,
-                  ]);
-                });
-            });
-          });
-      }
+      });
+      console.log(this.items);
       this.items.forEach((x) => {
         firebase
           .firestore()
@@ -275,15 +231,16 @@ export default {
     },
     getItemPage: function(listingID, userId) {
       this.$router.push({
-        name: "itemPageRent",
+        name: "itemPage",
         params: { listing: listingID, userId: userId },
       });
     },
   },
   created() {
-    this.fetchItems("all");
+    this.fetchItems();
   },
 };
 </script>
 
 <style scoped></style>
+

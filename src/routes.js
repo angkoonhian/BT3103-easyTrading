@@ -3,6 +3,7 @@ import NewListing from "./components/NewListing.vue";
 import Login from "./components/Login.vue";
 import SignUp from "./components/SignUp.vue";
 import Sales from "./components/Sales.vue";
+import Wish from "./components/Wish.vue";
 import Home from "./components/Home.vue";
 import Chat from "./components/chatComponent/Chat.vue";
 import UserListings from "./components/UserListings.vue";
@@ -13,6 +14,7 @@ import EditListing from "./components/EditListing.vue";
 import Search from "./components/Search.vue";
 import Blank from "./components/Blank.vue";
 import ItemPageRent from "./components/ItemPageRent.vue";
+import ItemPageService from "./components/ItemPageService.vue";
 
 export default [
   { path: "/", component: Home },
@@ -32,6 +34,7 @@ export default [
   },
   { path: "/Signup", name: "signUp", component: SignUp },
   { path: "/sales", name: "sales", component: Sales },
+  { path: "/wish", name: "wish", component: Wish },
   {
     path: "/edit",
     component: EditListing,
@@ -62,6 +65,12 @@ export default [
     path: "/ItemPageRent",
     name: "itemPageRent",
     component: ItemPageRent,
+    props: true,
+  },
+  {
+    path: "/ItemPageService",
+    name: "itemPageService",
+    component: ItemPageService,
     props: true,
   },
   {

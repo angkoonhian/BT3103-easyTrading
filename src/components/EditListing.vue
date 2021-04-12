@@ -106,6 +106,7 @@
                 </div>
               </v-row>
             </div>
+
             <div id="additionalOptions" v-show="selectedType === 'sale'">
               <h3><strong>7. Name your price and/or trades</strong></h3>
               <v-tooltip bottom>
@@ -168,6 +169,7 @@
               >
             </div>
           </div>
+
           <div id="additionalOptions" v-show="selectedType === 'rent'">
             <h3><strong>7. Name your price</strong></h3>
             <br />
@@ -198,6 +200,13 @@
               >Update Listing</v-btn
             >
           </div>
+          
+          <div id="additionalOptions" v-show="selectedType === 'wish'">
+            <v-btn v-on:click="submitListing('wish')" color="warning"
+              >Update Listing</v-btn
+            >
+          </div>
+
         </b-col>
       </b-row>
     </v-card>
@@ -264,6 +273,9 @@ export default {
         others2["Interval"] = this.interval;
         others2["Terms and Conditions"] = this.tnc;
         this.listing["rent"] = others2;
+      } else if (x === "wish") {
+        var others3 = {};
+        this.listing["wish"] = others3;
       }
       firebase
         .firestore()
