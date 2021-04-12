@@ -53,16 +53,36 @@
 
             <v-divider class="mx-4"></v-divider>
             <v-card-actions>
-              <v-btn color="orange darken-2" text  @click="getItemPage(x[0], user)" v-if="x[1]['Type']==='sale'" >
+              <v-btn
+                color="orange darken-2"
+                text
+                @click="getItemPage(x[0], user)"
+                v-if="x[1]['Type'] === 'sale'"
+              >
                 view
               </v-btn>
-              <v-btn color="orange darken-2" text  @click="getItemRentalPage(x[0], user)" v-if="x[1]['Type']==='rent'" >
+              <v-btn
+                color="orange darken-2"
+                text
+                @click="getItemRentalPage(x[0], user)"
+                v-if="x[1]['Type'] === 'rent'"
+              >
                 view
               </v-btn>
-              <v-btn v-show="isSameUser" color="orange darken-2" text v-on:click="route(x[0])">
+              <v-btn
+                v-show="isSameUser"
+                color="orange darken-2"
+                text
+                v-on:click="route(x[0])"
+              >
                 edit
               </v-btn>
-              <v-btn v-show="isSameUser" color="orange darken-2" text @click="delRecord(x[0])">
+              <v-btn
+                v-show="isSameUser"
+                color="orange darken-2"
+                text
+                @click="delRecord(x[0])"
+              >
                 delete
               </v-btn>
             </v-card-actions>
@@ -155,14 +175,11 @@ export default {
         .then(() => location.reload());
     },
     route: function(x) {
-      console.log("routig" + x);
       this.$router.push({ name: "edit", params: { doc_id: x } });
     },
   },
   created() {
-    console.log(this.user);
     this.fetchItems();
-    console.log(this.items[0][1]["images"]);
   },
 };
 </script>

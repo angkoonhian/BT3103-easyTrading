@@ -12,9 +12,17 @@
                 <v-form>
                   <v-text-field
                     prepend-icon="person"
-                    name="login"
-                    label="Login"
+                    name="Email"
+                    label="Email"
                     type="text"
+                    v-model="email"
+                  ></v-text-field>
+                  <v-text-field
+                    prepend-icon="person"
+                    name="username"
+                    label="username"
+                    type="text"
+                    v-model="Username"
                   ></v-text-field>
                   <v-text-field
                     id="password"
@@ -22,6 +30,7 @@
                     name="password"
                     label="Password"
                     type="password"
+                    v-model="password"
                   ></v-text-field>
                 </v-form>
               </v-card-text>
@@ -62,6 +71,7 @@ export default {
   data() {
     return {
       Username: "",
+      email: "",
       password: "",
     };
   },
@@ -71,13 +81,15 @@ export default {
       try {
         firebase
           .auth()
-          .signInWithEmailAndPassword(this.username, this.password)
+          .signInWithEmailAndPassword(this.email, this.password)
           .then((user) => {
-            console.log(user.data);
+            console.log(user);
             localStorage.setItem("username", this.username);
             localStorage.setItem("email", this.email);
-            this.$router.push("/sales");
+            localStorage.setItem("UID", user.user.uid);
             localStorage.setItem("login", true);
+            this.$router.push("/");
+            location.reload();
           });
       } catch (err) {
         alert(err);
@@ -118,7 +130,7 @@ export default {
             localStorage.setItem("email", res.user.email);
             localStorage.setItem("UID", res.user.uid);
             localStorage.setItem("login", true);
-            this.$router.push("/newListing");
+            this.$router.push("/");
             location.reload();
           });
       } catch (error) {

@@ -238,7 +238,7 @@ export default {
     return {
       type: [
         { text: "I am selling/trading an item", value: "sale" },
-        { text: "I am renting an item", value: "rent" }
+        { text: "I am renting an item", value: "rent" },
       ],
       imgcount: 0,
       radioGroup: "",
@@ -273,6 +273,7 @@ export default {
       img1: "",
       imageData: null,
       imgurls: [],
+      user: localStorage.UID,
     };
   },
   methods: {
@@ -307,10 +308,7 @@ export default {
       // firebase.database().ref('Listings').push(this.listing).then(
       //     ()=>
       //         {location.reload()});
-      if (
-        this.selectedType === "rent" &&
-        !this.tnc
-      ) {
+      if (this.selectedType === "rent" && !this.tnc) {
         alert("One or more required fields is not filled in!");
       }
       if (this.title === "" || this.imgurls.length === 0 || this.desc === "") {
@@ -357,7 +355,7 @@ export default {
       this.img1 = null;
       const storageRef = firebase
         .storage()
-        .ref(`${this.imageData.name}`)
+        .ref(`${this.user}/Listings` + `/${this.imageData.name}`)
         .put(this.imageData);
       storageRef.on(
         `state_changed`,
