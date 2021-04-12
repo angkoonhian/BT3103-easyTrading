@@ -36,6 +36,14 @@
                 solo
               ></v-select>
             </div>
+            <div v-show="selectedType === 'service'">
+              <v-select
+                :items="subcat_service"
+                label="Sub Category"
+                v-model="selectedSubcat"
+                solo
+              ></v-select>
+            </div>
             <h3><strong>3. Give your listing a title</strong></h3>
             <v-col cols="12" sm="12" md="12">
               <v-text-field
@@ -266,6 +274,14 @@ export default {
         { text: "Books", value: "Books" },
         { text: "Games", value: "Games" },
         { text: "Electronics", value: "Electronics" },
+        { text: "Miscellaneous", value: "Miscellaneous" },
+      ],
+      subcat_service: [
+        { text: "Housework", value: "Housework" },
+        { text: "Education & Child Care", value: "Education & Child Care" },
+        { text: "Construction & Maintenance", value: "Construction & Maintenance" },
+        { text: "Event Planning", value: "Event Planning" },
+        { text: "Travel Agent", value: "Travel Agent" },
         { text: "Miscellaneous", value: "Miscellaneous" },
       ],
       rent_intervals: ["hour", "day", "week", "month", "year"],

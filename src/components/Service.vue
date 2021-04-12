@@ -76,7 +76,7 @@
                 </div>
                 <div>
                   <strong>Price:</strong>
-                  ${{ x[1]["Price"] }} per {{ x[1]["rent"]["Interval"] }}
+                  ${{ x[1]["Price"] }} per {{ x[1]["service"]["Interval"] }}
                 </div>
                 <div class="my-2">
                   <strong>TimeListed:</strong>
@@ -120,12 +120,12 @@ export default {
       items: [],
       profiles: [],
       subcats: [
-        "Automobiles", 
-        "Property", 
-        "Books", 
-        "Games", 
-        "Electronics", 
-        "Miscellaneous"
+        "Housework",
+        "Education & Child Care",
+        "Construction & Maintenance",
+        "Event Planning",
+        "Travel Agent",
+        "Miscellaneous",
       ],
       rating: 0,
       name: "",
@@ -144,7 +144,7 @@ export default {
         firebase
           .firestore()
           .collection("Listings")
-          .where("Type", "==", "rent")
+          .where("Type", "==", "service")
           .orderBy("date", "desc")
           .get()
           .then((querySnapShot) => {
@@ -184,7 +184,7 @@ export default {
         firebase
           .firestore()
           .collection("Listings")
-          .where("Type", "==", "rent")
+          .where("Type", "==", "service")
           .where("Subcat", "==", x)
           .orderBy("date", "desc")
           .get()
@@ -271,7 +271,7 @@ export default {
     },
     getItemPage: function(listingID, userId) {
       this.$router.push({
-        name: "itemPageRent",
+        name: "itemPageService",
         params: { listing: listingID, userId: userId },
       });
     },
