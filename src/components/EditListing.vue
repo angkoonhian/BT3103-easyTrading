@@ -6,39 +6,13 @@
     <v-card elevation="2" style="padding-bottom: 100px">
       <b-row align-h="center">
         <b-col cols="8">
-          <h1>Post your listing</h1>
+          <h1>Edit your listing</h1>
           <br />
           <div id="commonOptions">
             <h3><strong>2. Choose your sub-category</strong></h3>
-            <v-select :items="subcat_sales" label="Solo field" solo></v-select>
-            <div
-              v-show="selectedType === 'sale'"
-              v-for="x in subcat_sales"
-              :key="x.id"
-            >
-              <input
-                type="radio"
-                name="subcat"
-                v-on:click="selectedSubcat = x"
-                checked="checked"
-                required
-              />
-              {{ x }}
-            </div>
-            <div
-              v-show="selectedType === 'rent'"
-              v-for="x in subcat_rent"
-              :key="x.id"
-            >
-              <input
-                type="radio"
-                name="subcat"
-                v-on:click="selectedSubcat = x"
-                checked="checked"
-                required
-              />
-              {{ x }}
-            </div>
+            <v-select :items="subcat_sales" label="Solo field" solo v-if="selectedType==='sale'" v-model="selectedSubcat"></v-select>
+            <v-select :items="subcat_rent" label="Solo field" solo v-if="selectedType==='rent'" v-model="selectedSubcat"></v-select>
+            
             <h3><strong>3. Give your listing a title</strong></h3>
             <v-col cols="12" sm="12" md="12">
               <v-text-field
@@ -254,8 +228,9 @@ export default {
         "Sports",
         "Education",
         "Fashion",
+        "Miscellaneous"
       ],
-      subcat_rent: ["Automobiles", "Property", "Books", "Games", "Electronics"],
+      subcat_rent: ["Automobiles", "Property", "Books", "Games", "Electronics", "Miscellaneous"],
       rent_intervals: ["hour", "day", "week", "month", "year"],
       interval: "",
       tnc: "",

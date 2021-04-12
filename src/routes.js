@@ -17,7 +17,7 @@ import ItemPageRent from "./components/ItemPageRent.vue";
 import ItemPageService from "./components/ItemPageService.vue";
 
 export default [
-  { path: "/home", component: Home },
+  { path: "/", component: Home },
   { path: "/login", component: Login },
   { path: "/home", component: Home },
   {

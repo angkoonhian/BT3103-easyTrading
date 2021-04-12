@@ -74,14 +74,14 @@
 
               <v-card-text>
                 <div class="my-2 subtitle-1">
-                  <strong>Location:</strong> {{ x[1]["Location"] }}
+                  <strong>Deal at:</strong> {{ x[1]["Location"] }}
                 </div>
                 <div>
                   <strong>Price:</strong>
                   ${{ x[1]["Price"] }} per {{ x[1]["rent"]["Interval"] }}
                 </div>
                 <div class="my-2">
-                  <strong>TimeListed:</strong>
+                  <strong>Posted:</strong>
                   <timeago
                     :datetime="x[1]['date'].toDate()"
                     :auto-update="60"
