@@ -1,11 +1,8 @@
 <template>
   <div>
-    <v-card class="mx-auto"  tile>
-      <v-img
-        height="200"
-        src="https://raw.githubusercontent.com/Irislah/bt3103-week-6/main/bcg2.png"
-      ></v-img>
-      <v-row style="margin:2.5%;position:absolute; top: 130px">
+    <v-card class="mx-auto" tile>
+      <v-img height="200px" v-bind:src="background"></v-img>
+      <v-row style="margin-left:2.5%;position:absolute;top:160px">
         <v-list-item>
           <v-list-item-avatar size="100">
             <img v-bind:src="profile" v-bind:alt="name" />
@@ -139,7 +136,7 @@
         {{ biography }}
       </h4>
     </v-card>
-    <br><br>
+    <br /><br />
     <v-tabs
       v-model="tab"
       background-color="orange accent-4"
