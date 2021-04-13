@@ -122,6 +122,8 @@ export default {
                       Rating: 0,
                       numRating: 0,
                       id: res.user.uid,
+                      BackgroundURL:
+                        "https://raw.githubusercontent.com/Irislah/bt3103-week-6/main/bcg2.png",
                       ProfileURL: res.user.photoURL,
                     });
                 }

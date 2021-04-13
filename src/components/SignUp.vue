@@ -85,6 +85,8 @@ export default {
               username: this.username,
               id: cred.user.uid,
               Biography: "",
+              BackgroundURL:
+                "https://raw.githubusercontent.com/Irislah/bt3103-week-6/main/bcg2.png",
               ProfileURL:
                 "https://firebasestorage.googleapis.com/v0/b/bt3103-finalproject.appspot.com/o/default.png?alt=media&token=7117f25c-5744-4816-9a39-68d51ebb2530",
             })
