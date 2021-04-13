@@ -1,11 +1,8 @@
 <template>
   <div>
     <v-card class="mx-auto" tile>
-      <v-img
-        height="200"
-        src="https://raw.githubusercontent.com/Irislah/bt3103-week-6/main/bcg2.png"
-      ></v-img>
-      <v-row style="margin:2.5%;position:absolute; top: 130px">
+      <v-img height="200" v-bind:src="background"></v-img>
+      <v-row style="margin-left:2.5%;position:absolute; top: 160px">
         <v-list-item>
           <v-list-item-avatar size="100">
             <img v-bind:src="profile" v-bind:alt="name" />
@@ -78,6 +75,7 @@ export default {
       rating: 0,
       biography: "",
       dialog: false,
+      background: "",
     };
   },
   components: {
@@ -112,6 +110,7 @@ export default {
         this.profile = data.ProfileURL;
         this.rating = data.Rating;
         this.biography = data.Biography;
+        this.background = data.BackgroundURL;
         this.rating = data.Rating;
         this.numRatings = data.numRatings;
         console.log(this.name);

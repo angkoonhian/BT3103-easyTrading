@@ -7,7 +7,7 @@
           <v-list-item-avatar size="100">
             <img v-bind:src="profile" v-bind:alt="name" />
           </v-list-item-avatar>
-          <v-list-item-content style="padding-top: 50px; width: 300px">
+          <v-list-item-content style="padding-top: 50px; width: 500px">
             <h5>{{ name }}</h5>
 
             <!-- <v-list-item-title class="title" style="margin-top:20px;">Injamamul Haque Sonet</v-list-item-title>

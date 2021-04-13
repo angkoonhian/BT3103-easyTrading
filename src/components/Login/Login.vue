@@ -109,8 +109,8 @@ export default {
               .collection("users")
               .doc(res.user.uid)
               .get()
-              .then((res) => {
-                if (res.empty) {
+              .then(() => {
+                if (res.additionalUserInfo.isNewUser) {
                   firebase
                     .firestore()
                     .collection("users")
