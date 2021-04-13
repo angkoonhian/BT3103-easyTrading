@@ -56,11 +56,12 @@
                       </div>
                     </v-row>
                     <v-card-text class="text-left">
-                      
                       <p>
                         <strong>Description:</strong> {{ x[1]["Description"] }}
                       </p>
-                      <p v-if="x[1].Price != ''"><strong>Price:</strong> ${{ x[1]["Price"] }}</p>
+                      <p v-if="x[1].Price != ''">
+                        <strong>Price:</strong> ${{ x[1]["Price"] }}
+                      </p>
                       <p v-if="x[1]['sale']['Alternatives'] != ''">
                         <strong>Can also trade for:</strong>
                         {{ x[1]["sale"]["Alternatives"] }}
@@ -106,7 +107,7 @@
 <script>
 // import firebase from 'firebase'
 import firebase from "firebase";
-import { roomsRef } from "../firebase";
+import { roomsRef } from "../../firebase";
 
 export default {
   props: ["listing", "userId"],
@@ -163,9 +164,9 @@ export default {
     },
     fetchItem: function(listing) {
       if (listing) {
-        localStorage.setItem("lastItemViewed", listing) 
+        localStorage.setItem("lastItemViewed", listing);
       } else {
-        listing = localStorage.getItem("lastItemViewed")
+        listing = localStorage.getItem("lastItemViewed");
       }
       this.itemInfo = [];
       firebase

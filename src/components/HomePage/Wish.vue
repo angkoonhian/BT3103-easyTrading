@@ -1,8 +1,6 @@
 <template>
   <div>
-    <br>
-    <h3>Put what you wish to buy below!</h3>
-    
+    <br />
     <div class="flex">
       <div class="flex">
         <v-row style="">
@@ -59,15 +57,15 @@
 
               <v-card-text>
                 <div class="my-2 subtitle-1">
-                  <strong>Description</strong> 
+                  <strong>Description</strong>
                   <p>{{ x[1]["Description"] }}</p>
                 </div>
 
                 <div class="my-2 subtitle-1">
-                  <strong>Location</strong> 
+                  <strong>Location</strong>
                   <p>{{ x[1]["Location"] }}</p>
                 </div>
-                
+
                 <div class="my-2">
                   <strong>TimeListed:</strong>
                   <timeago
@@ -89,15 +87,13 @@
         </v-row>
       </div>
     </div>
-
-
   </div>
 </template>
 
 <script>
 // import firebase from 'firebase'
 import firebase from "firebase";
-import { roomsRef } from "../firebase";
+import { roomsRef } from "../../firebase";
 
 export default {
   data() {
@@ -166,7 +162,7 @@ export default {
                 ]);
               });
           });
-      });
+        });
       console.log(this.items);
       this.items.forEach((x) => {
         firebase
@@ -230,4 +226,3 @@ export default {
 </script>
 
 <style scoped></style>
-

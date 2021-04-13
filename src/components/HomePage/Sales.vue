@@ -17,7 +17,6 @@
       </v-tab>
     </v-tabs>
 
-
     <div class="flex">
       <div class="flex">
         <v-row style="">
@@ -31,7 +30,11 @@
           >
             <v-card :loading="false" class="mx-auto my-12" max-width="374">
               <v-card-actions>
-                <v-list-item class="grow" style="font-weight: 700">
+                <v-list-item
+                  class="grow"
+                  style="font-weight: 700"
+                  @click="goToShopFront(x[6])"
+                >
                   <v-list-item-avatar
                     color="grey darken-3"
                     @click="goToShopFront(x[6])"
@@ -76,9 +79,13 @@
                 <div class="my-2 subtitle-1">
                   <strong>Deal at:</strong> {{ x[1]["Location"] }}
                 </div>
-                <div>
-                  <strong>Price:</strong>
-                  ${{ x[1]["Price"] }} per {{ x[1]["rent"]["Interval"] }}
+
+                <div v-if="x[1].Price != ''">
+                  <strong>Price:</strong> ${{ x[1]["Price"] }}
+                </div>
+                <div v-if="x[1]['sale']['Alternatives'] != ''">
+                  <strong>Can trade for:</strong>
+                  {{ x[1]["sale"]["Alternatives"] }}
                 </div>
                 <div class="my-2">
                   <strong>Posted:</strong>
@@ -108,15 +115,13 @@
         </v-row>
       </div>
     </div>
-
-    
   </div>
 </template>
 
 <script>
 // import firebase from 'firebase'
 import firebase from "firebase";
-import { roomsRef } from "../firebase";
+import { roomsRef } from "../../firebase";
 
 export default {
   data() {
@@ -124,12 +129,12 @@ export default {
       items: [],
       profiles: [],
       subcats: [
-        "Automobiles", 
-        "Property", 
-        "Books", 
-        "Games", 
-        "Electronics", 
-        "Miscellaneous"
+        "Mobile & Electronics",
+        "Hobbies & Games",
+        "Sports",
+        "Education",
+        "Fashion",
+        "Miscellaneous",
       ],
       rating: 0,
       name: "",
@@ -148,7 +153,7 @@ export default {
         firebase
           .firestore()
           .collection("Listings")
-          .where("Type", "==", "rent")
+          .where("Type", "==", "sale")
           .orderBy("date", "desc")
           .get()
           .then((querySnapShot) => {
@@ -188,7 +193,7 @@ export default {
         firebase
           .firestore()
           .collection("Listings")
-          .where("Type", "==", "rent")
+          .where("Type", "==", "sale")
           .where("Subcat", "==", x)
           .orderBy("date", "desc")
           .get()
@@ -275,7 +280,7 @@ export default {
     },
     getItemPage: function(listingID, userId) {
       this.$router.push({
-        name: "itemPageRent",
+        name: "itemPage",
         params: { listing: listingID, userId: userId },
       });
     },

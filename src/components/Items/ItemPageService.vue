@@ -56,20 +56,18 @@
                       </div>
                     </v-row>
                     <v-card-text class="text-left">
-                      
+                      <p><strong>Options:</strong> ${{ x[1]["Price"] }}</p>
                       <p>
                         <strong>Price:</strong>
-                        ${{ x[1]["Price"] }} per {{ x[1]["rent"]["Interval"] }}
+                        ${{ x[1]["Price"] }} per
+                        {{ x[1]["service"]["Interval"] }}
                       </p>
                       <p>
                         <strong>Description:</strong> {{ x[1]["Description"] }}
                       </p>
-                      <p>
-                        <strong>Terms and Conditions:</strong> {{ x[1]["rent"]["Terms and Conditions"] }}
-                      </p>
                       <p><strong>Location:</strong> {{ x[1]["Location"] }}</p>
                       <div class="my-2">
-                        <strong>Posted:</strong>
+                        <strong>TimeListed:</strong>
                         <timeago
                           :datetime="x[1]['date'].toDate()"
                           :auto-update="60"
@@ -104,7 +102,7 @@
 <script>
 // import firebase from 'firebase'
 import firebase from "firebase";
-import { roomsRef } from "../firebase";
+import { roomsRef } from "../../firebase";
 
 export default {
   props: ["listing", "userId"],
@@ -160,11 +158,6 @@ export default {
       });
     },
     fetchItem: function(listing) {
-      if (listing) {
-        localStorage.setItem("lastRentalViewed", listing) 
-      } else {
-        listing = localStorage.getItem("lastRentalViewed")
-      }
       this.itemInfo = [];
       firebase
         .firestore()

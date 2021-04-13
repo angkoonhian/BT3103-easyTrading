@@ -37,7 +37,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <div @click="socialLogin" class="other">
-                  <img id="icon" src="../assets/google.png" />
+                  <img id="icon" src="../../assets/google.png" />
                   <p>Login by Google</p>
                 </div>
                 <v-btn

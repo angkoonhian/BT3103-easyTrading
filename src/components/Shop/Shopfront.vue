@@ -28,7 +28,7 @@
       </h4>
       <h3 style="padding-bottom: 30px">Welcome to {{ name }}'s shop!!</h3>
     </v-card>
-    <br><br>
+    <br /><br />
     <v-tabs
       v-model="tab"
       background-color="orange accent-4"
@@ -64,8 +64,8 @@
 
 <script>
 import firebase from "firebase";
-import UserListings from "./UserListings";
-import Reviews from "./Reviews";
+import UserListings from "../UserPage/UserListings";
+import Reviews from "../UserPage/Reviews";
 
 export default {
   props: ["user", "tabs"],
@@ -86,11 +86,11 @@ export default {
   },
   created() {
     if (this.user) {
-        localStorage.setItem("lastShopViewed", this.user) 
-      } else {
-        this.user = localStorage.getItem("lastShopViewed")
-      }
-    
+      localStorage.setItem("lastShopViewed", this.user);
+    } else {
+      this.user = localStorage.getItem("lastShopViewed");
+    }
+
     // if (this.user === localStorage.getItem("UID")) {
     //   this.$router.push({
     //     path: `/profile`,

@@ -1,20 +1,20 @@
 // Import the components you want to define routes for.
-import NewListing from "./components/NewListing.vue";
-import Login from "./components/Login.vue";
-import SignUp from "./components/SignUp.vue";
-import Sales from "./components/Sales.vue";
-import Wish from "./components/Wish.vue";
-import Home from "./components/Home.vue";
+import NewListing from "./components/Listings/NewListing.vue";
+import Login from "./components/Login/Login.vue";
+import SignUp from "./components/Login/SignUp.vue";
+import Sales from "./components/HomePage/Sales.vue";
+import Wish from "./components/HomePage/Wish.vue";
+import Home from "./components/HomePage/Home.vue";
 import Chat from "./components/chatComponent/Chat.vue";
-import UserListings from "./components/UserListings.vue";
-import Profile from "./components/Profile.vue";
-import ItemPage from "./components/ItemPage.vue";
-import Shopfront from "./components/Shopfront.vue";
-import EditListing from "./components/EditListing.vue";
-import Search from "./components/Search.vue";
-import Blank from "./components/Blank.vue";
-import ItemPageRent from "./components/ItemPageRent.vue";
-import ItemPageService from "./components/ItemPageService.vue";
+import UserListings from "./components/UserPage/UserListings.vue";
+import Profile from "./components/UserPage/Profile.vue";
+import ItemPage from "./components/Items/ItemPage.vue";
+import Shopfront from "./components/Shop/Shopfront.vue";
+import EditListing from "./components/UserPage/EditListing.vue";
+import Search from "./components/HomePage/Search.vue";
+import Blank from "./components/HomePage/Blank.vue";
+import ItemPageRent from "./components/Items/ItemPageRent.vue";
+import ItemPageService from "./components/Items/ItemPageService.vue";
 
 export default [
   { path: "/", component: Home },
