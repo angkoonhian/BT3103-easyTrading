@@ -17,7 +17,7 @@
       </v-tab>
     </v-tabs>
 
-    <div class="flex">
+    <div class="flex" style="margin-left:40px; margin-right:40px;">
       <div class="flex">
         <v-row style="">
           <v-col

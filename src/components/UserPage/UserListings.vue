@@ -13,8 +13,7 @@
     </v-btn>
     <CfmDlg ref="confirm" />
 
-
-    <div class="flex">
+    <div class="flex" style="margin-left:40px; margin-right:40px;">
       <v-row style="">
         <v-col
           v-for="(x, i) in items"
@@ -92,8 +91,6 @@
         </v-col>
       </v-row>
     </div>
-
-    
   </div>
 </template>
 

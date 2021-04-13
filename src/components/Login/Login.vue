@@ -103,13 +103,14 @@ export default {
           .auth()
           .signInWithPopup(provider)
           .then((res) => {
-            console.log(res.user);
+            console.log(res);
             firebase
               .firestore()
               .collection("users")
               .doc(res.user.uid)
               .get()
               .then(() => {
+                //console.log(res.additionalUserInfo.isNewUser == true);
                 if (res.additionalUserInfo.isNewUser) {
                   firebase
                     .firestore()
@@ -126,14 +127,14 @@ export default {
                         "https://raw.githubusercontent.com/Irislah/bt3103-week-6/main/bcg2.png",
                       ProfileURL: res.user.photoURL,
                     });
+                  localStorage.setItem("username", res.user.displayName);
+                  localStorage.setItem("email", res.user.email);
+                  localStorage.setItem("UID", res.user.uid);
+                  localStorage.setItem("login", true);
+                  this.$router.push("/");
+                  location.reload();
                 }
               });
-            localStorage.setItem("username", res.user.displayName);
-            localStorage.setItem("email", res.user.email);
-            localStorage.setItem("UID", res.user.uid);
-            localStorage.setItem("login", true);
-            this.$router.push("/");
-            location.reload();
           });
       } catch (error) {
         alert(error.message);
