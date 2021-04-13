@@ -61,6 +61,45 @@
                             ></v-textarea>
                           </v-col>
                         </v-col>
+                        <v-col cols="12">
+                          <v-btn
+                            class="mx-2"
+                            dark
+                            small
+                            color="orange"
+                            @click="clickProfile"
+                          >
+                            Update Profile
+                          </v-btn>
+                          <input
+                            type="file"
+                            ref="input1"
+                            style="display: none"
+                            @change="previewImage"
+                            accept="image/*"
+                          />
+                          <v-list-item-avatar size="100">
+                            <img v-bind:src="profile" v-bind:alt="name" />
+                          </v-list-item-avatar>
+                        </v-col>
+                        <v-col cols="12">
+                          <v-btn
+                            class="mx-2"
+                            dark
+                            small
+                            color="orange"
+                            @click="clickBackground"
+                          >
+                            Update Background
+                          </v-btn>
+                          <input
+                            type="file"
+                            ref="background"
+                            style="display: none"
+                            @change="previewBackground"
+                            accept="image/*"
+                          />
+                        </v-col>
                       </v-row>
                     </v-container>
                     <small>*indicates required field</small>
@@ -152,6 +191,7 @@ export default {
       dialog: false,
       currentid: "",
       isSameUser: false,
+      profileData: "",
     };
   },
   components: {
@@ -177,6 +217,9 @@ export default {
         this.name = data.Name;
         this.email = data.Email;
         this.profile = data.ProfileURL;
+        this.profileData = data.ProfileURL;
+        this.background = data.BackgroundURL;
+        this.backgroundData = data.BackgroundURL;
         this.rating = data.Rating;
         this.biography = data.Biography;
         this.rating = data.Rating;
@@ -194,6 +237,74 @@ export default {
           Name: this.name,
           Biography: this.biography,
         });
+    },
+    clickProfile() {
+      this.$refs.input1.click();
+    },
+    clickBackground() {
+      this.$refs.background.click();
+    },
+    previewBackground(event) {
+      this.backgroundData = event.target.files[0];
+      this.onUploadBackground();
+    },
+    previewImage(event) {
+      this.profileData = event.target.files[0];
+      this.onUpload();
+    },
+    onUpload() {
+      const storageRef = firebase
+        .storage()
+        .ref(`${this.user}/profile` + `/${this.profileData.name}`)
+        .put(this.profileData);
+      storageRef.on(
+        `state_changed`,
+        (snapshot) => {
+          this.uploadValue =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        },
+        (error) => {
+          console.log(error.message);
+        },
+        () => {
+          this.uploadValue = 100;
+          storageRef.snapshot.ref.getDownloadURL().then((url) => {
+            this.profile = url;
+            firebase
+              .firestore()
+              .collection("users")
+              .doc(localStorage.UID)
+              .update({ ProfileURL: this.profile });
+          });
+        }
+      );
+    },
+    onUploadBackground: function() {
+      const storageRef = firebase
+        .storage()
+        .ref(`${this.user}/background` + `/${this.backgroundData.name}`)
+        .put(this.backgroundData);
+      storageRef.on(
+        `state_changed`,
+        (snapshot) => {
+          this.uploadValue =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        },
+        (error) => {
+          console.log(error.message);
+        },
+        () => {
+          this.uploadValue = 100;
+          storageRef.snapshot.ref.getDownloadURL().then((url) => {
+            this.background = url;
+            firebase
+              .firestore()
+              .collection("users")
+              .doc(localStorage.UID)
+              .update({ BackgroundURL: this.background });
+          });
+        }
+      );
     },
   },
 };

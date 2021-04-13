@@ -133,9 +133,8 @@
             </div>
           </div>
 
-
           <div id="additionalOptions" v-show="selectedType === 'sale'">
-            <br><br>
+            <br /><br />
             <h3><strong>6. Name your price and/or trades</strong></h3>
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
@@ -198,7 +197,6 @@
             >
           </div>
 
-
           <div id="additionalOptions" v-show="selectedType === 'rent'">
             <h3><strong>6. Name your price</strong></h3>
             <br />
@@ -226,14 +224,15 @@
               ></v-textarea> </v-col
             ><br />
             <v-btn v-on:click="submitListing('rent')" color="warning"
-              >Post for Rental</v-btn>
+              >Post for Rental</v-btn
+            >
           </div>
 
-
           <div id="additionalOptions" v-show="selectedType === 'wish'">
-            <br><br>
+            <br /><br />
             <v-btn v-on:click="submitListing('wish')" color="warning"
-              >Post for Wish</v-btn>
+              >Post for Wish</v-btn
+            >
           </div>
         </b-col>
       </b-row>
@@ -254,7 +253,6 @@ export default {
         { text: "I am selling/trading an item", value: "sale" },
         { text: "I am renting an item", value: "rent" },
         { text: "I want to add a wish item", value: "wish" },
-
       ],
       imgcount: 0,
       radioGroup: "",
@@ -286,7 +284,10 @@ export default {
       subcat_service: [
         { text: "Housework", value: "Housework" },
         { text: "Education & Child Care", value: "Education & Child Care" },
-        { text: "Construction & Maintenance", value: "Construction & Maintenance" },
+        {
+          text: "Construction & Maintenance",
+          value: "Construction & Maintenance",
+        },
         { text: "Event Planning", value: "Event Planning" },
         { text: "Travel Agent", value: "Travel Agent" },
         { text: "Miscellaneous", value: "Miscellaneous" },
