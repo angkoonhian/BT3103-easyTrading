@@ -47,7 +47,6 @@ router.beforeEach((to, from, next) => {
 let app;
 
 firebase.auth().onAuthStateChanged((user) => {
-  console.log(user);
   if (user == null) {
     localStorage.setItem("login", false);
   } else {
