@@ -3,7 +3,7 @@
     <br />
     <br />
     <h1 v-for="(x, i) in itemInfo" v-bind:key="i">
-      {{ x[1].Title }} for {{ x[1].Type }}
+      {{ x[1].Title }}
     </h1>
     <v-container>
       <v-row no-gutters>
@@ -59,6 +59,7 @@
                       <p>
                         <strong>Description:</strong> {{ x[1]["Description"] }}
                       </p>
+
                       <p v-if="x[1].Price != ''">
                         <strong>Price:</strong> ${{ x[1]["Price"] }}
                       </p>
@@ -79,24 +80,16 @@
                           style="padding-left: 5px; font-weight: 100; font-size: 15px"
                         ></timeago>
                       </div>
+                      <p><strong>Status:</strong> Completed</p>
+                      <p>
+                        <strong>Date of transaction:</strong>
+                        {{ dateCompleted }}
+                      </p>
                     </v-card-text>
                   </v-card>
                 </v-col>
               </v-row>
             </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-
-              <v-btn color="warning" @click="contactOwner(userId)">
-                Chat Now
-              </v-btn>
-              <v-btn color="white" @click="toReviews">
-                See all reviews
-              </v-btn>
-              <v-btn color="error" @click="reportListing">
-                Report Listing
-              </v-btn>
-            </v-card-actions>
           </v-card>
         </v-col>
       </v-row>
@@ -105,7 +98,6 @@
 </template>
 
 <script>
-// import firebase from 'firebase'
 import firebase from "firebase";
 import { roomsRef } from "../../firebase";
 
@@ -119,6 +111,7 @@ export default {
       numRatings: 0,
       profileURL: "",
       user: localStorage.UID,
+      dateCompleted: "",
     };
   },
   methods: {
@@ -164,9 +157,6 @@ export default {
                 sender_id: this.user,
                 timestamp: new Date(),
               });
-            await roomsRef
-              .doc(res.docs[0].id)
-              .update({ lastUpdated: new Date() });
           });
         return this.$router.push({ path: `/chat` });
       }
@@ -207,9 +197,6 @@ export default {
                 sender_id: this.user,
                 timestamp: new Date(),
               });
-            await roomsRef
-              .doc(res.docs[0].id)
-              .update({ lastUpdated: new Date() });
           });
         console.log(query2.docs);
         return this.$router.push({ path: `/chat` });
@@ -219,38 +206,7 @@ export default {
           users: [ownerId, this.user],
           lastUpdated: new Date(),
         })
-        .then((res) => {
-          roomsRef
-            .where("users", "==", [this.user, ownerId])
-            .get()
-            .then(async () => {
-              await roomsRef
-                .doc(res.id)
-                .collection("messages")
-                .add({
-                  content:
-                    "I am interested in " +
-                    this.itemInfo[0][1].Title +
-                    "\n" +
-                    "Type: " +
-                    this.itemInfo[0][1].Type +
-                    "\n" +
-                    "Subcat: " +
-                    this.itemInfo[0][1].Subcat +
-                    "\n" +
-                    "Location: " +
-                    this.itemInfo[0][1].Location,
-                  file: {
-                    extension: "png",
-                    name: this.itemInfo[0][1].Title,
-                    type: "image/png",
-                    url: this.itemInfo[0][1].images[0],
-                  },
-                  sender_id: this.user,
-                  timestamp: new Date(),
-                });
-              await roomsRef.doc(res.id).update({ lastUpdated: new Date() });
-            });
+        .then(() => {
           this.$router.push({ path: `/chat` });
         });
     },
@@ -282,6 +238,7 @@ export default {
             .where("id", "==", item.UserID)
             .get()
             .then((res) => {
+              this.dateCompleted = item.CompletedDate.toDate();
               this.rating = res.docs[0].data().Rating;
               this.name = res.docs[0].data().Name;
               this.numRating = res.docs[0].data().numRatings;

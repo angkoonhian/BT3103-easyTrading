@@ -152,6 +152,9 @@
       <v-tab v-on:click="currentTab = 'reviews'">
         Reviews
       </v-tab>
+      <v-tab v-on:click="currentTab = 'history'">
+        History
+      </v-tab>
     </v-tabs>
 
     <div v-if="currentTab === 'Listings'">
@@ -168,6 +171,17 @@
     <div v-if="currentTab === 'reviews'">
       <Reviews v-bind:shopOwner="user"></Reviews>
     </div>
+    <div v-if="currentTab === 'history'">
+      <History
+        v-bind:user="user"
+        v-bind:profile="true"
+        v-bind:rating="rating"
+        v-bind:numRatings="numRatings"
+        v-bind:name="name"
+        v-bind:profileURL="profile"
+        v-bind:isSameUser="isSameUser"
+      ></History>
+    </div>
   </div>
 </template>
 
@@ -175,6 +189,7 @@
 import firebase from "firebase";
 import UserListings from "./UserListings";
 import Reviews from "./Reviews";
+import History from "./History";
 
 export default {
   props: ["user"],
@@ -195,6 +210,7 @@ export default {
   components: {
     UserListings,
     Reviews,
+    History,
   },
   created() {
     console.log("yoyoyo" + this.user);

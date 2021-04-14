@@ -132,6 +132,36 @@ export default {
         .get();
 
       if (!query1.empty) {
+        roomsRef
+          .where("users", "==", [ownerId, this.user])
+          .get()
+          .then(async (res) => {
+            await roomsRef
+              .doc(res.docs[0].id)
+              .collection("messages")
+              .add({
+                content:
+                  "I am interested in " +
+                  this.itemInfo[0][1].Title +
+                  "\n" +
+                  "Type: " +
+                  this.itemInfo[0][1].Type +
+                  "\n" +
+                  "Subcat: " +
+                  this.itemInfo[0][1].Subcat +
+                  "\n" +
+                  "Location: " +
+                  this.itemInfo[0][1].Location,
+                file: {
+                  extension: "png",
+                  name: this.itemInfo[0][1].Title,
+                  type: "image/png",
+                  url: this.itemInfo[0][1].images[0],
+                },
+                sender_id: this.user,
+                timestamp: new Date(),
+              });
+          });
         return this.$router.push({ path: `/chat` });
       }
 
@@ -140,6 +170,39 @@ export default {
         .get();
 
       if (!query2.empty) {
+        console.log("hello");
+        roomsRef
+          .where("users", "==", [this.user, ownerId])
+          .get()
+          .then(async (res) => {
+            console.log(res.docs[0].id);
+            await roomsRef
+              .doc(res.docs[0].id)
+              .collection("messages")
+              .add({
+                content:
+                  "I am interested in " +
+                  this.itemInfo[0][1].Title +
+                  "\n" +
+                  "Type: " +
+                  this.itemInfo[0][1].Type +
+                  "\n" +
+                  "Subcat: " +
+                  this.itemInfo[0][1].Subcat +
+                  "\n" +
+                  "Location: " +
+                  this.itemInfo[0][1].Location,
+                file: {
+                  extension: "png",
+                  name: this.itemInfo[0][1].Title,
+                  type: "image/png",
+                  url: this.itemInfo[0][1].images[0],
+                },
+                sender_id: this.user,
+                timestamp: new Date(),
+              });
+          });
+        console.log(query2.docs);
         return this.$router.push({ path: `/chat` });
       }
       roomsRef
@@ -147,7 +210,38 @@ export default {
           users: [ownerId, this.user],
           lastUpdated: new Date(),
         })
-        .then(() => {
+        .then((res) => {
+          roomsRef
+            .where("users", "==", [this.user, ownerId])
+            .get()
+            .then(async () => {
+              await roomsRef
+                .doc(res.id)
+                .collection("messages")
+                .add({
+                  content:
+                    "I am interested in " +
+                    this.itemInfo[0][1].Title +
+                    "\n" +
+                    "Type: " +
+                    this.itemInfo[0][1].Type +
+                    "\n" +
+                    "Subcat: " +
+                    this.itemInfo[0][1].Subcat +
+                    "\n" +
+                    "Location: " +
+                    this.itemInfo[0][1].Location,
+                  file: {
+                    extension: "png",
+                    name: this.itemInfo[0][1].Title,
+                    type: "image/png",
+                    url: this.itemInfo[0][1].images[0],
+                  },
+                  sender_id: this.user,
+                  timestamp: new Date(),
+                });
+              await roomsRef.doc(res.id).update({ lastUpdated: new Date() });
+            });
           this.$router.push({ path: `/chat` });
         });
     },

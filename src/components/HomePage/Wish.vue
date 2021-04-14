@@ -78,7 +78,11 @@
 
               <v-divider class="mx-4"></v-divider>
               <v-card-actions>
-                <v-btn color="orange darken-2" text @click="contactOwner(x[6])">
+                <v-btn
+                  color="orange darken-2"
+                  text
+                  @click="contactOwner(x[6], x[1])"
+                >
                   Contact
                 </v-btn>
               </v-card-actions>
@@ -175,9 +179,9 @@ export default {
           });
       });
     },
-    contactOwner: async function(ownerId) {
+    contactOwner: async function(ownerId, item) {
       if (ownerId == this.user) {
-        return alert("this is your own store!!!");
+        return alert("this is your own store!");
       }
       //const chatRoomUsers = [ownerId, this.user];
       const query1 = await roomsRef
@@ -185,6 +189,36 @@ export default {
         .get();
 
       if (!query1.empty) {
+        roomsRef
+          .where("users", "==", [ownerId, this.user])
+          .get()
+          .then(async (res) => {
+            await roomsRef
+              .doc(res.docs[0].id)
+              .collection("messages")
+              .add({
+                content:
+                  "I am able to offer " +
+                  item.Title +
+                  "\n" +
+                  "Type: " +
+                  item.Type +
+                  "\n" +
+                  "Subcat: " +
+                  item.Subcat +
+                  "\n" +
+                  "Location: " +
+                  item.Location,
+                file: {
+                  extension: "png",
+                  name: item.Title,
+                  type: "image/png",
+                  url: item.images[0],
+                },
+                sender_id: this.user,
+                timestamp: new Date(),
+              });
+          });
         return this.$router.push({ path: `/chat` });
       }
 
@@ -193,6 +227,39 @@ export default {
         .get();
 
       if (!query2.empty) {
+        console.log("hello");
+        roomsRef
+          .where("users", "==", [this.user, ownerId])
+          .get()
+          .then(async (res) => {
+            console.log(res.docs[0].id);
+            await roomsRef
+              .doc(res.docs[0].id)
+              .collection("messages")
+              .add({
+                content:
+                  "I am able to offer " +
+                  item.Title +
+                  "\n" +
+                  "Type: " +
+                  item.Type +
+                  "\n" +
+                  "Subcat: " +
+                  item.Subcat +
+                  "\n" +
+                  "Location: " +
+                  item.Location,
+                file: {
+                  extension: "png",
+                  name: item.Title,
+                  type: "image/png",
+                  url: item.images[0],
+                },
+                sender_id: this.user,
+                timestamp: new Date(),
+              });
+          });
+        console.log(query2.docs);
         return this.$router.push({ path: `/chat` });
       }
       roomsRef
@@ -200,7 +267,38 @@ export default {
           users: [ownerId, this.user],
           lastUpdated: new Date(),
         })
-        .then(() => {
+        .then((res) => {
+          roomsRef
+            .where("users", "==", [this.user, ownerId])
+            .get()
+            .then(async () => {
+              await roomsRef
+                .doc(res.id)
+                .collection("messages")
+                .add({
+                  content:
+                    "I am able to offer " +
+                    item.Title +
+                    "\n" +
+                    "Type: " +
+                    item.Type +
+                    "\n" +
+                    "Subcat: " +
+                    item.Subcat +
+                    "\n" +
+                    "Location: " +
+                    item.Location,
+                  file: {
+                    extension: "png",
+                    name: item.Title,
+                    type: "image/png",
+                    url: item.images[0],
+                  },
+                  sender_id: this.user,
+                  timestamp: new Date(),
+                });
+              await roomsRef.doc(res.id).update({ lastUpdated: new Date() });
+            });
           this.$router.push({ path: `/chat` });
         });
     },

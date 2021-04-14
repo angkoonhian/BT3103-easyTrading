@@ -12,7 +12,7 @@
       New listing
     </v-btn>
     <CfmDlg ref="confirm" />
-
+    <CfmDone ref="complete" />
     <div class="flex" style="margin-left:40px; margin-right:40px;">
       <v-row style="">
         <v-col
@@ -31,10 +31,24 @@
                 indeterminate
               ></v-progress-linear>
             </template>
-
-            <v-img height="250" v-bind:src="x[1].images[0]">
-              <div class="hh">for {{ x[1]["Type"] }}</div>
-            </v-img>
+            <v-hover v-slot="{ hover }">
+              <v-img
+                height="250"
+                v-bind:src="x[1].images[0]"
+                @click="getItemRentalPage(x[0], user, x[1].Type)"
+                ><div class="hh">for {{ x[1]["Type"] }}</div>
+                <v-expand-transition>
+                  <div
+                    v-if="hover"
+                    class="d-flex transition-fast-in-fast-out green v-card--reveal display-3 white--text"
+                    style="height: 100%;"
+                  >
+                    View Listing
+                  </div>
+                </v-expand-transition>
+              </v-img>
+            </v-hover>
+            <v-img> </v-img>
 
             <v-card-title>{{ x[1]["Title"] }}</v-card-title>
 
@@ -55,20 +69,12 @@
             <v-divider class="mx-4"></v-divider>
             <v-card-actions>
               <v-btn
+                v-show="isSameUser"
                 color="orange darken-2"
                 text
-                @click="getItemPage(x[0], user)"
-                v-if="x[1]['Type'] === 'sale'"
+                v-on:click="Complete(x[0])"
               >
-                view
-              </v-btn>
-              <v-btn
-                color="orange darken-2"
-                text
-                @click="getItemRentalPage(x[0], user)"
-                v-if="x[1]['Type'] === 'rent'"
-              >
-                view
+                done
               </v-btn>
               <v-btn
                 v-show="isSameUser"
@@ -97,6 +103,7 @@
 <script>
 import firebase from "firebase";
 import CfmDlg from "./CfmDlg";
+import CfmDone from "./CfmDone";
 
 export default {
   props: [
@@ -115,19 +122,24 @@ export default {
       imgurls: [],
     };
   },
-  components: { CfmDlg },
+  components: { CfmDlg, CfmDone },
   methods: {
-    getItemRentalPage: function(listingID, userId) {
-      this.$router.push({
-        name: "itemPageRent",
-        params: { listing: listingID, userId: userId },
-      });
+    complete: function() {
+      console.log("completed");
     },
-    getItemPage: function(listingID, userId) {
-      this.$router.push({
-        name: "itemPage",
-        params: { listing: listingID, userId: userId },
-      });
+    getItemRentalPage: function(listingID, userId, type) {
+      console.log(type);
+      if (type == "sale") {
+        this.$router.push({
+          name: "itemPage",
+          params: { listing: listingID, userId: userId },
+        });
+      } else if (type == "rent") {
+        this.$router.push({
+          name: "itemPageRent",
+          params: { listing: listingID, userId: userId },
+        });
+      }
     },
     toListing: function() {
       this.$router.push({ path: `/newListing`, name: "newListing" });
@@ -151,11 +163,34 @@ export default {
           let item = {};
           querySnapShot.forEach((doc) => {
             item = doc.data();
-            console.log(item);
-            // console.log("executed: "+item);
-            this.items.push([doc.id, item]);
+            if (item.Type != "Completed") {
+              console.log(item);
+              // console.log("executed: "+item);
+              this.items.push([doc.id, item]);
+            }
           });
         });
+    },
+    async Complete(x) {
+      if (
+        await this.$refs.complete.open(
+          "Confirm Done",
+          "Are you sure you have completed this listing?"
+        )
+      ) {
+        this.completeRecord(x);
+      }
+    },
+    completeRecord(x) {
+      firebase
+        .firestore()
+        .collection("Listings")
+        .doc(x)
+        .update({
+          Type: "Completed",
+          CompletedDate: new Date(),
+        })
+        .then(() => location.reload());
     },
     async delRecord(x) {
       if (
@@ -195,5 +230,13 @@ export default {
   display: flex;
   font-size: 100%;
   word-break: break-all;
+}
+.v-card--reveal {
+  align-items: center;
+  bottom: 0;
+  justify-content: center;
+  opacity: 0.7;
+  position: absolute;
+  width: 100%;
 }
 </style>

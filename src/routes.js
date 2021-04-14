@@ -15,6 +15,7 @@ import Search from "./components/HomePage/Search.vue";
 import Blank from "./components/HomePage/Blank.vue";
 import ItemPageRent from "./components/Items/ItemPageRent.vue";
 import ItemPageService from "./components/Items/ItemPageService.vue";
+import ItemPageCompleted from "./components/Items/ItemPageCompleted.vue";
 
 export default [
   { path: "/", component: Home },
@@ -65,6 +66,12 @@ export default [
     path: "/ItemPageRent",
     name: "itemPageRent",
     component: ItemPageRent,
+    props: true,
+  },
+  {
+    path: "/ItemPageCompleted",
+    name: "itemPageCompleted",
+    component: ItemPageCompleted,
     props: true,
   },
   {
