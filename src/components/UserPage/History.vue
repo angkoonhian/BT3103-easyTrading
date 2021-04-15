@@ -53,6 +53,10 @@
                   style="padding-left: 5px; font-weight: 100; font-size: 15px"
                 ></timeago>
               </div>
+              <div class="my-2 subtitle-1">
+                <strong>Transacted on:</strong>
+                {{ x[1]["CompletedDate"].toDate() }}
+              </div>
             </v-card-text>
 
             <v-divider class="mx-4"></v-divider>
