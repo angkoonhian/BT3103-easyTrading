@@ -41,7 +41,7 @@
       </v-tabs>
       <div v-if="currentTab === 'sales'"><Sales></Sales></div>
       <div v-if="currentTab === 'rentals'"><Rentals></Rentals></div>
-      <div v-if="currentTab === 'wish'"><Wish></Wish></div>     
+      <div v-if="currentTab === 'wish'"><Wish></Wish></div>
     </div>
   </v-app>
 </template>
@@ -54,32 +54,27 @@ export default {
   components: {
     Sales,
     Rentals,
-    Wish
+    Wish,
   },
   data() {
     return {
       currentTab: "sales",
       items: [
         {
-          src:
-            "https://mk0adespressoj4m2p68.kinstacdn.com/wp-content/uploads/2020/02/ecommerce-advertising-the-complete-guide.jpg",
+          src: require("../../assets/poster.png"),
         },
         {
-          src:
-            "https://mk0adespressoj4m2p68.kinstacdn.com/wp-content/uploads/2015/03/facebook-ads-ecommerce.jpg",
+          src: require("../../assets/poster1.png"),
         },
         {
-          src:
-            "https://www.itl.cat/pngfile/big/251-2514844_facebook-ad-design.jpg",
+          src: require("../../assets/poster2.png"),
         },
         {
-          src:
-            "https://klgadgetguy.com/wp-content/uploads/2020/08/Shopee.jpg" 
+          src: require("../../assets/poster3.jpg"),
         },
         {
-          src:
-            "https://cdn3.vectorstock.com/i/1000x1000/47/07/thin-line-mobile-e-commerce-poster-banner-vector-21474707.jpg" 
-        }
+          src: "https://klgadgetguy.com/wp-content/uploads/2020/08/Shopee.jpg",
+        },
       ],
       tabs: null,
       text: "asdasdasdasdsads",
